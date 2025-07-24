@@ -2,8 +2,8 @@ import JobDetails from '@/components/JobDetails';
 import React from 'react';
 
 
-const BASE_URL = "http://localhost:3000";
-// const BASE_URL = "https://next-smart-job-ai.vercel.app";
+// const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://next-smart-job-ai.vercel.app";
 
 const getJob = async (jobId: string) => {
    
