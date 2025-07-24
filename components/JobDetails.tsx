@@ -1,5 +1,6 @@
 "use client";
 
+import { IJob } from "@/app/models/Job";
 // import { IJob } from "@/app/models/Job";
 import PrimaryButton from "@/components/button/PrimaryButton";
 // import SaveButton from "@/components/button/SaveButton";
@@ -16,79 +17,62 @@ const CompanyDefaultLogo = "/assets/companu-default-logo.png";
 const BgImage = "/assets/jods-details-header.jpg";
 // todo : add responsibolity to add next time
 
-
-const jobData = {
-      "salaryrange": {
-        "negotiable": false,
-        "min": 60000,
-        "max": 95000
-      },
-      "workTime": {
-        "start": "10:00 AM",
-        "end": "07:00 PM"
-      },
-      "_id": "688072585945a91fd40a26f7",
-      "title": "Full Stack JavaScript Developer",
-      "description": "We are seeking a highly motivated full stack developer proficient in MERN stack to design, develop and maintain web applications. You will be responsible for developing backend APIs, integrating third-party services, and collaborating with UI/UX teams to ensure smooth functionality across the system.",
-      "company": {
-        "_id": "687335c23aba454b97914999",
-        "name": "TechNova Ltd.",
-        "email": "hr@technova.com",
-        "description": "TechNova is a leading AI and software development firm.",
-        "website": "https://www.technova.com",
-        "logo": "https://technova.com/wp-content/uploads/2025/05/logo2-100x100.jpg",
-        "location": "Dhaka, Bangladesh",
-        "industry": "Software & AI",
-        "activeStatus": "active",
-        "createdAt": "2025-07-13T04:27:46.683Z",
-        "updatedAt": "2025-07-13T04:27:46.683Z",
-        "__v": 0
-      },
-      "reqruiter": "687336a23aba454b979149aa",
-      "location": "Banani, Dhaka",
-      "jobtype": [
-        "full-time",
-        "hybrid"
-      ],
-      "skills": [
-        "React.js",
-        "Node.js",
-        "MongoDB",
-        "Express",
-        "TypeScript"
-      ],
-      "education": [
-        "BSc in Computer Science",
-        "MSc in Software Engineering"
-      ],
-      "experience": [
-        "mid",
-        "senior"
-      ],
-      "experienceLevel": "Mid-Level",
-      "dedline": "2025-09-15T00:00:00.000Z",
-      "category": "Software Development",
-      "holidayPolicy": "Standard national holidays and company casual leaves included.",
-      "requirements": [
-        "Minimum 2 years experience with MERN stack.",
-        "Experience with RESTful APIs and version control (Git).",
-        "Understanding of CI/CD pipelines and deployment.",
-        "Good problem-solving and debugging skills."
-      ],
-      "shift": "day",
-      "benefits": [
-        "Medical",
-        "Festiva Bonus"
-      ],
-      "vacancies": 2,
-      "isRemoteAvailable": true,
-      "status": "active",
-      "createdAt": "2025-07-23T05:25:44.653Z",
-      "updatedAt": "2025-07-23T05:25:44.653Z",
-      "__v": 0
-    }
-const JobDetails = () => {
-//  console.log(job);
+// const jobData = {
+//   salaryrange: {
+//     negotiable: false,
+//     min: 60000,
+//     max: 95000,
+//   },
+//   workTime: {
+//     start: "10:00 AM",
+//     end: "07:00 PM",
+//   },
+//   _id: "688072585945a91fd40a26f7",
+//   title: "Full Stack JavaScript Developer",
+//   description:
+//     "We are seeking a highly motivated full stack developer proficient in MERN stack to design, develop and maintain web applications. You will be responsible for developing backend APIs, integrating third-party services, and collaborating with UI/UX teams to ensure smooth functionality across the system.",
+//   company: {
+//     _id: "687335c23aba454b97914999",
+//     name: "TechNova Ltd.",
+//     email: "hr@technova.com",
+//     description: "TechNova is a leading AI and software development firm.",
+//     website: "https://www.technova.com",
+//     logo: "https://technova.com/wp-content/uploads/2025/05/logo2-100x100.jpg",
+//     location: "Dhaka, Bangladesh",
+//     industry: "Software & AI",
+//     activeStatus: "active",
+//     createdAt: "2025-07-13T04:27:46.683Z",
+//     updatedAt: "2025-07-13T04:27:46.683Z",
+//     __v: 0,
+//   },
+//   reqruiter: "687336a23aba454b979149aa",
+//   location: "Banani, Dhaka",
+//   jobtype: ["full-time", "hybrid"],
+//   skills: ["React.js", "Node.js", "MongoDB", "Express", "TypeScript"],
+//   education: ["BSc in Computer Science", "MSc in Software Engineering"],
+//   experience: ["mid", "senior"],
+//   experienceLevel: "Mid-Level",
+//   dedline: "2025-09-15T00:00:00.000Z",
+//   category: "Software Development",
+//   holidayPolicy:
+//     "Standard national holidays and company casual leaves included.",
+//   requirements: [
+//     "Minimum 2 years experience with MERN stack.",
+//     "Experience with RESTful APIs and version control (Git).",
+//     "Understanding of CI/CD pipelines and deployment.",
+//     "Good problem-solving and debugging skills.",
+//   ],
+//   shift: "day",
+//   benefits: ["Medical", "Festiva Bonus"],
+//   vacancies: 2,
+//   isRemoteAvailable: true,
+//   status: "active",
+//   createdAt: "2025-07-23T05:25:44.653Z",
+//   updatedAt: "2025-07-23T05:25:44.653Z",
+//   __v: 0,
+// };
+const JobDetails = ({ job }: { job: IJob }) => {
+  //  console.log(job);
   const {
     company,
     title,
@@ -107,7 +91,7 @@ const JobDetails = () => {
     workTime,
     isRemoteAvailable,
     shift,
-  } = jobData;
+  } = job;
 
   const logoSrc =
     typeof company === "object" && "logo" in company && company.logo
@@ -268,7 +252,7 @@ const JobDetails = () => {
                   <li className="list-disc">
                     <span className="text-lg font-medium">Office Time -</span>{" "}
                     <span>
-                      {workTime?.start ?? 'N/A'}-{workTime?.end ?? 'N/A'}
+                      {workTime?.start ?? "N/A"}-{workTime?.end ?? "N/A"}
                     </span>{" "}
                     <span className="text-sm text-gray-500 font-medium">
                       ({shift})
@@ -286,12 +270,14 @@ const JobDetails = () => {
               <div className="mt-5">
                 <h2 className="text-xl font-semibold">Holiday Policy</h2>
                 <ul>
-                    <li>{holidayPolicy}</li>
+                  <li>{holidayPolicy}</li>
                 </ul>
               </div>
 
               <div className="mt-5">
-                <p className="font-medium">Total vacancies: {vacancies ?? 'N/A'}</p>
+                <p className="font-medium">
+                  Total vacancies: {vacancies ?? "N/A"}
+                </p>
               </div>
             </div>
 

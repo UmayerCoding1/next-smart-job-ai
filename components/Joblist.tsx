@@ -16,7 +16,7 @@ const CompanyDefaultLogo = "/assets/companu-default-logo.png";
 const Joblist = ({ job }: { job: IJob }) => {
   const { title, location, experience, jobtype, shift, salaryrange, company } =
     job;
-  console.log(job);
+ 
   return (
     <>
       <FadeRight>
@@ -79,7 +79,7 @@ const Joblist = ({ job }: { job: IJob }) => {
               </p>
             </div>
 
-            <Link href={`/jobdetails/${job._id}`}>
+            <Link href={`/job-details/${job._id}`}>
               <PrimaryButton className="px-10 py-2">Apply</PrimaryButton>
             </Link>
           </div>
