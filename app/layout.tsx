@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 
 
 import { Source_Sans_3 } from 'next/font/google';
-import Footer from "@/components/Footer";  
+// import Footer from "@/components/Footer";  
 import UseAuth from "@/components/useAuth";
 import { Toaster } from "sonner";
 import QueryProvider from "@/lib/QueryProvider";
@@ -39,7 +39,7 @@ export default async function RootLayout({
             <Navbar  />
             <UseAuth />
             <main>{children}</main>
-            <Footer />
+            {/* <Footer /> */}
            <Toaster closeButton={true} containerAriaLabel="Toaster" position="bottom-right"/>
           </ReduxProvider>
         </QueryProvider>
