@@ -1,16 +1,17 @@
 "use client";
 
 import { IJob } from "@/app/models/Job";
-// import { IJob } from "@/app/models/Job";
 import PrimaryButton from "@/components/button/PrimaryButton";
-// import SaveButton from "@/components/button/SaveButton";
+import SaveButton from "@/components/button/SaveButton";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import mongoose from "mongoose";
 
 // import mongoose from "mongoose";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import SimilarJob from "./SimilarJob";
 
 const book = "/assets/book-glass.jpg";
 const CompanyDefaultLogo = "/assets/companu-default-logo.png";
@@ -162,9 +163,9 @@ const JobDetails = ({ job }: { job: IJob }) => {
           </div>
 
           <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-5">
-            {/* <SaveButton
-              jobId={jobData!._id as mongoose.Types.ObjectId).toString()}
-            /> */}
+            <SaveButton
+              jobId={(job!._id as mongoose.Types.ObjectId).toString()}
+/>
             <PrimaryButton className="w-full lg:w-40 h-9">Apply</PrimaryButton>
           </div>
         </div>
@@ -358,10 +359,17 @@ const JobDetails = ({ job }: { job: IJob }) => {
               </div>
             </div>
           </div>
-          <div className="lg:w-[27%] h-screen">2</div>
+          <div className="lg:w-[27%] h-screen">
+            <h2 className="text-2xl font-semibold">Similar Jobs
+
+              <SimilarJob category={job.category} existingJodId={(job!._id as mongoose.Types.ObjectId).toString()}/>
+            </h2>
+          </div>
         </div>
       </div>
-      <div className="lg:w-[27%] h-screen">2</div>
+      <div className="lg:w-[27%] h-screen">
+        <h2 className="text-2xl font-semibold">Similar Jobs</h2>
+      </div>
     </div>
   );
 };

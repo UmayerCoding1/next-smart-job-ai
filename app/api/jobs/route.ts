@@ -31,8 +31,6 @@ export async function POST(request: NextRequest) {
       workTime,
     } = body;
 
-   
-    
     const auth = await withAuth(request, { allowedRoles: "recruiter" });
     if (!auth.ok) return auth.response;
 
@@ -93,8 +91,6 @@ export async function POST(request: NextRequest) {
       }),
     });
 
-    console.log(job);
-
     return NextResponse.json(
       { message: "Job posted successfully", success: true },
       { status: 200 }
@@ -105,11 +101,24 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
-    const jobs = await Job.find().populate("company");
-    return NextResponse.json({ jobs }, { status: 200 });
+    const searchParams = request.nextUrl.searchParams;
+    const existingJodId = searchParams.get("existingJodId");
+    const filter: Record<string, string> = {};
+    searchParams.forEach((value: string, key: string) => {
+      if(!key || !value) return;
+      if (key === "existingJodId") return;
+      filter[key] = value;
+    });
+
+    const jobs = await Job.find(filter).populate("company");
+    const filteredJobs = jobs.filter((job) => job._id.toString() !==  existingJodId);
+    // console.log('filteredJobs',typeof existingJodId);
+
+    
+    return NextResponse.json({ jobs: existingJodId ? filteredJobs : jobs }, { status: 200 });
   } catch (error) {
     console.log("Job get error", error);
     throw error;

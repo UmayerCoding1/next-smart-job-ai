@@ -10,15 +10,12 @@ import { ChevronRight } from "lucide-react";
 
 import Link from "next/link";
 import PrimaryButton from "../button/PrimaryButton";
+import useJobs from "@/hooks/useJobs";
 const Jobs = () => {
-  const { data: jobs = [] } = useQuery({
-    queryKey: ["jobs"],
-    queryFn: async () => {
-      const res = await axios.get("/api/jobs");
-      return res.data.jobs;
-    },
-  });
+ 
 
+const {jobs} = useJobs('','')
+console.log(jobs);
   const handleSearch = (search: {
     jobTitle: string;
     location: string;
