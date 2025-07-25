@@ -1,5 +1,5 @@
 "use client";
-import { IJob } from "@/app/models/Job";
+
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 

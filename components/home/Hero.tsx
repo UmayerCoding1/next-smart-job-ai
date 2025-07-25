@@ -65,9 +65,7 @@ const Hero = () => {
       </div>
 
       <div className="flex items-center gap-2 mt-5">
-
         <PrimaryButton Icon={Upload}>Upload Resume</PrimaryButton>
-        
 
         <Button
           variant={"outline"}
@@ -159,6 +157,10 @@ const Hero = () => {
             className="absolute right-60 top-5  object-cover lg:block hidden"
           />
         </div>
+
+        <div className="absolute bottom-10 right-0 w-[300px] h-[30%] border-dashed border-2 border-gray-300 rounded-l-full  z-0"></div>
+        <div className="absolute bottom-10 left-0 w-[300px] h-[30%] border-dashed border-2 border-gray-300 rounded-r-full  z-0"></div>
+        <div className="absolute top-0 left-28 w-[200px] h-[200px] border-dashed border-2  border-gray-300 rounded-b-full border-t-0  z-0"></div>
       </div>
     </div>
   );

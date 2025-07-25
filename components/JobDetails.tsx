@@ -16,62 +16,7 @@ import SimilarJob from "./SimilarJob";
 const book = "/assets/book-glass.jpg";
 const CompanyDefaultLogo = "/assets/companu-default-logo.png";
 const BgImage = "/assets/jods-details-header.jpg";
-// todo : add responsibolity to add next time
 
-// const jobData = {
-//   salaryrange: {
-//     negotiable: false,
-//     min: 60000,
-//     max: 95000,
-//   },
-//   workTime: {
-//     start: "10:00 AM",
-//     end: "07:00 PM",
-//   },
-//   _id: "688072585945a91fd40a26f7",
-//   title: "Full Stack JavaScript Developer",
-//   description:
-//     "We are seeking a highly motivated full stack developer proficient in MERN stack to design, develop and maintain web applications. You will be responsible for developing backend APIs, integrating third-party services, and collaborating with UI/UX teams to ensure smooth functionality across the system.",
-//   company: {
-//     _id: "687335c23aba454b97914999",
-//     name: "TechNova Ltd.",
-//     email: "hr@technova.com",
-//     description: "TechNova is a leading AI and software development firm.",
-//     website: "https://www.technova.com",
-//     logo: "https://technova.com/wp-content/uploads/2025/05/logo2-100x100.jpg",
-//     location: "Dhaka, Bangladesh",
-//     industry: "Software & AI",
-//     activeStatus: "active",
-//     createdAt: "2025-07-13T04:27:46.683Z",
-//     updatedAt: "2025-07-13T04:27:46.683Z",
-//     __v: 0,
-//   },
-//   reqruiter: "687336a23aba454b979149aa",
-//   location: "Banani, Dhaka",
-//   jobtype: ["full-time", "hybrid"],
-//   skills: ["React.js", "Node.js", "MongoDB", "Express", "TypeScript"],
-//   education: ["BSc in Computer Science", "MSc in Software Engineering"],
-//   experience: ["mid", "senior"],
-//   experienceLevel: "Mid-Level",
-//   dedline: "2025-09-15T00:00:00.000Z",
-//   category: "Software Development",
-//   holidayPolicy:
-//     "Standard national holidays and company casual leaves included.",
-//   requirements: [
-//     "Minimum 2 years experience with MERN stack.",
-//     "Experience with RESTful APIs and version control (Git).",
-//     "Understanding of CI/CD pipelines and deployment.",
-//     "Good problem-solving and debugging skills.",
-//   ],
-//   shift: "day",
-//   benefits: ["Medical", "Festiva Bonus"],
-//   vacancies: 2,
-//   isRemoteAvailable: true,
-//   status: "active",
-//   createdAt: "2025-07-23T05:25:44.653Z",
-//   updatedAt: "2025-07-23T05:25:44.653Z",
-//   __v: 0,
-// };
 const JobDetails = ({ job }: { job: IJob }) => {
   //  console.log(job);
   const {
@@ -98,6 +43,29 @@ const JobDetails = ({ job }: { job: IJob }) => {
     typeof company === "object" && "logo" in company && company.logo
       ? company.logo
       : CompanyDefaultLogo;
+
+       const jobCetagoris =[
+        "Web Development",
+        "Graphic Design",
+        "Database",
+        "Business Management",
+        "Accounting",
+        "Creative Design",
+        "IT Support",
+        "Sales",
+        "Customer Service",
+        "Marketing",
+        "Human Resources",
+        "Legal",
+        "Finance",
+        "Healthcare",
+        "Education",
+        "Manufacturing",
+        "Transportation",
+        "Retail",
+        "Technology",
+        "Energy",
+       ]
   return (
     <div className="relative">
       <div className="relative">
@@ -165,8 +133,12 @@ const JobDetails = ({ job }: { job: IJob }) => {
           <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-5">
             <SaveButton
               jobId={(job!._id as mongoose.Types.ObjectId).toString()}
-/>
-            <PrimaryButton className="w-full lg:w-40 h-9">Apply</PrimaryButton>
+            />
+            <Link href={`${job!._id}/apply`} className="w-full lg:w-40">
+              <PrimaryButton className="w-full lg:w-40 h-9">
+                Apply
+              </PrimaryButton>
+            </Link>
           </div>
         </div>
 
@@ -360,16 +332,31 @@ const JobDetails = ({ job }: { job: IJob }) => {
             </div>
           </div>
           <div className="lg:w-[27%] h-screen">
-            <h2 className="text-2xl font-semibold">Similar Jobs
+            <div>
+              <h2 className="text-2xl font-semibold">
+                Similar Jobs
+                <SimilarJob
+                  category={job.category}
+                  existingJodId={(
+                    job!._id as mongoose.Types.ObjectId
+                  ).toString()}
+                />
+              </h2>
 
-              <SimilarJob category={job.category} existingJodId={(job!._id as mongoose.Types.ObjectId).toString()}/>
-            </h2>
+
+              <div>
+                <h2 className="text-xl font-semibold mt-5">Try Searching for</h2>
+                 <div>
+                   {jobCetagoris.map((value, index) => (
+                  <button key={index} className="bg-blue-50 mr-2 p-2 my-1 rounded-lg text-sm text-blue-500 font-medium hover:bg-blue-100 cursor-pointer">{value}</button>
+                ))}
+                 </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div className="lg:w-[27%] h-screen">
-        <h2 className="text-2xl font-semibold">Similar Jobs</h2>
-      </div>
+      
     </div>
   );
 };

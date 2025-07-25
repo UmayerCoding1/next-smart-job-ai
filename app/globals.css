@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import 'tailwind-scrollbar-hide/v4';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -118,5 +119,53 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+.animate-scroll {
+  animation: scroll 20s linear infinite;
+}
+
+.scroll-container {
+  position: relative;
+}
+
+.scroll-container::after {
+  content: "";
+  background-image: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+  width: 100px;
+  height: 400px;
+  position: absolute;
+  transform: translateY(-50%);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.scroll-container::before {
+  content: "";
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+  width: 100px;
+  height: 400px;
+  position: absolute;
+  transform: translateY(-50%);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
   }
 }

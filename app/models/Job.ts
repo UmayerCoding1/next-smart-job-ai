@@ -1,5 +1,6 @@
 import mongoose, { Schema, model, models } from "mongoose";
 import { ICompany } from "./Company";
+import { IAppliedJob } from "./User";
 
 export interface ISalary {
   negotiable?: boolean;
@@ -33,6 +34,8 @@ export interface IJob {
   vacancies: number;
   isRemoteAvailable: boolean;
   status: string;
+  appliedjobs?: mongoose.Types.ObjectId[] | IAppliedJob[];
+  totalApplications?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
