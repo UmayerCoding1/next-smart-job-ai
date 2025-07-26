@@ -34,7 +34,11 @@ export interface IJob {
   vacancies: number;
   isRemoteAvailable: boolean;
   status: string;
-  applicationsQuestions: string[];
+  applicationsQuestions: {
+    question: string;
+    answerType: string;
+    required: boolean;
+  }[];
   appliedjobs?: mongoose.Types.ObjectId[] | IAppliedJob[];
   totalApplications?: number;
   createdAt?: Date;

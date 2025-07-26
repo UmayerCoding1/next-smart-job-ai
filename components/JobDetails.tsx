@@ -143,9 +143,7 @@ const JobDetails = ({ job }: { job: IJob }) => {
                 user
                   ? `${
                       job!._id
-                    }/apply?jobTitle=${title}&applicationsQuestions=${JSON.stringify(
-                      applicationsQuestions
-                    )}}  `
+                    }/apply`
                   : "/login"
               }
               className="w-full lg:w-40"

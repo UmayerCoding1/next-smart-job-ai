@@ -16,7 +16,7 @@ type Props = {
   currentPage: string;
 };
 const Breadcrumbs = ({ link, currentPage }: Props) => {
-  console.log(link);
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
