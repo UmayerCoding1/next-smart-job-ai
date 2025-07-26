@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
       holidayPolicy,
       requirements,
       workTime,
+      applicationsQuestions
     } = body;
 
     const auth = await withAuth(request, { allowedRoles: "recruiter" });
@@ -50,7 +51,8 @@ export async function POST(request: NextRequest) {
       !dedline ||
       !category ||
       !holidayPolicy ||
-      !workTime
+      !workTime ||
+      !applicationsQuestions
     ) {
       return NextResponse.json(
         { message: "All fields are required", success: false },
@@ -84,6 +86,7 @@ export async function POST(request: NextRequest) {
       experienceLevel,
       requirements,
       workTime,
+      applicationsQuestions,
       ...(body.shift && { shift: body.shift }),
       ...(body.vacancies && { vacancies: body.vacancies }),
       ...(body.isRemoteAvailable && {

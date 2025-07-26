@@ -1,6 +1,6 @@
 import { User } from "@/app/models/User";
 import { connectToDatabase } from "@/lib/db";
-import { sendOtpWithNodemailer } from "@/lib/service/nodemailer";
+import { sendOtpWithNodemailer } from "@/service/nodemailer";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

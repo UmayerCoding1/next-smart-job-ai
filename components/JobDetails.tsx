@@ -12,13 +12,15 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import SimilarJob from "./SimilarJob";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 
 const book = "/assets/book-glass.jpg";
 const CompanyDefaultLogo = "/assets/companu-default-logo.png";
 const BgImage = "/assets/jods-details-header.jpg";
 
 const JobDetails = ({ job }: { job: IJob }) => {
-  //  console.log(job);
+  const user = useSelector((state: RootState) => state.authR.user);
   const {
     company,
     title,
@@ -37,35 +39,37 @@ const JobDetails = ({ job }: { job: IJob }) => {
     workTime,
     isRemoteAvailable,
     shift,
+    applicationsQuestions,
   } = job;
-
+  console.log(user);
   const logoSrc =
     typeof company === "object" && "logo" in company && company.logo
       ? company.logo
       : CompanyDefaultLogo;
 
-       const jobCetagoris =[
-        "Web Development",
-        "Graphic Design",
-        "Database",
-        "Business Management",
-        "Accounting",
-        "Creative Design",
-        "IT Support",
-        "Sales",
-        "Customer Service",
-        "Marketing",
-        "Human Resources",
-        "Legal",
-        "Finance",
-        "Healthcare",
-        "Education",
-        "Manufacturing",
-        "Transportation",
-        "Retail",
-        "Technology",
-        "Energy",
-       ]
+  const jobCetagoris = [
+    "Web Development",
+    "Graphic Design",
+    "Database",
+    "Business Management",
+    "Accounting",
+    "Creative Design",
+    "IT Support",
+    "Sales",
+    "Customer Service",
+    "Marketing",
+    "Human Resources",
+    "Legal",
+    "Finance",
+    "Healthcare",
+    "Education",
+    "Manufacturing",
+    "Transportation",
+    "Retail",
+    "Technology",
+    "Energy",
+  ];
+
   return (
     <div className="relative">
       <div className="relative">
@@ -134,7 +138,18 @@ const JobDetails = ({ job }: { job: IJob }) => {
             <SaveButton
               jobId={(job!._id as mongoose.Types.ObjectId).toString()}
             />
-            <Link href={`${job!._id}/apply`} className="w-full lg:w-40">
+            <Link
+              href={
+                user
+                  ? `${
+                      job!._id
+                    }/apply?jobTitle=${title}&applicationsQuestions=${JSON.stringify(
+                      applicationsQuestions
+                    )}}  `
+                  : "/login"
+              }
+              className="w-full lg:w-40"
+            >
               <PrimaryButton className="w-full lg:w-40 h-9">
                 Apply
               </PrimaryButton>
@@ -343,20 +358,25 @@ const JobDetails = ({ job }: { job: IJob }) => {
                 />
               </h2>
 
-
               <div>
-                <h2 className="text-xl font-semibold mt-5">Try Searching for</h2>
-                 <div>
-                   {jobCetagoris.map((value, index) => (
-                  <button key={index} className="bg-blue-50 mr-2 p-2 my-1 rounded-lg text-sm text-blue-500 font-medium hover:bg-blue-100 cursor-pointer">{value}</button>
-                ))}
-                 </div>
+                <h2 className="text-xl font-semibold mt-5">
+                  Try Searching for
+                </h2>
+                <div>
+                  {jobCetagoris.map((value, index) => (
+                    <button
+                      key={index}
+                      className="bg-blue-50 mr-2 p-2 my-1 rounded-lg text-sm text-blue-500 font-medium hover:bg-blue-100 cursor-pointer"
+                    >
+                      {value}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

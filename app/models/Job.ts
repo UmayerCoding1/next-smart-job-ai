@@ -34,6 +34,7 @@ export interface IJob {
   vacancies: number;
   isRemoteAvailable: boolean;
   status: string;
+  applicationsQuestions: string[];
   appliedjobs?: mongoose.Types.ObjectId[] | IAppliedJob[];
   totalApplications?: number;
   createdAt?: Date;
@@ -91,6 +92,27 @@ export const JobSchema = new Schema<IJob>(
     benefits: { type: [String], default: ["Medical", "Festiva Bonus"] },
     vacancies: { type: Number, default: 1 },
     isRemoteAvailable: { type: Boolean, default: false },
+    applicationsQuestions: [
+      {
+        question: { type: String, required: true },
+        answerType: {
+          type: String,
+          enum: [
+            "text",
+            "number",
+            "date",
+            "select",
+            "radio",
+            "checkbox",
+            "textarea",
+            "file",
+          ],
+          default: "text",
+        },
+        required: { type: Boolean, default: false },
+      },
+    ],
+    appliedjobs: { type: [Schema.Types.ObjectId], ref: "User" },
     status: {
       type: String,
       default: "active",
