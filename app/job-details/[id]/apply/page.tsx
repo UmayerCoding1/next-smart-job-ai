@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { getJob } from "@/service/api";
 import { Edit, User } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { use, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 const applyImage = "/assets/apply.png";
@@ -15,13 +16,38 @@ const applyImage = "/assets/apply.png";
 const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
   const [job, setJob] = useState<IJob | null>(null);
   const [score, setScore] = useState(0);
-
   const user = useSelector((state: RootState) => state.authR.user);
   const [commpleteApplyProgress, setCommpleteApplyProgress] = useState(
     (score / 100) * 100
   );
+  const [isExpired, setIsExpired] = useState(false);
+  
+  const router = useRouter();
 
   const id = use(Context.params);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const appliedAt = sessionStorage.getItem("appliedAt");
+
+      if (!appliedAt) {
+        clearInterval(interval);
+        router.push("/expired");
+        return;
+      }
+
+      const appliedTime = new Date(appliedAt).getTime();
+      const now = Date.now();
+      const diff = now - appliedTime;
+console.log('time down')
+      if (diff > 1 * 60 * 1000) {
+        clearInterval(interval);
+        router.push("/expired");
+      }
+    }, 1000); 
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const handleJob = async () => {
@@ -31,8 +57,6 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
 
     handleJob();
   }, [id]);
-
- 
 
   useEffect(() => {
     const timer = setTimeout(() => setCommpleteApplyProgress(score), 500);
@@ -45,9 +69,20 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
     { href: `/job-details/${id.id}`, label: "Job Details" },
   ];
 
-  console.log(commpleteApplyProgress);
+  useEffect(() => {
+    if (isExpired) {
+      sessionStorage.removeItem("appliedAt");
+      router.push("/expired");
+      return;
+    }
+  });
+
+
+  const handleUrlSessionIsValid = () => {
+    sessionStorage.setItem("appliedAt", new Date().toISOString());
+  }
   return (
-    <div className="bg-gradient-to-bl from-white/50 to-blue-100">
+    <div onMouseMove={handleUrlSessionIsValid} className="bg-gradient-to-bl from-white/50 to-blue-100">
       <div className="w-full h-[300px] bg-black flex items-center justify-evenly text-white">
         <div className="flex flex-col gap-2">
           <h2 className="text-5xl font-semibold">Apply this job</h2>
@@ -73,11 +108,7 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
           <Breadcrumbs link={links} currentPage="Job apply page" />
 
           <div className=" w-full lg:w-[300px] relative   rounded-full">
-            <Progress
-              value={commpleteApplyProgress}
-              className="w-full "
-            
-            />
+            <Progress value={commpleteApplyProgress} className="w-full " />
 
             {score > 0 && score < 100 && (
               <div
@@ -145,10 +176,12 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
               </div>
 
               <div>
-                <h2 className="text-xl font-semibold mt-5">
-                  Quick link
-                </h2>
-                ul
+                <h2 className="text-xl font-semibold mt-5">Quick link</h2>
+                <ul>
+                  <li>Help</li>
+                  <li>Privacy Policy</li>
+                  <li>Terms & Conditions</li>
+                </ul>
               </div>
             </div>
           </div>

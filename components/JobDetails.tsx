@@ -40,7 +40,7 @@ const JobDetails = ({ job }: { job: IJob }) => {
     isRemoteAvailable,
     shift,
   } = job;
-  console.log(user);
+
   const logoSrc =
     typeof company === "object" && "logo" in company && company.logo
       ? company.logo
@@ -69,6 +69,10 @@ const JobDetails = ({ job }: { job: IJob }) => {
     "Energy",
   ];
 
+
+  const handleApply = () => {
+     sessionStorage.setItem("appliedAt", new Date().toISOString());
+  }
   return (
     <div className="relative">
       <div className="relative">
@@ -145,6 +149,7 @@ const JobDetails = ({ job }: { job: IJob }) => {
                     }/apply`
                   : "/login"
               }
+              onClick={handleApply}
               className="w-full lg:w-40"
             >
               <PrimaryButton className="w-full lg:w-40 h-9">
