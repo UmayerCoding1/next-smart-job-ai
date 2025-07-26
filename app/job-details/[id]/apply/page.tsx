@@ -32,7 +32,7 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
     handleJob();
   }, [id]);
 
-  console.log("applay", job);
+ 
 
   useEffect(() => {
     const timer = setTimeout(() => setCommpleteApplyProgress(score), 500);
@@ -76,7 +76,7 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
             <Progress
               value={commpleteApplyProgress}
               className="w-full "
-              barColor="bg-emerald-500"
+            
             />
 
             {score > 0 && score < 100 && (
@@ -148,11 +148,7 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
                 <h2 className="text-xl font-semibold mt-5">
                   Quick link
                 </h2>
-                <ul>
-                  <li className="text-blue-600">Terms and conditions</li>
-                  <li className="text-blue-600">Privacy Policy</li>
-                  <li className="text-blue-600">Cookie Policy</li>
-                </ul>
+                ul
               </div>
             </div>
           </div>
