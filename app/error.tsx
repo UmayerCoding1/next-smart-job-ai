@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 type ErrorPageProps = {
   error: Error & { digest?: string };
@@ -12,13 +12,11 @@ type ErrorPageProps = {
 export default function Error({ error, reset }: ErrorPageProps) {
   const [isLoading, setIsLoading] = useState(false);
 
- 
-
   const handleReset = () => {
     setIsLoading(true);
     setTimeout(() => {
       reset();
-    }, 500); 
+    }, 500);
   };
 
   console.log(error);
@@ -36,14 +34,7 @@ export default function Error({ error, reset }: ErrorPageProps) {
         disabled={isLoading}
       >
         <RotateCcw className={` ${isLoading ? "animate-spin" : ""}`} />
-        {isLoading ? (
-          <>
-            
-            Trying...
-          </>
-        ) : (
-          "Try Again"
-        )}
+        {isLoading ? <>Trying...</> : "Try Again"}
       </Button>
     </div>
   );

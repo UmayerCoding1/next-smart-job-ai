@@ -21,10 +21,7 @@ const BrowseJobs = () => {
 
 
   console.log(searchQuery);
-  const colors = [
-  "gray", "red", "orange", "yellow", "green", "teal", "blue",
-  "indigo", "purple", "pink", "lime",  "cyan", "emerald", "violet", "rose", "fuchsia"
-];
+  
 
 
   return (

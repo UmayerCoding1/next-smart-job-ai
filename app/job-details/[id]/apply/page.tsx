@@ -2,39 +2,16 @@
 import { RootState } from "@/app/redux/store";
 import Breadcrumbs from "@/components/Breadcrumb";
 import { Progress } from "@/components/ui/progress";
-import { useSearchParams } from "next/navigation";
 import React, { use, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-export function tryParseJson(str: string) {
-  try {
-    return JSON.parse(str);
-  } catch {
-    let lastIndex = str.length;
-    while (lastIndex > 0) {
-      try {
-        const substr = str.substring(0, lastIndex);
-        return JSON.parse(substr);
-      } catch {
-        lastIndex--;
-      }
-    }
-    return null;
-  }
-}
 
 const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
   const user = useSelector((state: RootState) => state.authR.user);
   const [commpleteApplyProgress, setCommpleteApplyProgress] = useState(0);
   const id = use(Context.params);
-  const raw = useSearchParams().get("applicationsQuestions");
-  const jobTitle = useSearchParams().get("jobTitle");
+  
 
-  let applicationsQuestionsData = null;
-  if (raw) {
-    const decoded = decodeURIComponent(raw);
-    applicationsQuestionsData = tryParseJson(decoded);
-  }
 
   useEffect(() => {
     const timer = setTimeout(
@@ -49,7 +26,7 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
     { href: "/", label: "Home" },
     { href: `/job-details/${id.id}`, label: "Job Details" },
   ];
-console.log(jobTitle)
+console.log( user);
   return (
     <div className="max-w-7xl mx-auto p-2 ">
       <div className="flex items-center justify-between w-full">
