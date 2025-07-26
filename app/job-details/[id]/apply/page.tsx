@@ -1,79 +1,164 @@
 "use client";
+import { IJob } from "@/app/models/Job";
 import { RootState } from "@/app/redux/store";
 import Breadcrumbs from "@/components/Breadcrumb";
+import ApplyForm from "@/components/form/applyForm";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useSearchParams } from "next/navigation";
+import { getJob } from "@/service/api";
+import { Edit, User } from "lucide-react";
+import Image from "next/image";
 import React, { use, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
-export function tryParseJson(str: string) {
-  try {
-    return JSON.parse(str);
-  } catch {
-    let lastIndex = str.length;
-    while (lastIndex > 0) {
-      try {
-        const substr = str.substring(0, lastIndex);
-        return JSON.parse(substr);
-      } catch {
-        lastIndex--;
-      }
-    }
-    return null;
-  }
-}
+const applyImage = "/assets/apply.png";
 
 const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
-  const user = useSelector((state: RootState) => state.authR.user);
-  const [commpleteApplyProgress, setCommpleteApplyProgress] = useState(0);
-  const id = use(Context.params);
-  const raw = useSearchParams().get("applicationsQuestions");
-  const jobTitle = useSearchParams().get("jobTitle");
+  const [job, setJob] = useState<IJob | null>(null);
+  const [score, setScore] = useState(0);
 
-  let applicationsQuestionsData = null;
-  if (raw) {
-    const decoded = decodeURIComponent(raw);
-    applicationsQuestionsData = tryParseJson(decoded);
-  }
+  const user = useSelector((state: RootState) => state.authR.user);
+  const [commpleteApplyProgress, setCommpleteApplyProgress] = useState(
+    (score / 100) * 100
+  );
+
+  const id = use(Context.params);
 
   useEffect(() => {
-    const timer = setTimeout(
-      () => setCommpleteApplyProgress(commpleteApplyProgress),
-      500
-    );
+    const handleJob = async () => {
+      const job: IJob = await getJob(id.id);
+      setJob(job);
+    };
+
+    handleJob();
+  }, [id]);
+
+  console.log("applay", job);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setCommpleteApplyProgress(score), 500);
 
     return () => clearTimeout(timer);
-  }, [commpleteApplyProgress]);
+  }, [score]);
 
   const links = [
     { href: "/", label: "Home" },
     { href: `/job-details/${id.id}`, label: "Job Details" },
   ];
-console.log(jobTitle)
+
+  console.log(commpleteApplyProgress);
   return (
-    <div className="max-w-7xl mx-auto p-2 ">
-      <div className="flex items-center justify-between w-full">
-        <Breadcrumbs link={links} currentPage="Job apply page" />
-
-        <div className=" w-[300px] relative   rounded-full">
-          <Progress
-            value={commpleteApplyProgress}
-            className="w-full "
-            barColor="bg-emerald-500"
-          />
-
-          {commpleteApplyProgress > 0 && (
-            <div
-              className={`relative  top-1 bg-black text-white text-xs p-2 rounded-sm flex items-center gap-2 before:absolute before:-left-0 before:-top-[10px] before:border-[6px] before:border-transparent before:border-b-black before:content-[''] w-32 transition-all duration-500 ease-in-out `}
-              style={{ left: `${commpleteApplyProgress - 2}%` }}
-            >
-              <span>You have completed</span>
-              <span className="font-bold text-emerald-500">
-                {commpleteApplyProgress}%
-              </span>
-            </div>
-          )}
+    <div className="bg-gradient-to-bl from-white/50 to-blue-100">
+      <div className="w-full h-[300px] bg-black flex items-center justify-evenly text-white">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-5xl font-semibold">Apply this job</h2>
+          <h2 className=" text-xl lg:text-3xl">{job?.title}</h2>
+          <p>
+            {" "}
+            {typeof job?.company === "object" && "name" in job?.company
+              ? job?.company.name
+              : "N/A"}
+          </p>
         </div>
+        <Image
+          src={applyImage}
+          alt="login form image"
+          width={800}
+          height={800}
+          className="w-96 ovject-cover hidden md:block lg:block"
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto p-2 mt-5 ">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4  justify-between w-full">
+          <Breadcrumbs link={links} currentPage="Job apply page" />
+
+          <div className=" w-full lg:w-[300px] relative   rounded-full">
+            <Progress
+              value={commpleteApplyProgress}
+              className="w-full "
+              barColor="bg-emerald-500"
+            />
+
+            {score > 0 && score < 100 && (
+              <div
+                className={`relative  top-1 bg-black text-white text-xs p-2 rounded-sm flex items-center gap-2 before:absolute before:-left-0 before:-top-[10px] before:border-[6px] before:border-transparent before:border-b-black before:content-[''] w-32 transition-all duration-500 ease-in-out `}
+                style={{ left: `${commpleteApplyProgress - 2}%` }}
+              >
+                <span>You have completed</span>
+                <span className="font-bold text-emerald-500">
+                  {commpleteApplyProgress}%
+                </span>
+              </div>
+            )}
+
+            {score === 100 && (
+              <span>You have completed {commpleteApplyProgress}%</span>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-20 ">
+          <div className="lg:flex  w-full gap-10 ">
+            <ApplyForm user={user} job={job} setScore={setScore} />
+            <div className="bg-white w-[30%] h-1/3 p-3">
+              <div className="flex items-center gap-2">
+                <div>
+                  {user?.avatar ? (
+                    <Image
+                      src={user.avatar}
+                      alt="login form image"
+                      width={800}
+                      height={800}
+                      className="w-full h-full ovject-cover"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 bg-gray-100 flex items-center justify-center rounded-full ">
+                      <User size={40} className="text-gray-400" />
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <h2 className="text-xl font-medium">{user?.fullname}</h2>
+                  <h2 className="text-sm">{user?.email}</h2>
+                  <h2 className="text-sm">
+                    {user?.phone ? user?.phone : "N/A"}
+                  </h2>
+                </div>
+
+                <Button className="">
+                  <Edit />
+                  <span>Edit</span>
+                </Button>
+              </div>
+
+              <div className="mt-10">
+                <h2 className="text-xl font-semibold mt-5">
+                  Please read before apply *
+                </h2>
+                <p>
+                  SmartJobAi.com Limited will not be responsible for any
+                  financial transactions or fraud by the company after applying
+                  through the website. The company only connects companies and
+                  job seekers.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-semibold mt-5">
+                  Quick link
+                </h2>
+                <ul>
+                  <li className="text-blue-600">Terms and conditions</li>
+                  <li className="text-blue-600">Privacy Policy</li>
+                  <li className="text-blue-600">Cookie Policy</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="h-screen"></div>
       </div>
     </div>
   );

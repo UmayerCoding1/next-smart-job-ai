@@ -20,7 +20,7 @@ const Joblist = ({ job }: { job: IJob }) => {
   const jobId = job._id?.toString();
   const { handleMouseEnter, handleMouseLeave, handleClick } =
     useDebouncedPrefetch({
-      queryKeyBuilder: (id) => ["job", job._id?.toString()],
+      queryKeyBuilder: () => ["job", job._id?.toString()],
       fetchFn: (id) => getJob(id),
       routeBuilder: (id) => `/job-details/${id}`,
     });

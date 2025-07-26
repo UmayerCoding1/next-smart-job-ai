@@ -47,6 +47,8 @@ export interface IUser {
   loginMethod: string;
   googleId?: string;
   facebookId?: string;
+  countryCode?: string;
+  phone?: string;
   otp?: {
     code: number;
     expiresAt: Date;
@@ -83,6 +85,12 @@ const userSchema = new Schema<IUser>(
       type: String,
       default: ROLE.JOBSEEKER,
       enum: Object.values(ROLE),
+    },
+    countryCode: {
+      type: String,
+    },
+    phone: {
+      type: String,
     },
     avatar: {
       type: String,

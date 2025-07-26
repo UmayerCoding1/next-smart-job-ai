@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const job = await Job.create({
+ await Job.create({
       title,
       description,
       company,
