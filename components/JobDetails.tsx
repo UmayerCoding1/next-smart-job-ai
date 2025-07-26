@@ -39,7 +39,6 @@ const JobDetails = ({ job }: { job: IJob }) => {
     workTime,
     isRemoteAvailable,
     shift,
-    applicationsQuestions,
   } = job;
   console.log(user);
   const logoSrc =
