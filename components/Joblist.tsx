@@ -2,25 +2,36 @@ import { IJob } from "@/app/models/Job";
 import { CircleDollarSign, MapPin, Timer } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-// import PrimaryButton from "./button/PrimaryButton";
+
 import FadeRight from "./animations/FadeRight";
 
-import PrimaryButton from "./button/PrimaryButton";
 import Link from "next/link";
 import SaveButton from "./button/SaveButton";
 import mongoose from "mongoose";
-import clsx from "clsx";
+import useDebouncedPrefetch from "@/hooks/useDebouncedPrefetch";
+import { getJob } from "@/service/api";
+
 const CompanyDefaultLogo = "/assets/companu-default-logo.png";
 
 // todo 1 : add company information to add next time , because company data in not available all job data;
 const Joblist = ({ job }: { job: IJob }) => {
   const { title, location, jobtype, salaryrange, company } = job;
 
+  const jobId = job._id?.toString();
+  const { handleMouseEnter, handleMouseLeave, handleClick } =
+    useDebouncedPrefetch({
+      queryKeyBuilder: (id) => ["job", job._id?.toString()],
+      fetchFn: (id) => getJob(id),
+      routeBuilder: (id) => `/job-details/${id}`,
+    });
   return (
     <>
       <FadeRight>
         <Link
           href={`/job-details/${job._id}`}
+          onMouseEnter={() => handleMouseEnter(jobId!)}
+          onMouseLeave={handleMouseLeave}
+          onClick={() => handleClick(jobId!)}
           className={
             "flex flex-col justify-between gap-3 shadow-md px-5 py-7 rounded-lg border bg-white border-gray-300 transition-all duration-200 w-full min-h-[230px] hover:bg-blue-50/50 hover:scale-105 "
           }

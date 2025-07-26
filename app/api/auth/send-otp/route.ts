@@ -1,5 +1,5 @@
 import { User } from "@/app/models/User";
-import { sendOtpWithNodemailer } from "@/lib/service/nodemailer";
+import { sendOtpWithNodemailer } from "@/service/nodemailer";
 
 import { NextRequest, NextResponse } from "next/server";
 

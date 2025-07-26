@@ -8,6 +8,7 @@ export interface IApplication {
   status: string;
   appliedAt: Date;
   expectedSalary: number;
+  jobRelatedQuestions?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -17,6 +18,12 @@ export const ApplicationSchema = new Schema<IApplication>({
   applicant: { type: Schema.Types.ObjectId, ref: "User", required: true },
   resumeLink: { type: String, required: true },
   expectedSalary: { type: Number, required: true },
+  jobRelatedQuestions: [
+    {
+      question: { type: String, required: true },
+      answer: { type: String, required: true },
+    },
+  ],
   status: {
     type: String,
     enum: ["pending", "reviewed", "interview", "rejected", "accepted"],
