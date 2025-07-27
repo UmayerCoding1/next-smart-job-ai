@@ -15,6 +15,7 @@ export const getUserByUsername = async(username : string) => {
     const res =await axios.get(`/api/auth/${username}`);
     return res.data.user;
   } catch (error) {
+    console.log(error);
     return null
   }
 }
