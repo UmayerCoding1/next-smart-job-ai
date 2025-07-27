@@ -4,14 +4,16 @@ import { Bell, LayoutDashboard, Menu, Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import GostButton from "./button/GostButton";
+
 // import NavlinkList from "./NavlinkList";
 import SearchBar from "./Search";
-import { Button } from "./ui/button";
-import { Sheet, SheetTrigger } from "./ui/sheet";
+
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import NavlinkList from "./NavlinkList";
+import GostButton from "@/components/button/GostButton";
+import { Button } from "../button";
+import { Sheet, SheetTrigger } from "../sheet";
 
 export const LargeLogo = "/assets/logo.png";
 export const SmallLogo = "/assets/Ai.png";

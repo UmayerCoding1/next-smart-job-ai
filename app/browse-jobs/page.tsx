@@ -2,9 +2,9 @@
 import { IJob } from "@/app/models/Job";
 import { RootState } from "@/app/redux/store";
 import GostButton from "@/components/button/GostButton";
-import Filter from "@/components/Filter";
-import Joblist from "@/components/Joblist";
-import Search from "@/components/Search";
+import Filter from "@/components/ui/custom/Filter";
+import Joblist from "@/components/ui/Joblist";
+import Search from "@/components/ui/Search";
 import useJobs from "@/hooks/useJobs";
 import { ChevronLeft, ChevronRight, Grid2X2, Menu } from "lucide-react";
 import Image from "next/image";

@@ -1,21 +1,15 @@
 "use client";
 import React from "react";
-import Link from "next/link";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 
+
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "../breadcrumb";
+import Link from "next/link";
 
 type Props = {
   link?: { href: string; label: string }[];
   currentPage: string;
 };
-const Breadcrumbs = ({ link, currentPage }: Props) => {
+const CustomBreadcrumb = ({ link, currentPage }: Props) => {
 
   return (
     <Breadcrumb>
@@ -39,4 +33,4 @@ const Breadcrumbs = ({ link, currentPage }: Props) => {
   );
 };
 
-export default Breadcrumbs;
+export default CustomBreadcrumb;

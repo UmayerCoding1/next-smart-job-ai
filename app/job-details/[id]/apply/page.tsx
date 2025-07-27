@@ -1,7 +1,7 @@
 "use client";
 import { IJob } from "@/app/models/Job";
 import { RootState } from "@/app/redux/store";
-import Breadcrumbs from "@/components/Breadcrumb";
+
 import ApplyForm from "@/components/form/applyForm";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -11,6 +11,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { use, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import CustomBreadcrumb from "../../../../components/ui/custom/CustomBreadcrumb";
 const applyImage = "/assets/apply.png";
 
 const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
@@ -21,7 +22,9 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
     (score / 100) * 100
   );
   const [isExpired, setIsExpired] = useState(false);
-  
+  const [fixedBreadcrumb, setFixedBreadcrumb] = useState(false);
+  const [windowPosition, setWindowPosition] = useState(0);
+
   const router = useRouter();
 
   const id = use(Context.params);
@@ -39,12 +42,12 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
       const appliedTime = new Date(appliedAt).getTime();
       const now = Date.now();
       const diff = now - appliedTime;
-console.log('time down')
-      if (diff > 1 * 60 * 1000) {
+
+      if (diff > 1 * 60 * 60 * 60 * 1000) {
         clearInterval(interval);
         router.push("/expired");
       }
-    }, 1000); 
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -70,6 +73,7 @@ console.log('time down')
   ];
 
   useEffect(() => {
+    //  window.scrollTo(0, 0);
     if (isExpired) {
       sessionStorage.removeItem("appliedAt");
       router.push("/expired");
@@ -77,12 +81,26 @@ console.log('time down')
     }
   });
 
+  useEffect(() => {
+    if (windowPosition > 300) {
+      setFixedBreadcrumb(true);
+    } else {
+      setFixedBreadcrumb(false);
+    }
+    const handleScroll = () => {
+      setWindowPosition(window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [windowPosition, fixedBreadcrumb]);
 
   const handleUrlSessionIsValid = () => {
     sessionStorage.setItem("appliedAt", new Date().toISOString());
-  }
+  };
   return (
-    <div onMouseMove={handleUrlSessionIsValid} className="bg-gradient-to-bl from-white/50 to-blue-100">
+    <div onMouseMove={handleUrlSessionIsValid} className="bg-gray-50">
       <div className="w-full h-[300px] bg-black flex items-center justify-evenly text-white">
         <div className="flex flex-col gap-2">
           <h2 className="text-5xl font-semibold">Apply this job</h2>
@@ -103,9 +121,15 @@ console.log('time down')
         />
       </div>
 
-      <div className="max-w-7xl mx-auto p-2 mt-5 ">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-4  justify-between w-full">
-          <Breadcrumbs link={links} currentPage="Job apply page" />
+      <div className="max-w-7xl mx-auto p-2 mt-5 relative">
+        <div
+          className={`flex flex-col lg:flex-row lg:items-center gap-4  justify-between w-full p-3 my-2 rpunded-lg shadow-lg border  border-gray-200 rounded-sm ${
+            fixedBreadcrumb
+              ? "fixed top-16 z-50  max-w-7xl mx-auto bg-gray-100"
+              : "bg-white"
+          }`}
+        >
+          <CustomBreadcrumb link={links} currentPage="Job apply page" />
 
           <div className=" w-full lg:w-[300px] relative   rounded-full">
             <Progress value={commpleteApplyProgress} className="w-full " />
@@ -128,8 +152,8 @@ console.log('time down')
           </div>
         </div>
 
-        <div className="mt-20 ">
-          <div className="lg:flex  w-full gap-10 ">
+        <div className=" ">
+          <div className="lg:flex justify-between  w-full gap-10 ">
             <ApplyForm user={user} job={job} setScore={setScore} />
             <div className="bg-white w-[30%] h-1/3 p-3">
               <div className="flex items-center gap-2">
@@ -187,7 +211,7 @@ console.log('time down')
           </div>
         </div>
 
-        <div className="h-screen"></div>
+       
       </div>
     </div>
   );

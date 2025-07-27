@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-import Navbar from "@/components/Navbar";
+
 
 
 import { Source_Sans_3 } from 'next/font/google';
 // import Footer from "@/components/Footer";  
-import UseAuth from "@/components/useAuth";
+import UseAuth from "@/components/ui/custom/useAuth";
 import { Toaster } from "sonner";
 import QueryProvider from "@/lib/QueryProvider";
 import ReduxProvider from "@/lib/ReduxProvider";
+import Navbar from "@/components/ui/custom/Navbar";
 
 
 const SourceSans = Source_Sans_3({

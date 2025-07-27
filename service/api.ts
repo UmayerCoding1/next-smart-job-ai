@@ -1,3 +1,4 @@
+import axios from "axios";
 
 
 export const getJob = async (jobId: string) => {
@@ -7,3 +8,13 @@ export const getJob = async (jobId: string) => {
 
   return data.job;
 };
+
+
+export const getUserByUsername = async(username : string) => {
+  try {
+    const res =await axios.get(`/api/auth/${username}`);
+    return res.data.user;
+  } catch (error) {
+    return null
+  }
+}
