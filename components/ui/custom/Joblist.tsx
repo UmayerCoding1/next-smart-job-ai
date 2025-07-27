@@ -3,13 +3,15 @@ import { CircleDollarSign, MapPin, Timer } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-import FadeRight from "./animations/FadeRight";
+
 
 import Link from "next/link";
-import SaveButton from "./button/SaveButton";
+
 import mongoose from "mongoose";
 import useDebouncedPrefetch from "@/hooks/useDebouncedPrefetch";
 import { getJob } from "@/service/api";
+import FadeRight from "@/components/animations/FadeRight";
+import SaveButton from "@/components/button/SaveButton";
 
 const CompanyDefaultLogo = "/assets/companu-default-logo.png";
 

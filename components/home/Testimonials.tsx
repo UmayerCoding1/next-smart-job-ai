@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { Rating } from "../Rating";
+import { Rating } from "../ui/custom/Rating";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 const AvatarImage = "/assets/avatar.avif";

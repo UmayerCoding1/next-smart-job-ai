@@ -42,8 +42,11 @@ export interface IUser {
   fullname: string;
   email: string;
   password: string;
+  username: string;
   role: string;
+  about?: string;
   avatar?: string;
+  coverImage?: string;
   loginMethod: string;
   googleId?: string;
   facebookId?: string;
@@ -81,10 +84,23 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     role: {
       type: String,
       default: ROLE.JOBSEEKER,
       enum: Object.values(ROLE),
+    },
+    about: {
+      type: String,
+      default: "",
+    },
+    coverImage: {
+      type: String,
+      default: "",
     },
     countryCode: {
       type: String,

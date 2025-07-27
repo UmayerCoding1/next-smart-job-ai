@@ -10,8 +10,8 @@ import { ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "./ui/button";
-import { Checkbox } from "./ui/checkbox";
+import { Button } from "../button";
+import { Checkbox } from "../checkbox";
 
 export const JobType = ["any", "full time", "hybrid", "remote", "internship"];
 export const DatePosted = [

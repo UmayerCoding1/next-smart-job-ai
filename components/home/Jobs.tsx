@@ -1,14 +1,16 @@
 "use client";
 import React from "react";
-import Search from "../Search";
+
 import { IJob } from "@/app/models/Job";
-import Joblist from "../Joblist";
+
 
 import { ChevronRight } from "lucide-react";
 
 import Link from "next/link";
 import PrimaryButton from "../button/PrimaryButton";
 import useJobs from "@/hooks/useJobs";
+import Search from "../ui/custom/Search";
+import Joblist from "../ui/custom/Joblist";
 const Jobs = () => {
  
 

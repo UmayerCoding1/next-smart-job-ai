@@ -11,6 +11,7 @@ import { Checkbox } from "../ui/checkbox";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Upload } from "lucide-react";
+import PrimaryButton from "../button/PrimaryButton";
 
 type ApplyFormProps = {
   user: IUser | null;
@@ -39,7 +40,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
 
     formData.forEach((value, key) => {
       if (typeof value === "string") {
-        data[key] = value; // ✅ OK
+        data[key] = value;
       } else {
       }
     });
@@ -106,7 +107,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="  w-full lg:w-[70%]  p-3 flex flex-col gap-6 bg-white/50 rounded-lg"
+      className="  w-full lg:w-[50%]  p-3 flex flex-col gap-6 bg-white shadow rounded-lg"
     >
       <div>
         <Label htmlFor="name">Name (Match your NID)</Label>
@@ -272,8 +273,8 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
           </div>
         );
       })}
-
-      <button>Submit</button>
+        
+        <PrimaryButton>Submit</PrimaryButton>
     </form>
   );
 };

@@ -8,11 +8,11 @@ export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
 
-    const { fullname, email, password, confirmPassword, role, loginMethod } =
+    const { fullname, email, password, confirmPassword, role, loginMethod,username } =
       await request.json();
   console.log({ fullname, email, password, confirmPassword, role, loginMethod });
   
-    if (!fullname || !email || !password || !role || !loginMethod) {
+    if (!fullname || !email || !password || !role || !loginMethod || !username) {
       return NextResponse.json(
         { message: "All fields are required", success: false },
         { status: 400 }
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     const userExists = await User.findOne({ email });
-
+     
     if (userExists) {
       return NextResponse.json(
         { message: "User already exists", success: false },
@@ -45,13 +45,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const usernameExists = await User.findOne({ username });
+     
+    if (usernameExists) {
+      return NextResponse.json(
+        { message: "Username already exists", success: false },
+        { status: 400 }
+      );
+    }
+
     const otp = Math.floor(100000 + Math.random() * 900000);
-    console.log(otp);
+    
     
     const user = await User.create({
       fullname,
       email,
       password,
+      username,
       role,
       loginMethod,
       otp : {

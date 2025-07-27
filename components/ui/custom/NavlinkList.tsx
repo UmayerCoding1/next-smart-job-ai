@@ -1,4 +1,4 @@
-import { SheetContent, SheetDescription, SheetHeader } from "./ui/sheet";
+import { SheetContent, SheetDescription, SheetHeader } from "../sheet";
 // import { IUser } from "@/app/models/User";
 import { RootState } from "@/app/redux/store";
 
@@ -18,8 +18,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "./ui/button";
-import Logout from "./action/logout";
+import { Button } from "../button";
+import Logout from "../../action/logout";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { setUser } from "@/app/features/user/userSlice";
@@ -33,7 +33,7 @@ const NavlinkList = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const authenticatedRoutes = [
-    { lable: "Profile", link: "/profile", icon: User },
+    { lable: "Profile", link: `/${user?.username}`, icon: User },
     { lable: "My Applications", link: "/my-applications", icon: FileCheck2 },
     { lable: "Resume Builder", link: "/resume-builder", icon: FilePenLine },
     { lable: "Settings", link: "/settings", icon: Settings },
