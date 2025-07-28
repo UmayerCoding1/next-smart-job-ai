@@ -64,6 +64,17 @@ export interface IUser {
   postJobs?: mongoose.Types.ObjectId[];
   profileComplete: number;
   isVerified: string;
+  socialLinks?: {
+    facebook?: string;
+    twitter?: string;
+    linkedin?: string;
+    instagram?: string;
+    github?: string;
+  },
+  provileView: {
+    count: number;
+
+  }
   status: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -180,6 +191,13 @@ const userSchema = new Schema<IUser>(
       type: String,
       default: VERIFIED.UNVERIFIED,
       enum: Object.values(VERIFIED),
+    },
+    socialLinks: {
+      facebook: { type: String },
+      twitter: { type: String },
+      linkedin: { type: String },
+      instagram: { type: String },
+      github: { type: String },
     },
     status: {
       type: String,

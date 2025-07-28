@@ -27,8 +27,8 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${SourceSans.className} bg-white dark:bg-slate-900`}>
-        <main className='max-w-7xl mx-auto p-1 lg:p-0 flex gap-3 '>
-           <div className='w-80 h-screen shadow-lg border gorder-gray-200 rounded-lg p-2'>
+        <main className='max-w-7xl mx-auto p-1 lg:p-0 lg:flex gap-3 '>
+           <div className='lg:w-80 lg:h-[400px] shadow-lg border gorder-gray-200 rounded-lg p-2 '>
             <ProfileNavList/>
            </div>
 

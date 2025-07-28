@@ -3,6 +3,7 @@ import { User } from "@/app/models/User";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "./verifyToken";
+import mongoose from "mongoose";
 
 interface Options {
   allowedRoles?: string;
@@ -13,7 +14,7 @@ export const withAuth = async (
   request: NextRequest,
   options: Options
 ): Promise<
-  { ok: true; token: unknown } | { ok: false; response: NextResponse }
+  { ok: true; userId: mongoose.Types.ObjectId | string} | { ok: false; response: NextResponse }
 > => {
   const token = (await cookies()).get("token")?.value as unknown as string;
 
@@ -40,8 +41,8 @@ export const withAuth = async (
 
   const user = await User.findById(veriFyToken.id);
 
-  console.log(user);
-  
+
+   console.log("Token verified", veriFyToken);
   if (options.allowedRoles !== user.role) {
     return {
       ok: false,
@@ -52,5 +53,5 @@ export const withAuth = async (
     };
   }
 
-  return { ok: true, token };
+  return { ok: true,  userId: veriFyToken.id };
 };

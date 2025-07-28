@@ -30,6 +30,7 @@ const signUpSchema = z
   .object({
     firstName: z.string().min(1, "First name is required"),
     lastName: z.string().min(1, "Last name is required"),
+    username: z.string().min(1, "Username is required"),
     email: z.string().email("Invalid email"),
     password: z
       .string()
@@ -76,12 +77,13 @@ const SignUp = () => {
         confirmPassword: data.confirmPassword,
         role: data.role,
         loginMethod: "custom",
+        username: data.username,
       };
       const res = await axios.post("/api/auth/register", signUpData);
 
       if (res.data.success) {
         toast.success("Account created successfully");
-        if (!res.data.user.isOtpVerified ){
+        if (!res.data.user.isOtpVerified) {
           setIsLoading(false);
           localStorage.setItem("unverifyed_user_traits", res.data.user.email);
           router.push("/verify");
@@ -92,6 +94,9 @@ const SignUp = () => {
       }
     } catch (error) {
       console.log(error);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -133,7 +138,19 @@ const SignUp = () => {
           </div>
         </section>
 
-        {/* Email */}
+        {/* User name */}
+        <div>
+          <Label>User Name</Label>
+          <Input
+            type="text"
+            placeholder="User Name"
+            className="h-12"
+            {...register("username")}
+          />
+          {errors.email && (
+            <p className="text-sm text-red-500">{errors.email.message}</p>
+          )}
+        </div>
         <div>
           <Label>Email</Label>
           <Input

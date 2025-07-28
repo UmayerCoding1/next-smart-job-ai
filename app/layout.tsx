@@ -5,12 +5,12 @@ import "./globals.css";
 
 
 import { Source_Sans_3 } from 'next/font/google';
-// import Footer from "@/components/Footer";  
 import UseAuth from "@/components/ui/custom/useAuth";
 import { Toaster } from "sonner";
 import QueryProvider from "@/lib/QueryProvider";
 import ReduxProvider from "@/lib/ReduxProvider";
 import Navbar from "@/components/ui/custom/Navbar";
+import Footer from "@/components/ui/custom/Footer";
 
 
 const SourceSans = Source_Sans_3({
@@ -40,7 +40,7 @@ export default async function RootLayout({
             <Navbar  />
             <UseAuth />
             <main>{children}</main>
-            {/* <Footer /> */}
+            <Footer />
            <Toaster closeButton={true} containerAriaLabel="Toaster" position="bottom-right"/>
           </ReduxProvider>
         </QueryProvider>

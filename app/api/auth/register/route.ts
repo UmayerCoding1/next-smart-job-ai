@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
     const { fullname, email, password, confirmPassword, role, loginMethod,username } =
       await request.json();
-  console.log({ fullname, email, password, confirmPassword, role, loginMethod });
+  console.log({ fullname, email, password, confirmPassword, role, loginMethod,username });
   
     if (!fullname || !email || !password || !role || !loginMethod || !username) {
       return NextResponse.json(

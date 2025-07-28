@@ -94,7 +94,7 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [windowPosition, fixedBreadcrumb]);
+  }, [windowPosition]);
 
   const handleUrlSessionIsValid = () => {
     sessionStorage.setItem("appliedAt", new Date().toISOString());

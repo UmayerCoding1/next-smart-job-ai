@@ -7,6 +7,7 @@ export const verifyToken = (token: string): JwtPayload & { id: string } | null =
       id: string;
     };
 
+   
     return decoded;
   } catch (error) {
     console.error("Token verify error", error);
