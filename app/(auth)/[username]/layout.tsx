@@ -1,5 +1,5 @@
 import { ProfileNavList } from "@/components/ui/custom/Profile";
-import { getUserByUsername } from "@/service/api";
+
 import type { Metadata } from "next";
 
 import { Source_Sans_3 } from "next/font/google";
