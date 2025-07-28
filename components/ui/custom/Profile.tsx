@@ -16,17 +16,11 @@ export const ProfileNavList = () => {
 
   const profileList = [
     { lable: "My Profile", hraf: `/${user?.username}`, icon: User },
-    {
-      lable: "Change password",
-      hraf: `/${user?.username}/update-password`,
-      icon: Key,
-    },
-    {
-      lable: "Notifications",
-      hraf: `/${user?.username}/notification`,
-      icon: Bell,
-    },
+    {lable: "Change password",hraf: `/${user?.username}/update-password`,icon: Key,},
+    {lable: "Notifications",hraf: `/${user?.username}/notification`,icon: Bell,},
   ];
+
+
   console.log(user);
   return (
     <div>
