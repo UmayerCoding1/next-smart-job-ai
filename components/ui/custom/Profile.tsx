@@ -27,8 +27,9 @@ import { useSelector } from "react-redux";
 import { Dialog } from "../dialog";
 
 import UpdateAvatar from "./UpdateAvatar";
-import { Input } from "@/components/form/AppForm";
+
 import AccountSettingForm from "@/components/form/profile/AccountSettingForm";
+import CompanyProfileForm from "@/components/form/profile/CompanyProfileForm";
 
 const coverImage = "/assets/profilecover-image.jpg";
 const UserImage = "/assets/user-image.png";
@@ -38,11 +39,17 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const tabs = ['Account Settings', 'Company Profile', 'Education', 'Resume', "Social Media"];
 
+const gettabs = (role : string) => {
+  return role === 'recruiter' ? tabs : tabs.filter((tab) => tab !== 'Company Profile');
+}
+
+
 const Profile = () => {
   const user = useSelector((state: RootState) => state.authR.user);
   const [company, setCompany] = useState<ICompany | null>(null);
   const [selectedTab, setSelectedTab] = useState(1);
-
+  const userTabs = gettabs(user?.role || '');
+  
   useEffect(() => {
     const handleGetCompany = async () => {
       try {
@@ -55,16 +62,18 @@ const Profile = () => {
 
     handleGetCompany();
   }, [user?._id]);
+
+  
   
   return (
-    <div className="relative">
-      <div className="bg-blue-50 w-full h-52 relative">
+    <div className="relative lg:mb-10">
+      <div className="bg-blue-50 w-full lg:h-52 relative">
         <Image
           src={user?.coverImage || coverImage}
           alt="Google"
           width={800}
           height={800}
-          className=" w-full h-full  rounded-sm"
+          className=" w-full h-[150px]  lg:h-full rounded-sm"
         />
 
         <div className="absolute  top-0 right-1 lg:right-2 mt-2  flex   items-center   gap-1 bg-white px-3 py-1 rounded-full cursor-pointer active:scale-105 ">
@@ -73,7 +82,7 @@ const Profile = () => {
         </div>
       </div>
 
-      <div className="mx-1 lg:flex">
+      <div className="mx-1 lg:flex  h-a">
         <div className="w-full lg:w-68 lg:h-[400px] shadow-lg border border-gray-200 rounded-sm bg-white lg:absolute z-10 top-32 mt-2 lg:mt-0 flex lg:flex-col  items-center p-3 lg:mx-5">
           <div className="flex flex-col items-center ">
             <div className="relative">
@@ -126,7 +135,7 @@ const Profile = () => {
         {/* tabs */}
         <div className="w-full ">
           <div className="flex items-center justify-between gap-5   cursor-pointer">
-            {tabs.map((tab, index) => (
+            {userTabs.map((tab, index) => (
               <div
               onClick={() => setSelectedTab(index + 1)}
                 key={index}
@@ -141,10 +150,11 @@ const Profile = () => {
             ))}
           </div>
  <hr />
-          <div>
+          <div className="p-2  min-h-[300px] overflow-y-scroll scrollbar-hide ">
             {selectedTab === 1 && <AccountSettingForm/>}
-            {/* {selectedTab === 2 && <CompanyProfileForm />}
-            {selectedTab === 3 && <EducationForm />}
+             {user?.role === "recruiter" && selectedTab === 2 && <CompanyProfileForm company={company} />}
+
+            {/* {selectedTab === 3 && <EducationForm />}
             {selectedTab === 4 && <ResumeForm />}
             {selectedTab === 5 && <SocialMediaForm />} */}
             

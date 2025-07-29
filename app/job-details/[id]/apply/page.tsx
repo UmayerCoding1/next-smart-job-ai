@@ -162,6 +162,7 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
                     <Image
                       src={user.avatar}
                       alt="login form image"
+                      
                       width={800}
                       height={800}
                       className="w-full h-full ovject-cover"
