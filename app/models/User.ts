@@ -2,6 +2,7 @@ import mongoose, { Schema, model, models } from "mongoose";
 import bcrypt from "bcryptjs";
 
 
+
 export const ROLE = {
   JOBSEEKER: "jobseeker",
   RECRUITER: "recruiter",
@@ -47,6 +48,7 @@ export interface IUser {
   about?: string;
   avatar?: string;
   coverImage?: string;
+  resume?: mongoose.Types.ObjectId;
   loginMethod: string;
   googleId?: string;
   facebookId?: string;
@@ -71,7 +73,7 @@ export interface IUser {
     instagram?: string;
     github?: string;
   },
-  provileView: {
+  profileView: {
     count: number;
 
   }
@@ -112,6 +114,10 @@ const userSchema = new Schema<IUser>(
     coverImage: {
       type: String,
       default: "",
+    },
+    resume: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Resume",
     },
     countryCode: {
       type: String,
@@ -199,6 +205,12 @@ const userSchema = new Schema<IUser>(
       instagram: { type: String },
       github: { type: String },
     },
+    profileView: {
+      count: {
+        type: Number,
+        default: 0,
+      },
+    },
     status: {
       type: String,
       default: Status.ACTIVE,
@@ -217,3 +229,9 @@ userSchema.pre("save", async function (next) {
 });
 
 export const User = models.User || model<IUser>("User", userSchema);
+
+
+
+userSchema.methods.comparePassword = async function (enteredPassword: string) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};

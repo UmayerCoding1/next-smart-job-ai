@@ -4,6 +4,7 @@ import { IJob, Job } from "@/app/models/Job";
 import { connectToDatabase } from "@/lib/db";
 import { withAuth } from "@/lib/withAuth";
 import { NextRequest, NextResponse } from "next/server";
+import mongoose, { FilterQuery } from "mongoose";
 
 // shift,vacancies,isRemoteAvailable
 
@@ -16,7 +17,7 @@ export async function POST(request: NextRequest) {
       title,
       description,
       company,
-      reqruiter,
+      recruiter,
       location,
       salaryrange,
       jobtype,
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
       holidayPolicy,
       requirements,
       workTime,
-      applicationsQuestions
+      applicationsQuestions,
     } = body;
 
     const auth = await withAuth(request, { allowedRoles: "recruiter" });
@@ -39,11 +40,11 @@ export async function POST(request: NextRequest) {
       !title ||
       !description ||
       !company ||
-      !reqruiter ||
+      !recruiter ||
       !location ||
       !salaryrange ||
       !jobtype ||
-      !skills ||
+      !skills.length ||
       !education ||
       !experience ||
       !experienceLevel ||
@@ -69,11 +70,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
- await Job.create({
+    await Job.create({
       title,
       description,
       company,
-      reqruiter,
+      recruiter,
       location,
       salaryrange,
       jobtype,
@@ -99,8 +100,11 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.log("Job post error", error);
-    throw error;
+    console.error("Job post error", error);
+    return NextResponse.json(
+      { message: "Failed to post job", success: false },
+      { status: 500 }
+    );
   }
 }
 
@@ -108,20 +112,41 @@ export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
     const searchParams = request.nextUrl.searchParams;
-    const existingJodId = searchParams.get("existingJodId");
-    const filter: Record<string, string> = {};
-    searchParams.forEach((value: string, key: string) => {
-      if(!key || !value) return;
-      if (key === "existingJodId") return;
-      filter[key] = value;
-    });
+    const existingJobId = searchParams.get("existingJodId");
+    const jobtitle = searchParams.get("title");
+    const jobType = searchParams.get("jobType");
+    const location = searchParams.get("location");
 
-    const jobs = await Job.find(filter).populate("company");
-    const filteredJobs = jobs.filter((job) => job._id.toString() !==  existingJodId);
-    // console.log('filteredJobs',typeof existingJodId);
+    if (existingJobId && !mongoose.Types.ObjectId.isValid(existingJobId)) {
+      return NextResponse.json(
+        { message: "Invalid job ID", success: false },
+        { status: 400 }
+      );
+    }
 
+    const filter: FilterQuery<IJob> = {};
+    if (existingJobId) filter._id = existingJobId;
+    if (jobtitle) {
+      filter.title = {
+        $regex: new RegExp(jobtitle, "i"),
+      };
+    }
+    if (jobType) {
+      filter.jobtype = {
+        $elemMatch: { $regex: new RegExp(jobType, "i") },
+      };
+    }
+    if (location) {
+      filter.location = {
+        $regex: new RegExp(location, "i"),
+      };
+    }
+
+    console.log(filter);
     
-    return NextResponse.json({ jobs: existingJodId ? filteredJobs : jobs }, { status: 200 });
+    const jobs = await Job.find(filter).populate("company");
+
+    return NextResponse.json({ jobs, success: true }, { status: 200 });
   } catch (error) {
     console.log("Job get error", error);
     throw error;

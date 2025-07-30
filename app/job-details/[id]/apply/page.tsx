@@ -44,13 +44,14 @@ const ApplyPage = (Context: { params: Promise<{ id: string }> }) => {
       const diff = now - appliedTime;
 
       if (diff > 1 * 60 * 60 * 60 * 1000) {
+        setIsExpired(true);
         clearInterval(interval);
         router.push("/expired");
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     const handleJob = async () => {

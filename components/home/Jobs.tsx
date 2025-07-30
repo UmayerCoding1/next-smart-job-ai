@@ -3,7 +3,6 @@ import React from "react";
 
 import { IJob } from "@/app/models/Job";
 
-
 import { ChevronRight } from "lucide-react";
 
 import Link from "next/link";
@@ -11,18 +10,14 @@ import PrimaryButton from "../button/PrimaryButton";
 import useJobs from "@/hooks/useJobs";
 import Search from "../ui/custom/Search";
 import Joblist from "../ui/custom/Joblist";
-const Jobs = () => {
- 
 
-const {jobs} = useJobs('','')
-console.log(jobs);
-  const handleSearch = (search: {
-    jobTitle: string;
-    location: string;
-    jobType: string;
-  }) => {
-    console.log(search);
-  };
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+const Jobs = () => {
+  const searchQuery = useSelector((state: RootState) => state.searchR.search);
+
+  console.log("home jobs ", searchQuery);
+  const { jobs } = useJobs("", "", "", "", "");
 
   return (
     <div>
@@ -34,7 +29,7 @@ console.log(jobs);
               Know your worth and find the job that qualify your life
             </p>
           </div>
-          <Search onSearch={handleSearch} />
+          <Search />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
             {jobs?.length > 0 ? (
               jobs

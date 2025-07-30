@@ -1,27 +1,30 @@
 "use client";
 import React, { useState } from "react";
 
-import { BriefcaseBusiness, Building2, SearchIcon } from "lucide-react";
+import { BriefcaseBusiness, Building2, SearchIcon, X } from "lucide-react";
 import { seacrhSchema } from "@/lib/zod-schema/SearchForm";
 import { useDispatch } from "react-redux";
 import { setSearchData } from "@/app/features/searchSlice";
 import PrimaryButton from "@/components/button/PrimaryButton";
+import { useRouter } from "next/navigation";
+import { Button } from "../button";
 
 interface SearchProps {
-  onSearch?: (search: {
-    jobTitle: string;
-    location: string;
-    jobType: string;
-  }) => void;
+  title?: string;
+  jobType?: string;
+  location?: string;
+  clearSearch?: () => void;
 }
 
-const Search = ({ onSearch }: SearchProps) => {
+const Search = ({ title, jobType, location ,clearSearch}: SearchProps = {}) => {
+  
   const [search, setSearch] = useState({
-    jobTitle: "",
+    title: "",
     location: "",
     jobType: "",
   });
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,11 +36,10 @@ const Search = ({ onSearch }: SearchProps) => {
 
   const handleSubmit = () => {
     const searchData = seacrhSchema.parse(search);
+    console.log(search);
     dispatch(setSearchData(searchData));
-
-    if (onSearch) {
-      onSearch(searchData);
-    }
+    
+    router.push(`/browse-jobs?title=${search.title}&location=${search.location}&jobType=${search.jobType}`);
   };
 
   return (
@@ -46,8 +48,8 @@ const Search = ({ onSearch }: SearchProps) => {
         <BriefcaseBusiness size={15} className="text-gray-600" />
         <input
           type="search"
-          name="jobTitle"
-          value={search.jobTitle}
+          name="title"
+          defaultValue={ title || search.title}
           onChange={handleChange}
           autoComplete="off"
           placeholder="Job title or keyword"
@@ -59,7 +61,7 @@ const Search = ({ onSearch }: SearchProps) => {
         <input
           type="search"
           name="location"
-          value={search.location}
+          defaultValue={location || search.location}
           onChange={handleChange}
           placeholder="Location"
           autoComplete="off"
@@ -71,7 +73,7 @@ const Search = ({ onSearch }: SearchProps) => {
         <input
           type="search"
           name="jobType"
-          value={search.jobType}
+           defaultValue={ jobType || search.jobType}
           onChange={handleChange}
           placeholder="Job Type (e.g. Full-time)"
           autoComplete="off"
@@ -82,6 +84,10 @@ const Search = ({ onSearch }: SearchProps) => {
       <PrimaryButton className="px-8" onClick={handleSubmit}>
         Search
       </PrimaryButton>
+
+      {search.title || search.location || search.jobType ? (
+         <Button onClick={clearSearch} variant={'destructive'} className="px-8"><X/></Button>
+      ) :""}
     </div>
   );
 };

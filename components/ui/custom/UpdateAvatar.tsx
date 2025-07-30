@@ -29,8 +29,8 @@ interface avatarImagePreviewData {
 const UpdateAvatar = ({ user, UserImage }: Props) => {
   const [avatarImagePreview, setAvatarImagePreview] =useState<avatarImagePreviewData | null>(null);
   const [imageError, setImageError] = useState<{ type: string , message: string} | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [progress, setProgress] = useState(0);
+  // const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

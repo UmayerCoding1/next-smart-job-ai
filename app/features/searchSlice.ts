@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   search: {
-    jobTitle: "",
+    title: "",
     location: "",
     jobType: "",
   },
@@ -17,7 +17,7 @@ export const searchSlice = createSlice({
     },
     clearSearchData: (state) => {
       state.search = {
-        jobTitle: "",
+        title: "",
         location: "",
         jobType: "",
       };

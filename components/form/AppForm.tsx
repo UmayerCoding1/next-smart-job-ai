@@ -89,7 +89,7 @@ export const Input = ({
         },
       } as React.ChangeEvent<HTMLInputElement>);
     }
-  }, [handleInput.value]);
+  }, [formdata, handleInput, handleChange]);
 
   return (
     <>

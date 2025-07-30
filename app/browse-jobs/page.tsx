@@ -1,6 +1,5 @@
 "use client";
 import { IJob } from "@/app/models/Job";
-import { RootState } from "@/app/redux/store";
 import GostButton from "@/components/button/GostButton";
 import Filter from "@/components/ui/custom/Filter";
 import Joblist from "@/components/ui/custom/Joblist";
@@ -8,21 +7,25 @@ import Search from "@/components/ui/custom/Search";
 import useJobs from "@/hooks/useJobs";
 import { ChevronLeft, ChevronRight, Grid2X2, Menu } from "lucide-react";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 
 const HeaderBg = "/assets/jods-header.jpg";
 
 const BrowseJobs = () => {
-  const searchQuery = useSelector((stste: RootState) => stste.searchR.search);
   const [listView, setListView] = useState<string>("grid");
   const [page, setPage] = useState<number>(1);
-  const { jobs, isLoading } = useJobs('','');
 
+  const searchUrl = useSearchParams();
+  const title = searchUrl.get("title") || "";
+  const jobType = searchUrl.get("jobType") || "";
+  const location = searchUrl.get("location") || "";
+  const { jobs, isLoading } = useJobs("", "", title, jobType, location);
+  const router = useRouter();
 
-  console.log(searchQuery);
-  
-
+  const clearSearch = () => {
+    router.push("/browse-jobs");
+  };
 
   return (
     <div className="bg-blue-50/70">
@@ -41,7 +44,12 @@ const BrowseJobs = () => {
           </h2>
           <p className="font-medium text-white">500k jobs for you to explore</p>
           <div className="bg-white rounded-lg mt-10 w-full lg:w-auto ">
-            <Search />
+            <Search
+              title={title}
+              jobType={jobType}
+              location={location}
+              clearSearch={clearSearch}
+            />
           </div>
         </div>
       </div>
@@ -58,33 +66,48 @@ const BrowseJobs = () => {
         <div className="flex-1">
           <div className="bg-white rounded-md mb-2 px-4 py-3 flex items-center justify-between">
             <div className="flex items-center  gap-3">
-              <GostButton onClick={() => {
-                if (page > 1) {
-                  setPage(page - 1);
-                }
-              }}
-              className={`${page === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+              <GostButton
+                onClick={() => {
+                  if (page > 1) {
+                    setPage(page - 1);
+                  }
+                }}
+                className={`${
+                  page === 1 ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
                 <ChevronLeft size={13} />
               </GostButton>
-              <div  className="flex items-center gap-2 ">
+              <div className="flex items-center gap-2 ">
                 {Array.from({ length: 5 }).map((_, index) => (
-                  <span key={index} className={`text-sm font-medium ${page === index + 1 ? "text-blue-500" : "text-gray-400"}`}>{index + 1}</span>
+                  <span
+                    key={index}
+                    className={`text-sm font-medium ${
+                      page === index + 1 ? "text-blue-500" : "text-gray-400"
+                    }`}
+                  >
+                    {index + 1}
+                  </span>
                 ))}
               </div>
 
-              <GostButton onClick={() => {
-                if (page < 5) {
-                  setPage(page + 1);
-                }
-              }} 
-              className={`${page === 5 ? "opacity-50 cursor-not-allowed" : ""}`}
+              <GostButton
+                onClick={() => {
+                  if (page < 5) {
+                    setPage(page + 1);
+                  }
+                }}
+                className={`${
+                  page === 5 ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
                 <ChevronRight size={13} />
               </GostButton>
             </div>
 
-            <p className="text-lg font-medium lg:hidden">Showing {jobs.length} Jobs</p>
+            <p className="text-lg font-medium lg:hidden">
+              Showing {jobs.length} Jobs
+            </p>
             <div className="lg:flex items-center gap-4 hidden">
               <p className="text-lg font-medium">View :</p>
               <Grid2X2

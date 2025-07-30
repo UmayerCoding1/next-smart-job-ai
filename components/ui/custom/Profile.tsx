@@ -30,6 +30,8 @@ import UpdateAvatar from "./UpdateAvatar";
 
 import AccountSettingForm from "@/components/form/profile/AccountSettingForm";
 import CompanyProfileForm from "@/components/form/profile/CompanyProfileForm";
+import EducationForm from "@/components/form/profile/EducationForm";
+import ResumeUpload from "./ResumeUpload";
 
 const coverImage = "/assets/profilecover-image.jpg";
 const UserImage = "/assets/user-image.png";
@@ -47,7 +49,7 @@ const gettabs = (role : string) => {
 const Profile = () => {
   const user = useSelector((state: RootState) => state.authR.user);
   const [company, setCompany] = useState<ICompany | null>(null);
-  const [selectedTab, setSelectedTab] = useState(1);
+  const [selectedTab, setSelectedTab] = useState<string>('Account Settings');
   const userTabs = gettabs(user?.role || '');
   
   useEffect(() => {
@@ -137,10 +139,10 @@ const Profile = () => {
           <div className="flex items-center justify-between gap-5   cursor-pointer">
             {userTabs.map((tab, index) => (
               <div
-              onClick={() => setSelectedTab(index + 1)}
+              onClick={() => setSelectedTab(tab)}
                 key={index}
                 className={`cursor-pointer   transition-all h-14 duration-200 flex items-center justify-center ${
-                  selectedTab === index + 1
+                  selectedTab === tab
                     ? "border-b-2 border-blue-500 bg-gray-100 lg:bg-transparent "
                     : ""
                 }`}
@@ -151,12 +153,12 @@ const Profile = () => {
           </div>
  <hr />
           <div className="p-2  min-h-[300px] overflow-y-scroll scrollbar-hide ">
-            {selectedTab === 1 && <AccountSettingForm/>}
-             {user?.role === "recruiter" && selectedTab === 2 && <CompanyProfileForm company={company} />}
+            {selectedTab === "Account Settings" && <AccountSettingForm/>}
+             {user?.role === "recruiter" && selectedTab === 'Company Profile' && <CompanyProfileForm company={company} />}
 
-            {/* {selectedTab === 3 && <EducationForm />}
-            {selectedTab === 4 && <ResumeForm />}
-            {selectedTab === 5 && <SocialMediaForm />} */}
+            {selectedTab === 'Education' && <EducationForm />}
+            {selectedTab === 'Resume' && <ResumeUpload />}
+            {/* {selectedTab === 5 && <SocialMediaForm />} */}
             
           </div>
          
