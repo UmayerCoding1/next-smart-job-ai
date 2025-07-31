@@ -85,8 +85,11 @@ const Navbar = () => {
             />
           </section>
 
-          {user ? (
+          <section className="flex items-center gap-4">
+            <Link href={'/pricing'} className="text-lg font-semibold border-b border-black hover:text-blue-600 hover:border-blue-600 ">Pricing</Link>
+            {user ? (
             <section className="flex items-center gap-2">
+              
               <GostButton onClick={toggleSearch}>
                 <Search size={30} />
               </GostButton>
@@ -132,6 +135,7 @@ const Navbar = () => {
             </section>
           ) : (
             <div className="flex items-center gap-2">
+              
               <Link href="/login">
                 <Button className="cursor-pointer bg-gradient-to-r from-blue-500 to-blue-700 text-white">
                   <span>Login</span>
@@ -153,6 +157,7 @@ const Navbar = () => {
               </Sheet>
             </div>
           )}
+          </section>
         </nav>
       </header>
 

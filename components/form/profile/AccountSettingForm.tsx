@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import AppForm, { Input } from "../AppForm";
+import AppForm, { Input } from "../../shared/AppForm";
 import { Label } from "@/components/ui/label";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";

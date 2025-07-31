@@ -1,4 +1,4 @@
-import { ProfileNavList } from "@/components/ui/custom/Profile";
+import { ProfileNavList } from "@/components/ui/profile/Profile";
 
 import type { Metadata } from "next";
 

@@ -33,7 +33,7 @@ export const ExperienceLavel = [
 const Filter = ({
   setFilterQuery,
 }: {
-  setFilterQuery: React.Dispatch<React.SetStateAction<string>>;
+  setFilterQuery: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
   const filterQuery = useSelector((state: RootState) => state.filterR);
   const [isOpenJobType, setIsOpenJobType] = useState<boolean>(true);

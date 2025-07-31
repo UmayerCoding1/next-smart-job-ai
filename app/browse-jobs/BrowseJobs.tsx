@@ -15,7 +15,7 @@ const HeaderBg = "/assets/jods-header.jpg";
 const BrowseJobs = () => {
   const [listView, setListView] = useState<string>("grid");
   const [page, setPage] = useState<number>(1);
- const [filterQuery, setFilterQuery] = useState<string>('');
+ const [filterQuery, setFilterQuery] = useState<string | null>(null);
   const searchUrl = useSearchParams();
   const category = searchUrl.get("category") || "";
   const title = searchUrl.get("title") || "";

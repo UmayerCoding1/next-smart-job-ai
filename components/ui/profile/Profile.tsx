@@ -11,6 +11,7 @@ import {
   Bell,
   BriefcaseBusiness,
   Camera,
+  CloudDownload,
   Copy,
   FileCheck2,
   HeartHandshake,
@@ -18,7 +19,7 @@ import {
   Key,
   Rss,
   Shield,
-  User,
+  User
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,27 +32,41 @@ import UpdateAvatar from "./UpdateAvatar";
 import AccountSettingForm from "@/components/form/profile/AccountSettingForm";
 import CompanyProfileForm from "@/components/form/profile/CompanyProfileForm";
 import EducationForm from "@/components/form/profile/EducationForm";
-import ResumeUpload from "./ResumeUpload";
+import ResumeUpload, { ResumeUploadInput } from "../../shared/ResumeUpload";
+import { Button } from "../button";
+import { toast } from "sonner";
+import PreviesResume from "./PreviesResume";
 
 const coverImage = "/assets/profilecover-image.jpg";
 const UserImage = "/assets/user-image.png";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+const tabs = [
+  "Account Settings",
+  "Company Profile",
+  "Education",
+  "Resume",
+  "Social Media",
+];
 
-const tabs = ['Account Settings', 'Company Profile', 'Education', 'Resume', "Social Media"];
-
-const gettabs = (role : string) => {
-  return role === 'recruiter' ? tabs : tabs.filter((tab) => tab !== 'Company Profile');
-}
-
+const gettabs = (role: string) => {
+  return role === "recruiter"
+    ? tabs
+    : tabs.filter((tab) => tab !== "Company Profile");
+};
 
 const Profile = () => {
   const user = useSelector((state: RootState) => state.authR.user);
   const [company, setCompany] = useState<ICompany | null>(null);
-  const [selectedTab, setSelectedTab] = useState<string>('Account Settings');
-  const userTabs = gettabs(user?.role || '');
-  
+  const [selectedTab, setSelectedTab] = useState<string>("Account Settings");
+  const [resumedata, setResumeData] = useState<{
+    url: string;
+    name: string;
+    file: File | null;
+  } | null>(null);
+  const userTabs = gettabs(user?.role || "");
+
   useEffect(() => {
     const handleGetCompany = async () => {
       try {
@@ -65,8 +80,20 @@ const Profile = () => {
     handleGetCompany();
   }, [user?._id]);
 
-  
-  
+  const handleFileChange = (pdfdata: {
+    url: string;
+    name: string;
+    file: File;
+  }) => {
+    if(pdfdata){
+      setResumeData(pdfdata);
+      toast.success("Resume uploaded successfully", { duration: 1500 });
+    }else{
+      toast.error("Something went wrong", { duration: 1500 });
+      setResumeData(null);
+    }
+  };
+
   return (
     <div className="relative lg:mb-10">
       <div className="bg-blue-50 w-full lg:h-52 relative">
@@ -139,7 +166,7 @@ const Profile = () => {
           <div className="flex items-center justify-between gap-5   cursor-pointer">
             {userTabs.map((tab, index) => (
               <div
-              onClick={() => setSelectedTab(tab)}
+                onClick={() => setSelectedTab(tab)}
                 key={index}
                 className={`cursor-pointer   transition-all h-14 duration-200 flex items-center justify-center ${
                   selectedTab === tab
@@ -147,24 +174,71 @@ const Profile = () => {
                     : ""
                 }`}
               >
-                <p className="text-gray-500 font-semibold cursor-pointer text-sm">{tab}</p>
+                <p className="text-gray-500 font-semibold cursor-pointer text-sm">
+                  {tab}
+                </p>
               </div>
             ))}
           </div>
- <hr />
+          <hr />
           <div className="p-2  min-h-[300px] overflow-y-scroll scrollbar-hide ">
-            {selectedTab === "Account Settings" && <AccountSettingForm/>}
-             {user?.role === "recruiter" && selectedTab === 'Company Profile' && <CompanyProfileForm company={company} />}
+            {selectedTab === "Account Settings" && <AccountSettingForm />}
+            {user?.role === "recruiter" &&
+              selectedTab === "Company Profile" && (
+                <CompanyProfileForm company={company} />
+              )}
 
-            {selectedTab === 'Education' && <EducationForm />}
-            {selectedTab === 'Resume' && <ResumeUpload />}
+            {selectedTab === "Education" && <EducationForm />}
+            {selectedTab === "Resume" && (
+              <ResumeUpload handleGetFileData={handleFileChange}>
+                <div className="w-full ">
+                  <div className="flex gap-5 ">
+                    <div className={`{w-full ${resumedata?.url ? 'lg:w-[55%]' : 'lg:w-full'} cursor-pointer `}>
+                      <ResumeUploadInput
+                        handleFileInput={{ id: "resume", className: "w-full" }}
+                      />
+                      <label htmlFor="resume">
+                        <div className="w-full  h-40 bg-gray-100 rounded-lg flex flex-col items-center justify-center text-gray-500 cursor-pointer">
+                          <CloudDownload size={20} className="rotate-180" />
+                          <span className="text-lg font-semibold">
+                            Upload Your Resume
+                          </span>
+                          <span className="text-sm">Upload only document</span>
+                        </div>
+                      </label>
+                    </div>
+                    {resumedata?.url && (
+                      <div className="h-40 shadow p-2">
+                      <Link
+                        href={resumedata?.url 
+                          ? resumedata.url : "#"
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex gap-2 h-full"
+                      >
+                        <div className="w-40 h-full bg-red-700 rounded-lg flex items-center justify-center ">
+                          <span className="text-white text-xl">PDF</span>
+                        </div>
+                        <div className="flex flex-col justify-between items-end">
+                          <span className="text-sm">{resumedata.name}</span>
+                          
+                        </div>
+                      </Link>
+                    </div>
+                    )}
+                  </div>
+                </div>
+
+               <PreviesResume/>
+                <Button className="bg-gradient-to-tr from-blue-500 to-blue-800 w-full">
+                  Update
+                </Button>
+              </ResumeUpload>
+            )}
             {/* {selectedTab === 5 && <SocialMediaForm />} */}
-            
           </div>
-         
         </div>
-
-        
       </div>
     </div>
   );

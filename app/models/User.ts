@@ -1,8 +1,6 @@
 import mongoose, { Schema, model, models } from "mongoose";
 import bcrypt from "bcryptjs";
 
-
-
 export const ROLE = {
   JOBSEEKER: "jobseeker",
   RECRUITER: "recruiter",
@@ -72,10 +70,17 @@ export interface IUser {
     linkedin?: string;
     instagram?: string;
     github?: string;
-  },
+  };
   profileView: {
     count: number;
-
+  };
+  subscription?: {
+    plan: string;
+    duration: string;
+    startDate: Date;
+    expiresAt: Date;
+    isActive: boolean;
+    paymentId?: string;
   }
   status: string;
   createdAt?: Date;
@@ -144,7 +149,10 @@ const userSchema = new Schema<IUser>(
     },
     otp: {
       code: { type: Number },
-      expiresAt: { type: Date,  default: () => new Date(Date.now() + 5 * 60 * 1000)},
+      expiresAt: {
+        type: Date,
+        default: () => new Date(Date.now() + 5 * 60 * 1000),
+      },
     },
     isOtpVerified: {
       type: Boolean,
@@ -211,6 +219,31 @@ const userSchema = new Schema<IUser>(
         default: 0,
       },
     },
+    subscription: {
+      plan: {
+        type: String,
+        enum: ["free", "growth", "professional"],
+        default: "free",
+      },
+      duration: {
+        type: String,
+        enum: ["monthly", "yearly"],
+        default: "monthly",
+      },
+      startedAt: {
+        type: Date,
+      },
+      expiresAt: {
+        type: Date,
+      },
+      isActive: {
+        type: Boolean,
+        default: false,
+      },
+      paymentId: {
+        type: String, // optional: store Stripe/SSLCommerz transaction ID
+      },
+    },
     status: {
       type: String,
       default: Status.ACTIVE,
@@ -229,8 +262,6 @@ userSchema.pre("save", async function (next) {
 });
 
 export const User = models.User || model<IUser>("User", userSchema);
-
-
 
 userSchema.methods.comparePassword = async function (enteredPassword: string) {
   return await bcrypt.compare(enteredPassword, this.password);

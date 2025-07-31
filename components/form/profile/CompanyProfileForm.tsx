@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import AppForm, { Input } from "../AppForm";
+import AppForm, { Input } from "../../shared/AppForm";
 import { Label } from "@/components/ui/label";
 import { ICompany } from "@/app/models/Company";
 import { Button } from "@/components/ui/button";

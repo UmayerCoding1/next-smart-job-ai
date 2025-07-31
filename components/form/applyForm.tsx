@@ -2,7 +2,7 @@
 import { IJob } from "@/app/models/Job";
 import { IUser } from "@/app/models/User";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { Upload } from "lucide-react";
 import PrimaryButton from "../button/PrimaryButton";
+import ResumeUpload, { ResumeUploadInput, ResumeUploadProvider } from "../shared/ResumeUpload";
 
 type ApplyFormProps = {
   user: IUser | null;
@@ -20,6 +21,8 @@ type ApplyFormProps = {
 };
 
 const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
+  const contest = useContext(ResumeUploadProvider);
+  
   const [pdfUrl, setPdfUrl] = useState<{ url: string; name: string }>({
     name: "",
     url: "",
@@ -48,19 +51,8 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
     console.log("Form data:", { ...data, resume: pdfUrl.url });
   };
 
-  const handleGetResume = (file: File | undefined) => {
-    if (!file) return;
-
-    if (file && file.type === "application/pdf") {
-      const url = URL.createObjectURL(file);
-      const updated = { ...formFields, resumeUploaded: true };
-      setPdfUrl({ url, name: file.name });
-      setFormFields(updated);
-      calculateScore(updated);
-    } else {
-      setPdfUrl({ url: "", name: "" });
-      toast.error("Please select a PDF file", { duration: 1500 });
-    }
+  const handleGetResume = (pdfdata: { url: string; name: string , file: File}) => {
+    setPdfUrl(pdfdata);
   };
 
   const calculateScore = (updatedFields = formFields) => {
@@ -169,31 +161,18 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
         />
       </div>
 
-      <div className="   justify-between gap-2">
-        <Label htmlFor="name">Resume</Label>
-        <div className="flex">
-          <div className="relative w-full">
-            <input
-              id="resume-upload"
-              type="file"
-              accept="application/pdf"
-              name="resume"
-              className="hidden"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                handleGetResume(e.target.files?.[0])
-              }
-              required
-            />
-            <label
+     <ResumeUpload handleGetFileData={handleGetResume} className={'flex items-center gap-3'}>
+        <ResumeUploadInput handleFileInput={{id: "resume-upload", className: "w-full"}}/>
+        <label
               htmlFor="resume-upload"
               className="cursor-pointer transition duration-300 flex items-center justify-center rounded-lg h-14  gap-2 border w-full"
             >
               <Upload size={13} />
               Upload PDF
             </label>
-          </div>
+          
 
-          {pdfUrl.url && (
+           {pdfUrl.url && (
             <div>
               <Link
                 href={pdfUrl.url}
@@ -208,8 +187,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
               </Link>
             </div>
           )}
-        </div>
-      </div>
+     </ResumeUpload>
 
       
 

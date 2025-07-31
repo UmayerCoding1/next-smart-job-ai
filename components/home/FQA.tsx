@@ -9,7 +9,7 @@ const FQAImage = "/assets/FQA.png";
 
 const FQA = () => {
   return (
-    <div className="mt-20 flex gap-10">
+    <div className="mt-20 flex gap-10 p-2 lg:p-0">
       <Accordion
         type="single"
         collapsible
@@ -80,7 +80,7 @@ const FQA = () => {
         </AccordionItem>
       </Accordion>
 
-      <div className="flex items-center justify-center gap-10  w-full lg:w-1/2">
+      <div className="hidden  lg:flex items-center justify-center gap-10  w-full lg:w-1/2">
         <div className=" ">
           <h2 className="text-3xl font-semibold mb-4">
             Frequently Asked Questions
@@ -99,7 +99,7 @@ const FQA = () => {
           alt="Google"
           width={800}
           height={800}
-          className="w-[300px] "
+          className="w-[300px]  filter drop-shadow-2xl"
         />
       </div>
     </div>

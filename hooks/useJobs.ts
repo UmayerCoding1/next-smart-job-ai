@@ -7,7 +7,7 @@ import { FilterQuery } from "mongoose";
 
 
 
-const useJobs = (category?:  string, existingJodId?: string,title?: string ,jobType?: string,location?: string ,filterQuery?: string  ) => {
+const useJobs = (category?:  string, existingJodId?: string,title?: string ,jobType?: string,location?: string ,filterQuery?: string | null  ) => {
   
   const {
     data: jobs = [],
