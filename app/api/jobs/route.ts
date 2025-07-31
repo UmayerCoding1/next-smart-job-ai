@@ -111,42 +111,69 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
-    const searchParams = request.nextUrl.searchParams;
+    const searchParams = new URL(request.url).searchParams;
     const existingJobId = searchParams.get("existingJodId");
+    const catehory = searchParams.get("category");
     const jobtitle = searchParams.get("title");
     const jobType = searchParams.get("jobType");
     const location = searchParams.get("location");
 
-    if (existingJobId && !mongoose.Types.ObjectId.isValid(existingJobId)) {
-      return NextResponse.json(
-        { message: "Invalid job ID", success: false },
-        { status: 400 }
-      );
-    }
+    const filterString = searchParams.getAll("filter");
+    console.log('filterString',);
 
-    const filter: FilterQuery<IJob> = {};
-    if (existingJobId) filter._id = existingJobId;
-    if (jobtitle) {
-      filter.title = {
-        $regex: new RegExp(jobtitle, "i"),
-      };
-    }
-    if (jobType) {
-      filter.jobtype = {
-        $elemMatch: { $regex: new RegExp(jobType, "i") },
-      };
-    }
-    if (location) {
-      filter.location = {
-        $regex: new RegExp(location, "i"),
-      };
-    }
+    if (filterString && filterString.length > 0 && filterString[0].trim() !== "") {
+      const filterQuery = JSON.parse(filterString[0]) as FilterQuery<IJob>;
+      const filter: FilterQuery<IJob> = {};
+      if (filterQuery.JobType && filterQuery.JobType.length > 0) {
+        filter.jobtype = {
+          $in: filterQuery.JobType,
+        };
+      }
+      if (filterQuery.ExperienceLavel && filterQuery.ExperienceLavel.length > 0) {
+        filter.experience = {
+          $in: filterQuery.ExperienceLavel,
+        };
+      }
+      console.log(filterQuery);
+      const jobs = await Job.find(filter).populate("company");
+      console.log(jobs.length );
+       return NextResponse.json({ jobs, success: true }, { status: 200 });
+    } else {
+      if (existingJobId && !mongoose.Types.ObjectId.isValid(existingJobId)) {
+        return NextResponse.json(
+          { message: "Invalid job ID", success: false },
+          { status: 400 }
+        );
+      }
 
-    console.log(filter);
-    
-    const jobs = await Job.find(filter).populate("company");
+      const filter: FilterQuery<IJob> = {};
+      if (existingJobId) filter._id = existingJobId;
+      if (jobtitle) {
+        filter.title = {
+          $regex: new RegExp(jobtitle, "i"),
+        };
+      }
+      if (jobType) {
+        filter.jobtype = {
+          $elemMatch: { $regex: new RegExp(jobType, "i") },
+        };
+      }
+      if (location) {
+        filter.location = {
+          $regex: new RegExp(location, "i"),
+        };
+      }
 
-    return NextResponse.json({ jobs, success: true }, { status: 200 });
+      if (catehory) {
+        filter.category = {
+          $regex: new RegExp(catehory, "i"),
+        };
+      }
+
+      const jobs = await Job.find(filter).populate("company");
+
+      return NextResponse.json({ jobs, success: true }, { status: 200 });
+    }
   } catch (error) {
     console.log("Job get error", error);
     throw error;

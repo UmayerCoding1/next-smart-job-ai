@@ -17,8 +17,8 @@ const Jobs = () => {
   const searchQuery = useSelector((state: RootState) => state.searchR.search);
 
   console.log("home jobs ", searchQuery);
-  const { jobs } = useJobs("", "", "", "", "");
-
+  const { jobs } = useJobs("", "", "", "", "","");
+  console.log('jobs',jobs);
   return (
     <div>
       <section className="mt-16 ">

@@ -30,20 +30,24 @@ export const ExperienceLavel = [
   "executive",
 ];
 
-const Filter = () => {
+const Filter = ({
+  setFilterQuery,
+}: {
+  setFilterQuery: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const filterQuery = useSelector((state: RootState) => state.filterR);
   const [isOpenJobType, setIsOpenJobType] = useState<boolean>(true);
   const [jobType, setJobType] = React.useState<string[]>([]);
   const [isOpenExprience, setIsOpenExperience] = useState<boolean>(true);
   const [experience, setExperience] = React.useState<string[]>([]);
   const [isOpenDatePosted, setIsOpenDatePosted] = useState<boolean>(true);
-  const [datePosted, setDatePosted] = React.useState<string[]>([]);
+  const [datePosted, setDatePosted] = React.useState<string>("");
   const [showResetButton, setShowResetButton] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const handleJobTypeChange = (checked: boolean, value: string) => {
     if (checked) {
-      setJobType((prev) => [...prev, value]);
+      setJobType((prev) => [...prev,  value]);
     } else {
       setJobType((prev) => prev.filter((type) => type !== value));
     }
@@ -51,7 +55,7 @@ const Filter = () => {
 
   const handleExperienceChange = (checked: boolean, value: string) => {
     if (checked) {
-      setExperience((prev) => [...prev, value]);
+      setExperience((prev) => [...prev, value === 'any' ? '' : value === 'mid level' ? 'mid' : value === 'senior level' ? 'senior': value]);
     } else {
       setExperience((prev) => prev.filter((type) => type !== value));
     }
@@ -59,9 +63,7 @@ const Filter = () => {
 
   const handleDatePostedChange = (checked: boolean, value: string) => {
     if (checked) {
-      setDatePosted((prev) => [...prev, value]);
-    } else {
-      setDatePosted((prev) => prev.filter((type) => type !== value));
+      setDatePosted(value);
     }
   };
 
@@ -82,10 +84,27 @@ const Filter = () => {
   const handleResetFilter = () => {
     setJobType([]);
     setExperience([]);
-    setDatePosted([]);
+    setDatePosted("");
     setShowResetButton(false);
     dispatch(clearFilterQuery());
   };
+
+  useEffect(() => {
+    if (
+      filterQuery.DatePosted.length > 0 ||
+      filterQuery.ExperienceLavel.length > 0 ||
+      filterQuery.JobType.length > 0
+    ) {
+      setShowResetButton(true);
+    } else {
+      setShowResetButton(false);
+    }
+  }, [filterQuery]);
+
+  const filterString = JSON.stringify(filterQuery);
+  useEffect(() => {
+    setFilterQuery(filterString);
+  }, [filterQuery]);
 
   return (
     <>
@@ -173,9 +192,9 @@ const Filter = () => {
                   <div key={type} className="flex items-center gap-2 my-1">
                     <Checkbox
                       id={type}
-                      checked={experience.includes(type)}
+                      checked={experience.includes(type === 'any' ? '' : type === 'mid level' ? 'mid' : type === 'senior level' ? 'senior': type)}
                       onCheckedChange={(checked) =>
-                        handleExperienceChange(!!checked, type)
+                        handleExperienceChange(!!checked, type === 'any' ? '' : type === 'mid level' ? 'mid' : type === 'senior level' ? 'senior': type)
                       }
                       className="bg-transparent border border-gray-300 data-[state=checked]:bg-blue-500 data-[state=checked]:border-none"
                     />

@@ -15,14 +15,17 @@ const HeaderBg = "/assets/jods-header.jpg";
 const BrowseJobs = () => {
   const [listView, setListView] = useState<string>("grid");
   const [page, setPage] = useState<number>(1);
-
+ const [filterQuery, setFilterQuery] = useState<string>('');
   const searchUrl = useSearchParams();
+  const category = searchUrl.get("category") || "";
   const title = searchUrl.get("title") || "";
   const jobType = searchUrl.get("jobType") || "";
   const location = searchUrl.get("location") || "";
-  const { jobs, isLoading } = useJobs("", "", title, jobType, location);
+  const { jobs, isLoading } = useJobs(category, '', title, jobType, location, filterQuery);
   const router = useRouter();
 
+console.log(filterQuery)
+  console.log(category);
   const clearSearch = () => {
     router.push("/browse-jobs");
   };
@@ -56,7 +59,7 @@ const BrowseJobs = () => {
 
       <div className="flex flex-col md:flex-row gap-4 lg:p-16">
         <div className="w-[22%] hidden lg:block bg-white p-5 rounded-md">
-          <Filter />
+          <Filter setFilterQuery={setFilterQuery}/>
         </div>
 
         {/* <div>
