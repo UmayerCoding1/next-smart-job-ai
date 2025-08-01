@@ -1,5 +1,5 @@
 "use client";
-import { Bell, LayoutDashboard, Menu, Search, X } from "lucide-react";
+import { Bell, LayoutDashboard, Mail, Menu, Search, X } from "lucide-react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import NavlinkList from "./NavlinkList";
 import GostButton from "@/components/button/GostButton";
 import { Button } from "../button";
 import { Sheet, SheetTrigger } from "../sheet";
+import { usePathname } from "next/navigation";
 
 export const LargeLogo = "/assets/logo.png";
 export const SmallLogo = "/assets/Ai.png";
@@ -22,6 +23,7 @@ const Navbar = () => {
   const [isSticky, setIsSticky] = useState<boolean>(false);
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
   const user = useSelector((state: RootState) => state.authR.user);
+  const pathname = usePathname();
   const toggleSearch = () => {
     setIsOpenSearch(!isOpenSearch);
     window.scrollTo(0, 0);
@@ -57,6 +59,17 @@ const Navbar = () => {
   }, [isOpenSearch]);
 
  
+ const commonNav = [
+  { name: "Home", href: "/" },
+  { name: "Find Jobs", href: "/browse-jobs" },
+  { name: "Companies", href: "/companies" },
+  { name: "Pricing Plan", href: "/pricing" },
+  { name: "Customer Support", href: "/support" },
+];
+
+const recruiterNav = user?.role === "recruiter" ? [{ name: "Candidates", href: "/candidates" }] : [];
+
+const navitem = [...commonNav, ...recruiterNav];
 
   return (
     <>
@@ -65,6 +78,23 @@ const Navbar = () => {
           isSticky ? "bg-white backdrop-blur-md" : "bg-transparent"
         } transition-all duration-300 ease-in-out bg-white`}
       >
+        <div className="lg:max-w-7xl mx-auto bg-gray-100 px-2 py3 mb-3 rounded-lg lg:flex  items-center justify-between ">
+           <ul className="flex items-center justify-between gap-2 lg:gap-7">
+            {navitem.map((item) => (
+              <Link href={item?.href || "#"} key={item?.name} className={`text-sm lg:text-sm font-medium   flex items-center justify-center h-10 ${pathname === item?.href ? "text-blue-600 border-b-2 border-blue-500" : "text-gray-500"}`}>{item?.name}</Link>
+             
+
+
+            ))}
+             
+           </ul>
+
+
+           <p className="lg:flex items-center gap-2 text-gray-600 hidden ">
+            <Mail size={13} className="cursor-pointer" />
+            <span>smartjonai@gmail.com</span>
+           </p>
+        </div>
         <nav className="max-w-7xl mx-auto  px-1 flex items-center justify-between">
           <section>
             <Link href="/">
@@ -86,7 +116,7 @@ const Navbar = () => {
           </section>
 
           <section className="flex items-center gap-4">
-            <Link href={'/pricing'} className="text-lg font-semibold border-b border-black hover:text-blue-600 hover:border-blue-600 ">Pricing</Link>
+           
             {user ? (
             <section className="flex items-center gap-2">
               
@@ -175,7 +205,7 @@ const Navbar = () => {
         </div>
       )}
 
-      <div className="h-[65px] md:h-[75px] lg:h-[62px]"></div>
+      <div className="h-[100px] md:h-[75px] lg:h-[87px]"></div>
     </>
   );
 };

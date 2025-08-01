@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { Upload } from "lucide-react";
 import PrimaryButton from "../button/PrimaryButton";
-import ResumeUpload, { ResumeUploadInput, ResumeUploadProvider } from "../shared/ResumeUpload";
+import ResumeUpload, { ResumeUploadInput, ResumeUploadProvider } from "../shared/FileUpload";
 
 type ApplyFormProps = {
   user: IUser | null;

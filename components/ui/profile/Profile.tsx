@@ -32,10 +32,11 @@ import UpdateAvatar from "./UpdateAvatar";
 import AccountSettingForm from "@/components/form/profile/AccountSettingForm";
 import CompanyProfileForm from "@/components/form/profile/CompanyProfileForm";
 import EducationForm from "@/components/form/profile/EducationForm";
-import ResumeUpload, { ResumeUploadInput } from "../../shared/ResumeUpload";
+import ResumeUpload, { ResumeUploadInput } from "../../shared/FileUpload";
 import { Button } from "../button";
 import { toast } from "sonner";
 import PreviesResume from "./PreviesResume";
+import SocialLink from "./SocialLink";
 
 const coverImage = "/assets/profilecover-image.jpg";
 const UserImage = "/assets/user-image.png";
@@ -193,7 +194,7 @@ const Profile = () => {
               <ResumeUpload handleGetFileData={handleFileChange}>
                 <div className="w-full ">
                   <div className="flex gap-5 ">
-                    <div className={`{w-full ${resumedata?.url ? 'lg:w-[55%]' : 'lg:w-full'} cursor-pointer `}>
+                    <div className={`{ ${resumedata?.url ? 'lg:w-[55%]' : 'w-full lg:w-full'} cursor-pointer `}>
                       <ResumeUploadInput
                         handleFileInput={{ id: "resume", className: "w-full" }}
                       />
@@ -236,7 +237,7 @@ const Profile = () => {
                 </Button>
               </ResumeUpload>
             )}
-            {/* {selectedTab === 5 && <SocialMediaForm />} */}
+            {selectedTab === "Social Media" && <SocialLink />}
           </div>
         </div>
       </div>
