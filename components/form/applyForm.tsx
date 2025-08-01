@@ -23,9 +23,10 @@ type ApplyFormProps = {
 const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
   const contest = useContext(ResumeUploadProvider);
   
-  const [pdfUrl, setPdfUrl] = useState<{ url: string; name: string }>({
+  const [pdfUrl, setPdfUrl] = useState<{ url: string; name: string, file: File | null }>({
     name: "",
     url: "",
+    file: null
   });
   const [formFields, setFormFields] = useState({
     name: "",
@@ -53,6 +54,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
 
   const handleGetResume = (pdfdata: { url: string; name: string , file: File}) => {
     setPdfUrl(pdfdata);
+    setScore((prev) => prev + 50);
   };
 
   const calculateScore = (updatedFields = formFields) => {
@@ -62,12 +64,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
     if (updatedFields.name) total += 25;
     if (updatedFields.phone) total += 25;
     if (updatedFields.email) total += 25;
-    // if (updatedFields.expectedSalary) total += 25;
-
-    // Resume
-    if (updatedFields.resumeUploaded) total += 50;
-
-    // Dynamic questions
+   
     const totalDynamic = job?.applicationsQuestions?.length || 0;
     const dynamicAnswered = Object.values(updatedFields.dynamicAnswers).filter(
       Boolean

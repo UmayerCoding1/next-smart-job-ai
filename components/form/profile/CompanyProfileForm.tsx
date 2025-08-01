@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { ICompany } from "@/app/models/Company";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CloudUpload, X } from "lucide-react";
+import { CloudUpload, UploadCloud, X } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 
@@ -16,15 +16,27 @@ const CompanyProfileForm = ({ company }: { company: ICompany | null }) => {
     name: string;
     size: number;
   } | null>(null);
+  const [bannerImagePreview, setBannerImagePreview] = useState<{
+    url: string;
+    name: string;
+    size: number;
+  } | null>(null);
   const logoImageRef = useRef<HTMLInputElement | null>(null);
+  const bannerImageRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    const name = e.target.name;
+    console.log(name);
     if (file) {
       const convertSizeInMB = file?.size / (1024 * 1024);
       if (logoImageRef.current) {
         // setLogoImagePreview(null);
         logoImageRef.current.value = "";
+      }
+      if (bannerImageRef.current) {
+        // setLogoImagePreview(null);
+        bannerImageRef.current.value = "";
       }
 
       if (convertSizeInMB > 4) {
@@ -34,31 +46,163 @@ const CompanyProfileForm = ({ company }: { company: ICompany | null }) => {
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as string;
-        setLogoImagePreview({
-          url: result,
-          name: file.name,
-          size: Number(convertSizeInMB.toFixed(2)),
-        });
+
+        if (name === "logo") {
+          setLogoImagePreview({
+            url: result,
+            name: file.name,
+            size: Number(convertSizeInMB.toFixed(2)),
+          });
+          toast.success("Company logo uploaded successfully", {
+            duration: 1500,
+          });
+        }
+
+        if (name === "banner") {
+          setBannerImagePreview({
+            url: result,
+            name: file.name,
+            size: Number(convertSizeInMB.toFixed(2)),
+          });
+          toast.success("Company banner uploaded successfully", {
+            duration: 1500,
+          });
+        }
       };
       reader.readAsDataURL(file);
-      toast.success("Image uploaded successfully", { duration: 1500 });
     }
   };
 
-  const clearLogoImagePreview = () => {
-    setLogoImagePreview(null);
-    if (logoImageRef.current) {
-      logoImageRef.current.value = "";
-      toast.warning("Clearing previous image", { duration: 1500 });
+  const clearLogoImagePreview = (filename: string) => {
+    if (filename === "logo") {
+      setLogoImagePreview(null);
+      if (logoImageRef.current) {
+        logoImageRef.current.value = "";
+        toast.warning("Clearing previous image", { duration: 1500 });
+      }
+    }
+
+
+    if (filename === "banner") {
+      setBannerImagePreview(null);
+      if (bannerImageRef.current) {
+        bannerImageRef.current.value = "";
+        toast.warning("Clearing previous image", { duration: 1500 });
+      }
+      
     }
   };
   const handleSubmit = (data: { [key: string]: string }) => {
-     console.log(data);
+    console.log({ ...data, logo: logoImagePreview?.url, banner: bannerImagePreview?.url });
   };
+
+  console.log("bannerImagePreview", bannerImagePreview);
   return (
     <div>
       {company ? (
         <AppForm submitFn={handleSubmit}>
+          <div>
+            <h2 className="text-xl font-semibold">Logo and bannar image</h2>
+            <div className="flex flex-col lg:flex-row gap-5 mt-5">
+              <div className="w-full flex flex-col lg:flex-row gap-5">
+                <div
+                  className={logoImagePreview ? "w-full lg:w-1/2" : "w-full"}
+                >
+                  <h2>Upoad Logo</h2>
+                  <Input
+                    handleInput={{
+                      type: "file",
+                      name: "logo",
+                      placeholder: "Your Company Description",
+                    }}
+                    className="hidden"
+                    id="company-logo"
+                    accept="image/*"
+                    ref={logoImageRef}
+                    imageandleChange={handleFileChange}
+                  />
+
+                  <label
+                    htmlFor="company-logo"
+                    className="cursor-pointer transition duration-300 flex items-center justify-center rounded-lg h-40  gap-2 border-2 border-dashed border-gray-200 w-full bg-gray-100 overflow-hidden"
+                  >
+                    {logoImagePreview ? (
+                      <div className="relative w-full">
+                        <Image
+                          src={logoImagePreview.url}
+                          width={100}
+                          height={100}
+                          alt="logo"
+                          className="w-full h-36 object-contain"
+                        />
+                        <Button
+                          variant={"destructive"}
+                          className="mt-2 absolute top-0 right-0"
+                          onClick={() => clearLogoImagePreview('logo')}
+                        >
+                          Clear
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center  text-gray-500">
+                        <UploadCloud />
+                        <p className="text-gray-500">Upload Logo</p>
+                        <p>Max Size: 4MB</p>
+                      </div>
+                    )}
+                  </label>
+                </div>
+
+                <div
+                  className={logoImagePreview ? "w-full lg:w-1/2" : "w-full"}
+                >
+                  <h2>Upoad Banner</h2>
+                  <Input
+                    handleInput={{
+                      type: "file",
+                      name: "banner",
+                    }}
+                    className="hidden"
+                    id="company-banner"
+                    accept="image/*"
+                    ref={bannerImageRef}
+                    imageandleChange={handleFileChange}
+                  />
+
+                  <label
+                    htmlFor="company-banner"
+                    className="cursor-pointer transition duration-300 flex items-center justify-center rounded-lg h-40  gap-2 border-2 border-dashed border-gray-200 w-full bg-gray-100 overflow-hidden"
+                  >
+                    {bannerImagePreview ? (
+                      <div className="relative">
+                        <Image
+                          src={bannerImagePreview.url}
+                          width={100}
+                          height={100}
+                          alt="logo"
+                          className="w-full h-36 object-contain"
+                        />
+                        <Button
+                          variant={"destructive"}
+                          className="mt-2 absolute top-0 right-0"
+                          onClick={() => clearLogoImagePreview('banner')}
+                        >
+                          Clear
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center  text-gray-500">
+                        <UploadCloud />
+                        <p className="text-gray-500">Upload Logo</p>
+                        <p>Max Size: 4MB</p>
+                      </div>
+                    )}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="w-full">
             <Label htmlFor="name">Company Name</Label>
             <Input
@@ -70,6 +214,7 @@ const CompanyProfileForm = ({ company }: { company: ICompany | null }) => {
               }}
             />
           </div>
+
           <div className="w-full">
             <Label htmlFor="email">Company Email</Label>
             <Input
@@ -92,63 +237,6 @@ const CompanyProfileForm = ({ company }: { company: ICompany | null }) => {
                 value: company?.description,
               }}
             />
-          </div>
-
-          <div className="flex flex-col lg:flex-row gap-5">
-            <div className={logoImagePreview ? "w-full lg:w-1/2" : "w-full"}>
-              <Input
-                handleInput={{
-                  type: "file",
-                  name: "logo",
-                  placeholder: "Your Company Description",
-                }}
-                className="hidden"
-                id="company-logo"
-                accept="image/*"
-                ref={logoImageRef}
-                imageandleChange={handleFileChange}
-              />
-
-              <label
-                htmlFor="company-logo"
-                className="cursor-pointer transition duration-300 flex items-center justify-center rounded-lg h-14  gap-2 border w-full"
-              >
-                <CloudUpload size={13} />
-                Upload Logo
-              </label>
-            </div>
-
-            {logoImagePreview && (
-              <div className="px-2 py-1 flex  flex-col gap-2 shadow border border-gray-200 rounded-lg  w-full lg:w-1/2">
-                <div className="flex gap-2">
-                  <Image
-                    src={logoImagePreview.url && logoImagePreview.url}
-                    alt="update profile picture"
-                    width={800}
-                    height={800}
-                    loading="lazy"
-                    className="w-12 h-12 rounded-2xl object-cover rounded- shadow"
-                  />
-
-                  <div className="flex items-center justify-between w-full">
-                    <div>
-                      <h2 className="font-semibold">
-                        {logoImagePreview?.name.slice(0, 20).concat("...")}
-                      </h2>
-                      <p className="text-sm text-gray-500">
-                        {logoImagePreview.size} MB
-                      </p>
-                    </div>
-
-                    <X
-                      size={15}
-                      onClick={() => clearLogoImagePreview()}
-                      className="text-red-500"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           <div className="flex flex-col lg:flex-row gap-5 items-center">
@@ -177,11 +265,17 @@ const CompanyProfileForm = ({ company }: { company: ICompany | null }) => {
           </div>
 
           {company ? (
-            <Button type="submit" className="bg-gradient-to-tr from-blue-500 to-blue-800">
+            <Button
+              type="submit"
+              className="bg-gradient-to-tr from-blue-500 to-blue-800"
+            >
               Update
             </Button>
           ) : (
-            <Button type="button" className="bg-gradient-to-tr from-blue-500 to-blue-800">
+            <Button
+              type="button"
+              className="bg-gradient-to-tr from-blue-500 to-blue-800"
+            >
               Add Company
             </Button>
           )}

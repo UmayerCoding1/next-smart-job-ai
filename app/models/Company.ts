@@ -12,7 +12,8 @@ export interface ICompany {
     email: string
     description: string
     website: string
-    logo: string
+    logo: string;
+    coverImage: string;
     location: string
     industry: string
     activeStatus: string
@@ -27,6 +28,7 @@ export interface ICompany {
     description: { type: String, required: true },
     website: { type: String, required: true },
     logo: { type: String, required: true },
+    coverImage: { type: String },
     location: { type: String, required: true },
     industry: { type: String, required: true },
     activeStatus: { type: String, default: ActiveStatus.ACTIVE, enum: Object.values(ActiveStatus) },

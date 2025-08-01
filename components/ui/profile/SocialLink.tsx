@@ -19,7 +19,7 @@ import {
 import PrimaryButton from "@/components/button/PrimaryButton";
 
 const SocialLink = () => {
-  const [toatlink, setTotalLink] = useState<string[]>([]);
+  
   const [linksData, setLinksData] = useState<{ title: string; link: string }[]>(
     [{ title: "", link: "" }]
   );
