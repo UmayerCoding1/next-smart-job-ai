@@ -118,6 +118,7 @@ export async function GET(request: NextRequest) {
     const jobType = searchParams.get("jobType");
     const location = searchParams.get("location");
 
+    
     const filterString = searchParams.getAll("filter");
     console.log("filterString", filterString);
     const filter: FilterQuery<IJob> = {};

@@ -5,9 +5,10 @@ import { Label } from "@/components/ui/label";
 import { ICompany } from "@/app/models/Company";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CloudUpload, UploadCloud, X } from "lucide-react";
+import { CloudUpload, Loader2, UploadCloud, X } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
+import { imagekit } from "@/lib/ImageKitInstance";
 
 const CompanyProfileForm = ({ company }: { company: ICompany | null }) => {
   console.log(company);
@@ -21,13 +22,15 @@ const CompanyProfileForm = ({ company }: { company: ICompany | null }) => {
     name: string;
     size: number;
   } | null>(null);
+  const [isLogoUploading, setIsLogoUploading] = useState(false);
+  const [isBannerUploading, setIsBannerUploading] = useState(false);
   const logoImageRef = useRef<HTMLInputElement | null>(null);
   const bannerImageRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange =async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     const name = e.target.name;
-    console.log(name);
+    
     if (file) {
       const convertSizeInMB = file?.size / (1024 * 1024);
       if (logoImageRef.current) {
@@ -44,29 +47,54 @@ const CompanyProfileForm = ({ company }: { company: ICompany | null }) => {
         return;
       }
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onload =async () => {
         const result = reader.result as string;
 
         if (name === "logo") {
-          setLogoImagePreview({
-            url: result,
+          setIsLogoUploading(true);
+          const uploadelogo = await imagekit.upload({
+            
+            file: result,
+            fileName: file.name,
+            isPublished: true,
+            useUniqueFileName:false
+          })
+
+          if (uploadelogo.url) {
+            setIsLogoUploading(false);
+            setLogoImagePreview({
+            url: uploadelogo.url,
             name: file.name,
             size: Number(convertSizeInMB.toFixed(2)),
           });
           toast.success("Company logo uploaded successfully", {
             duration: 1500,
           });
+          }
+
+     
         }
 
         if (name === "banner") {
+          setIsBannerUploading(true);
+           const uploadelogo = await imagekit.upload({
+            file: result,
+            fileName: file.name,
+            isPublished: true,
+            useUniqueFileName:false
+          })
+
+          if (uploadelogo.url) {
+          setIsBannerUploading(false);
           setBannerImagePreview({
-            url: result,
+            url: uploadelogo.url,
             name: file.name,
             size: Number(convertSizeInMB.toFixed(2)),
           });
           toast.success("Company banner uploaded successfully", {
             duration: 1500,
           });
+        }
         }
       };
       reader.readAsDataURL(file);
@@ -145,9 +173,18 @@ const CompanyProfileForm = ({ company }: { company: ICompany | null }) => {
                       </div>
                     ) : (
                       <div className="flex flex-col items-center  text-gray-500">
-                        <UploadCloud />
-                        <p className="text-gray-500">Upload Logo</p>
-                        <p>Max Size: 4MB</p>
+                        {isLogoUploading ? (
+                         <>
+                           <Loader2 size={15} className="animate-spin" />
+                           
+                         </>
+                       ) : (
+                         <>
+                           <UploadCloud />
+                           <p className="text-gray-500">Upload Logo</p>
+                           <p>Max Size: 4MB</p>
+                         </>
+                       )}
                       </div>
                     )}
                   </label>
@@ -192,9 +229,18 @@ const CompanyProfileForm = ({ company }: { company: ICompany | null }) => {
                       </div>
                     ) : (
                       <div className="flex flex-col items-center  text-gray-500">
-                        <UploadCloud />
-                        <p className="text-gray-500">Upload Logo</p>
-                        <p>Max Size: 4MB</p>
+                       {isBannerUploading ? (
+                         <>
+                           <Loader2 size={15} className="animate-spin" />
+                           
+                         </>
+                       ) : (
+                         <>
+                           <UploadCloud />
+                           <p className="text-gray-500">Upload Banner</p>
+                           <p>Max Size: 4MB</p>
+                         </>
+                       )}
                       </div>
                     )}
                   </label>

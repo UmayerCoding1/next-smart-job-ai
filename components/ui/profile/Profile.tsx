@@ -37,9 +37,10 @@ import { Button } from "../button";
 import { toast } from "sonner";
 import PreviesResume from "./PreviesResume";
 import SocialLink from "./SocialLink";
+import PublicProfileModal from "./PublicProfileModal";
 
 const coverImage = "/assets/profilecover-image.jpg";
-const UserImage = "/assets/user-image.png";
+export const UserImage = "/assets/user-image.png";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -52,8 +53,9 @@ const tabs = [
 ];
 
 const gettabs = (role: string) => {
+  
   return role === "recruiter"
-    ? tabs
+    ? tabs.filter((tab) => tab !== "Resume" && tab !== "Education")
     : tabs.filter((tab) => tab !== "Company Profile");
 };
 
@@ -66,7 +68,9 @@ const Profile = () => {
     name: string;
     file: File | null;
   } | null>(null);
+  const [isOpenPublicProfileModla, setIsOpenPublicProfileModal] = useState(false);
   const userTabs = gettabs(user?.role || "");
+
 
   useEffect(() => {
     const handleGetCompany = async () => {
@@ -95,7 +99,19 @@ const Profile = () => {
     }
   };
 
+   useEffect(() => {
+      if (isOpenPublicProfileModla) {
+        document.body.style.overflow = "hidden";
+         window.scrollTo(0, 0);
+      }
+
+      if (!isOpenPublicProfileModla) {
+        document.body.style.overflow = "auto";
+      }
+    }, [isOpenPublicProfileModla]);
+
   return (
+   <>
     <div className="relative lg:mb-10">
       <div className="bg-blue-50 w-full lg:h-52 relative">
         <Image
@@ -141,7 +157,11 @@ const Profile = () => {
             </div>
           </div>
 
-          <div>s</div>
+          <div className="my-10">
+            <button onClick={() => setIsOpenPublicProfileModal(true)} className="bg-gray-50 px-3 py-2 font-medium shadow-md border border-gray-200 cursor-pointer rounded-lg text-sm w-full">View Public Profile</button>
+          </div>
+
+         
 
           <div>
             <div className="flex items-center  gap-4 p-2 bg-blue-50/50  shadow border border-gray-200 rounded-lg w-full">
@@ -189,8 +209,8 @@ const Profile = () => {
                 <CompanyProfileForm company={company} />
               )}
 
-            {selectedTab === "Education" && <EducationForm />}
-            {selectedTab === "Resume" && (
+            {user?.role === "jobseeker" && selectedTab === "Education" && <EducationForm />}
+            {user?.role === "jobseeker" &&  selectedTab === "Resume" && (
               <ResumeUpload handleGetFileData={handleFileChange}>
                 <div className="w-full ">
                   <div className="flex gap-5 ">
@@ -241,7 +261,18 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+     
     </div>
+
+      {/* view public profile modal */}
+          {isOpenPublicProfileModla && (
+            <PublicProfileModal
+              setIsOpenPublicProfileModal={setIsOpenPublicProfileModal}
+              user={user}
+            />
+          )}
+   </>
   );
 };
 

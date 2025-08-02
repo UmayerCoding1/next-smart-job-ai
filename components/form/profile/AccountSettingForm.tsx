@@ -5,6 +5,14 @@ import { Label } from "@/components/ui/label";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+
+ export interface Accountdata {
+  fullname:string,
+  phone:string,
+  email:string,
+  about:string
+ }
 
 const AccountSettingForm = () => {
    const user =useSelector((state:RootState) => state.authR.user);
@@ -12,8 +20,21 @@ const AccountSettingForm = () => {
    const firstName = user?.fullname.split(" ")[0];
    const lastName = user?.fullname.split(" ")[1];
 
-   const handleSubmit = (data: { [key: string]: string }) => {
+   const handleSubmit =async (data: { [key: string]: string }) => {
     console.log('data', data);
+
+    try {
+      const accountUpdateData: Accountdata = {
+        fullname: `${data.firstName} ${data.lastName}`,
+        phone: data.phone,
+        email: data.email,
+        about: data.about
+      };
+      const res =await axios.put(`/api/auth/${user?.username}`, accountUpdateData);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
    }
   return (
     <div>
