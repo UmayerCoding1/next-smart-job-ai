@@ -17,11 +17,18 @@ import {
   SelectValue,
 } from "../select";
 import PrimaryButton from "@/components/button/PrimaryButton";
+import axios from "axios";
+import { IUser } from "@/app/models/User";
+import { toast } from "sonner";
 
-const SocialLink = () => {
+interface SocialLinkProps {
+  username: string;
+  socialLink?: { platform: string; link: string }[]; // made optional
+}
+const SocialLink = ({ username,socialLink} : SocialLinkProps) => {
   
-  const [linksData, setLinksData] = useState<{ title: string; link: string }[]>(
-    [{ title: "", link: "" }]
+  const [linksData, setLinksData] = useState<{ platform: string; link: string }[]>(
+    socialLink?.length ? socialLink : [{ platform: "", link: "" }]
   );
   const socialLinks = [
     {
@@ -49,7 +56,7 @@ const SocialLink = () => {
   // Handle social media name change
   const handleTitleChange = (index: number, value: string) => {
     const updated = [...linksData];
-    updated[index].title = value;
+    updated[index].platform = value;
     setLinksData(updated);
   };
 
@@ -62,7 +69,7 @@ const SocialLink = () => {
 
   // Add new row
   const handleAddLink = () => {
-    setLinksData((prev) => [...prev, { title: "", link: "" }]);
+    setLinksData((prev) => [...prev, { platform: "", link: "" }]);
   };
 
   // Remove row
@@ -71,9 +78,12 @@ const SocialLink = () => {
   };
 
   // Save
-  const handleSave = () => {
-    console.log("Saved Links:", linksData);
-    console.log("dsd");
+  const handleSave =async () => {
+    console.log("Saved Links:", {socialLinks: linksData});
+     const res =await axios.put(`/api/auth/${username}`, {socialLinks: linksData});
+      if (res.data.success) {
+        toast.success("Social links updated successfully", { duration: 1500 });
+      }
   };
   return (
     <div>
@@ -88,7 +98,7 @@ const SocialLink = () => {
             <div>
               <Select
                 name={`social-media-${index}`}
-                value={item.title}
+                value={item.platform}
                 onValueChange={(value) => handleTitleChange(index, value)}
               >
                 <SelectTrigger className="w-[180px]">

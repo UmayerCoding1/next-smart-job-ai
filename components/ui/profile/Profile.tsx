@@ -206,12 +206,12 @@ const Profile = () => {
             {selectedTab === "Account Settings" && <AccountSettingForm />}
             {user?.role === "recruiter" &&
               selectedTab === "Company Profile" && (
-                <CompanyProfileForm company={company} />
+                <CompanyProfileForm company={company} userid={user?._id?.toString()  || 'undifined'} />
               )}
 
-            {user?.role === "jobseeker" && selectedTab === "Education" && <EducationForm />}
+            {user?.role === "jobseeker" && selectedTab === "Education" && <EducationForm educationdata={user?.education || []}/>}
             {user?.role === "jobseeker" &&  selectedTab === "Resume" && (
-              <ResumeUpload handleGetFileData={handleFileChange}>
+              <ResumeUpload handleGetFileData={handleFileChange }>
                 <div className="w-full ">
                   <div className="flex gap-5 ">
                     <div className={`{ ${resumedata?.url ? 'lg:w-[55%]' : 'w-full lg:w-full'} cursor-pointer `}>
@@ -257,7 +257,7 @@ const Profile = () => {
                 </Button>
               </ResumeUpload>
             )}
-            {selectedTab === "Social Media" && <SocialLink />}
+            {selectedTab === "Social Media" && <SocialLink  username={user?.username  || 'undifined'} socialLink={user?.socialLinks || []}/>}
           </div>
         </div>
       </div>

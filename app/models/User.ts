@@ -1,5 +1,6 @@
 import mongoose, { Schema, model, models } from "mongoose";
 import bcrypt from "bcryptjs";
+import { string } from "zod";
 
 export const ROLE = {
   JOBSEEKER: "jobseeker",
@@ -24,10 +25,18 @@ export enum Status {
   BLACKLISTED = "blacklisted",
 }
 
+export enum SOCIAL_MEDIA {
+  FACEBOOK = "facebook",
+  TWITTER = "twitter",
+  LINKEDIN = "linkedin",
+  INSTAGRAM = "instagram",
+  GITHUB = "github",
+}
+
 export interface IEducation {
   degree: string;
   institution: string;
-  year: number;
+  year: string;
 }
 
 export interface IAppliedJob {
@@ -64,13 +73,11 @@ export interface IUser {
   postJobs?: mongoose.Types.ObjectId[];
   profileComplete: number;
   isVerified: string;
-  socialLinks?: {
-    facebook?: string;
-    twitter?: string;
-    linkedin?: string;
-    instagram?: string;
-    github?: string;
-  };
+  socialLinks?: [
+    {
+      platform: string;
+      link: string;
+  }]
   profileView: {
     count: number;
   };
@@ -160,9 +167,9 @@ const userSchema = new Schema<IUser>(
     },
     education: [
       {
-        degree: { type: String, required: false },
-        institution: { type: String, required: false },
-        year: { type: Number, required: false },
+        degree: { type: String },
+        institution: { type: String },
+        year: { type: string },
       },
     ],
     savejobs: [
@@ -206,13 +213,17 @@ const userSchema = new Schema<IUser>(
       default: VERIFIED.UNVERIFIED,
       enum: Object.values(VERIFIED),
     },
-    socialLinks: {
-      facebook: { type: String },
-      twitter: { type: String },
-      linkedin: { type: String },
-      instagram: { type: String },
-      github: { type: String },
-    },
+    socialLinks: [
+      {
+        platform: {
+          type: String,
+          enum: Object.values(SOCIAL_MEDIA),
+        },
+        link: {
+          type: String,
+        },
+      }
+    ],
     profileView: {
       count: {
         type: Number,

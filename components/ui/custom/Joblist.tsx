@@ -91,7 +91,7 @@ const Joblist = ({ job }: { job: IJob }) => {
               <Image
                 src={
                   typeof company === "object" && "logo" in company
-                    ? company.logo
+                    ? company?.logo
                     : CompanyDefaultLogo
                 }
                 alt="Google"

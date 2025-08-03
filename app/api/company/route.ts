@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     if (!isRecruiter.ok) return isRecruiter.response;
 
 
-    console.log(isRecruiter)
+
 
     const {
       name,
@@ -20,12 +20,13 @@ export async function POST(request: NextRequest) {
       description,
       website,
       logo,
+      coverImage,
       location,
       industry,
       recruiter
     }: ICompany = await request.json();
     
-
+ console.log(industry);
 
     if (
       !name ||
@@ -33,6 +34,7 @@ export async function POST(request: NextRequest) {
       !description ||
       !website ||
       !logo ||
+      !coverImage ||
       !location ||
       !industry || 
       !recruiter
@@ -57,6 +59,7 @@ export async function POST(request: NextRequest) {
         description,
         website,
         logo,
+        coverImage,
         location,
         industry,
         recruiter
