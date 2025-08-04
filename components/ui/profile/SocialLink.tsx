@@ -18,7 +18,6 @@ import {
 } from "../select";
 import PrimaryButton from "@/components/button/PrimaryButton";
 import axios from "axios";
-import { IUser } from "@/app/models/User";
 import { toast } from "sonner";
 
 interface SocialLinkProps {

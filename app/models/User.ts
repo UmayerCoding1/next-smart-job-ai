@@ -1,6 +1,5 @@
 import mongoose, { Schema, model, models } from "mongoose";
 import bcrypt from "bcryptjs";
-import { string } from "zod";
 
 export const ROLE = {
   JOBSEEKER: "jobseeker",
@@ -68,7 +67,7 @@ export interface IUser {
   isOtpVerified: boolean;
   education: IEducation[];
   savejobs?: mongoose.Types.ObjectId[];
-  appliedjobs?: IAppliedJob[];
+  appliedjobs?: mongoose.Types.ObjectId[] | IAppliedJob[];
   company?: mongoose.Types.ObjectId;
   postJobs?: mongoose.Types.ObjectId[];
   profileComplete: number;
@@ -169,7 +168,7 @@ const userSchema = new Schema<IUser>(
       {
         degree: { type: String },
         institution: { type: String },
-        year: { type: string },
+        year: { type: String },
       },
     ],
     savejobs: [
@@ -180,19 +179,15 @@ const userSchema = new Schema<IUser>(
     ],
     appliedjobs: [
       {
-        jodId: {
+        apply: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Job",
+          ref: "Apply",
         },
         appliedAt: {
           type: Date,
           default: Date.now,
         },
-        status: {
-          type: String,
-          default: "pending",
-        },
-      },
+      }
     ],
     company: {
       type: mongoose.Schema.Types.ObjectId,

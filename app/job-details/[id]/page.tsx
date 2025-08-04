@@ -1,5 +1,7 @@
-import JobDetails from '@/components/ui/custom/JobDetails';
-import React from 'react';
+
+import JobDetails from '@/components/ui/job/JobDetails';
+import React, { Suspense } from 'react';
+import JobDetailsLoading from './loading';
 
 
 // const BASE_URL = "http://localhost:3000";
@@ -18,7 +20,9 @@ const page =async (context: {params: Promise<{id: string}>}) => {
     const {id} = await context.params;
    const job = await getJob(id);
     return (
-       <JobDetails job={job}/>
+       <Suspense fallback={<JobDetailsLoading/>}>
+        <JobDetails job={job}/>
+       </Suspense>
     );
 };
 

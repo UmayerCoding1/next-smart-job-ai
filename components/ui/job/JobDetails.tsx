@@ -11,9 +11,10 @@ import mongoose from "mongoose";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import SimilarJob from "./SimilarJob";
+
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
+import SimilarJob from "./SimilarJob";
 
 const book = "/assets/book-glass.jpg";
 const CompanyDefaultLogo = "/assets/companu-default-logo.png";

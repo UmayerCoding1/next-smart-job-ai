@@ -12,7 +12,7 @@ const SaveButton = ({jobId, className,isOnlyIcon,defaultStyle=true}: {jobId: str
        className={`${className ? className : " w-full lg:w-40 "} ${defaultStyle && "border active:scale-105 h-12 bg-gray-100 shadow hover:bg-gray-200 cursor-pointer"}`}
        onClick={() => handleSvaeJob(jobId)}
        >
-        <Bookmark/>
+        <Bookmark className='fill-red-500'/>
         {!isOnlyIcon && <span>Save</span>}
        </Button>
     );

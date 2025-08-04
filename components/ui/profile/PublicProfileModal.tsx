@@ -1,7 +1,7 @@
 "use client";
 import { IUser } from "@/app/models/User";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React from "react";
 import { UserImage } from "./Profile";
 import { FileText } from "lucide-react";
 import { Button } from "../button";

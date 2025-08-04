@@ -3,7 +3,6 @@
 import React from "react";
 
 import Hero from "./Hero";
-import Jobs from "./Jobs";
 import Capabilities from "./Capabilities";
 import Categorys from "./Categorys";
 import Company from "./Company";
@@ -12,6 +11,7 @@ import KeyHighlights from "./KeyHighlights";
 import Testimonials from "./Testimonials";
 import FQA from "./FQA";
 import HowItWorks from "./HowItWorks";
+import Jobs from "../ui/job/Jobs";
 
 const Home = () => {
   return (

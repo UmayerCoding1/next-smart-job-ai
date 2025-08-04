@@ -116,7 +116,7 @@ export const JobSchema = new Schema<IJob>(
         required: { type: Boolean, default: false },
       },
     ],
-    appliedjobs: { type: [Schema.Types.ObjectId], ref: "User" },
+    appliedjobs: { type: [Schema.Types.ObjectId], ref: "Apply" },
     status: {
       type: String,
       default: "active",

@@ -6,13 +6,15 @@ import { IJob } from "@/app/models/Job";
 import { ChevronRight } from "lucide-react";
 
 import Link from "next/link";
-import PrimaryButton from "../button/PrimaryButton";
+
 import useJobs from "@/hooks/useJobs";
-import Search from "../ui/custom/Search";
-import Joblist from "../ui/custom/Joblist";
+
 
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
+import Search from "../custom/Search";
+import Joblist from "./Joblist";
+import PrimaryButton from "@/components/button/PrimaryButton";
 const Jobs = () => {
   const searchQuery = useSelector((state: RootState) => state.searchR.search);
 

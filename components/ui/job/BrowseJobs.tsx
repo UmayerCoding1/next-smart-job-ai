@@ -1,8 +1,8 @@
 "use client";
 import { IJob } from "@/app/models/Job";
 import GostButton from "@/components/button/GostButton";
-import Filter from "@/components/ui/custom/Filter";
-import Joblist from "@/components/ui/custom/Joblist";
+import Filter from "@/components/ui/job/Filter";
+import Joblist from "@/components/ui/job/Joblist";
 import Search from "@/components/ui/custom/Search";
 import useJobs from "@/hooks/useJobs";
 import { ChevronLeft, ChevronRight, Grid2X2, Menu } from "lucide-react";

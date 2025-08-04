@@ -1,4 +1,3 @@
-import { User } from "@/app/models/User";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -7,6 +6,7 @@ export async function POST(request:NextRequest) {
         const formData = await request.formData();
         const resume = formData.get('resume');
         // const user = await User.findById();
+        console.log(resume);
 
         return NextResponse.json({ message: "Resume uploaded successfully", success: true }, { status: 200 });
     } catch (error) {

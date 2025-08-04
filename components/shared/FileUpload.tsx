@@ -49,7 +49,7 @@ const ResumeUpload = ({
     }
   };
 
-  console.log(resumedata);
+
   return (
     <ResumeUploadProvider value={{ resumedata, handleFileChange }}>
       <div className={className}>{children}</div>
@@ -60,7 +60,6 @@ const ResumeUpload = ({
 export default ResumeUpload;
 
 export const ResumeUploadInput = ({
-  children,
   handleFileInput,
 }: {
   children?: React.ReactNode;
@@ -76,7 +75,7 @@ export const ResumeUploadInput = ({
     );
   }
 
-  const { resumedata, handleFileChange } = context;
+  const {  handleFileChange } = context;
   return (
     <div>
       <input

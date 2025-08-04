@@ -1,24 +1,31 @@
 import mongoose, { Schema, model, models } from "mongoose";
 
-export interface IApplication {
+export interface IApply {
   _id?: mongoose.Types.ObjectId;
   job: mongoose.Types.ObjectId;
+  name: string;
+  email: string;
   applicant: mongoose.Types.ObjectId;
   resumeLink: string;
+  countryCode: string;
   phone: string;
   status: string;
   appliedAt: Date;
   expectedSalary: number;
+  coverLetter: string;
   jobRelatedQuestions?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export const ApplicationSchema = new Schema<IApplication>({
+export const ApplySchema = new Schema<IApply>({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
   job: { type: Schema.Types.ObjectId, ref: "Job", required: true },
   applicant: { type: Schema.Types.ObjectId, ref: "User", required: true },
   resumeLink: { type: String, required: true },
   expectedSalary: { type: Number, required: true },
+  countryCode: { type: String, required: true },
   phone: { type: String, required: true },
   jobRelatedQuestions: [
     {
@@ -26,6 +33,7 @@ export const ApplicationSchema = new Schema<IApplication>({
       answer: { type: String, required: true },
     },
   ],
+  coverLetter: { type: String , required: true },
   status: {
     type: String,
     enum: ["pending", "reviewed", "interview", "rejected", "accepted"],
@@ -35,4 +43,4 @@ export const ApplicationSchema = new Schema<IApplication>({
 });
 
 
-export const Application = models?.Application || model<IApplication>("Application", ApplicationSchema);
+export const Apply = models?.Apply || model<IApply>("Apply", ApplySchema);

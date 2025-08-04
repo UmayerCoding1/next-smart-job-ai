@@ -2,7 +2,7 @@ import { IJob } from "@/app/models/Job";
 import useJobs from "@/hooks/useJobs";
 import React from "react";
 
-import Joblist from "./Joblist";
+import Joblist from "../job/Joblist";
 
 type Props = {
   category: string;

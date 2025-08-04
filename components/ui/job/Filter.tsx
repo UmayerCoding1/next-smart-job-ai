@@ -104,7 +104,7 @@ const Filter = ({
   const filterString = JSON.stringify(filterQuery);
   useEffect(() => {
     setFilterQuery(filterString);
-  }, [filterQuery]);
+  }, [filterString, setFilterQuery]);
 
   return (
     <>
