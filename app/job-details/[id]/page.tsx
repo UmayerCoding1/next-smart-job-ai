@@ -4,8 +4,8 @@ import React, { Suspense } from 'react';
 import JobDetailsLoading from './loading';
 
 
-// const BASE_URL = "http://localhost:3000";
-const BASE_URL = "https://next-smart-job-ai.vercel.app";
+const BASE_URL = "http://localhost:3000";
+// const BASE_URL = "https://next-smart-job-ai.vercel.app";
 
 const getJob = async (jobId: string) => {
    
@@ -19,6 +19,8 @@ const getJob = async (jobId: string) => {
 const page =async (context: {params: Promise<{id: string}>}) => {
     const {id} = await context.params;
    const job = await getJob(id);
+
+   if(!job) return <JobDetailsLoading/>;
     return (
        <Suspense fallback={<JobDetailsLoading/>}>
         <JobDetails job={job}/>

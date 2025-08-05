@@ -14,7 +14,7 @@ import React from "react";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
-import SimilarJob from "./SimilarJob";
+// import SimilarJob from "./SimilarJob";
 
 const book = "/assets/book-glass.jpg";
 const CompanyDefaultLogo = "/assets/companu-default-logo.png";
@@ -23,7 +23,6 @@ const BgImage = "/assets/jods-details-header.jpg";
 const JobDetails = ({ job }: { job: IJob }) => {
   const user = useSelector((state: RootState) => state.authR.user);
   const {
-    company,
     title,
     location,
     description,
@@ -40,8 +39,11 @@ const JobDetails = ({ job }: { job: IJob }) => {
     workTime,
     isRemoteAvailable,
     shift,
+    appliedjobs
   } = job;
+console.log(job);
 
+const  company = job.company;
   const logoSrc =
     typeof company === "object" && "logo" in company && company.logo
       ? company.logo
@@ -68,12 +70,15 @@ const JobDetails = ({ job }: { job: IJob }) => {
     "Retail",
     "Technology",
     "Energy",
+    
   ];
 
 
   const handleApply = () => {
      sessionStorage.setItem("appliedAt", new Date().toISOString());
   }
+
+ 
   return (
     <div className="relative">
       <div className="relative">
@@ -142,7 +147,14 @@ const JobDetails = ({ job }: { job: IJob }) => {
             <SaveButton
               jobId={(job!._id as mongoose.Types.ObjectId).toString()}
             />
-            <Link
+
+{appliedjobs && user?._id  ? (
+  appliedjobs.map(id => id.toString()).includes(user?._id.toString()) ? (
+    // user has applied — show something
+    <div>Already Applied</div>
+  ) : (
+   
+   <Link
               href={
                 user
                   ? `${
@@ -157,6 +169,23 @@ const JobDetails = ({ job }: { job: IJob }) => {
                 Apply
               </PrimaryButton>
             </Link>
+  )
+) :    <Link
+              href={
+                user
+                  ? `${
+                      job!._id
+                    }/apply`
+                  : "/login"
+              }
+              onClick={handleApply}
+              className="w-full lg:w-40"
+            >
+              <PrimaryButton className="w-full lg:w-40 h-9">
+                Apply
+              </PrimaryButton>
+            </Link>}
+            
           </div>
         </div>
 
@@ -272,7 +301,7 @@ const JobDetails = ({ job }: { job: IJob }) => {
               </div>
             </div>
 
-            <div className="bg-gray-50 p-3 mt-4">
+             <div className="bg-gray-50 p-3 mt-4">
               <h2 className="text-2xl font-semibold">About Company</h2>
 
               <div className="mt-10">
@@ -353,12 +382,12 @@ const JobDetails = ({ job }: { job: IJob }) => {
             <div>
               <h2 className="text-2xl font-semibold">
                 Similar Jobs
-                <SimilarJob
+                {/* <SimilarJob
                   category={job.category}
                   existingJodId={(
                     job!._id as mongoose.Types.ObjectId
                   ).toString()}
-                />
+                /> */}
               </h2>
 
               <div>

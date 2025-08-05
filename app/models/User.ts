@@ -39,7 +39,7 @@ export interface IEducation {
 }
 
 export interface IAppliedJob {
-  jodId: mongoose.Types.ObjectId;
+  jod: mongoose.Types.ObjectId;
   appliedAt: Date;
   status: string;
 }
@@ -54,7 +54,7 @@ export interface IUser {
   about?: string;
   avatar?: string;
   coverImage?: string;
-  resume?: mongoose.Types.ObjectId;
+  resume?: string;
   loginMethod: string;
   googleId?: string;
   facebookId?: string;
@@ -127,8 +127,8 @@ const userSchema = new Schema<IUser>(
       default: "",
     },
     resume: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Resume",
+      type: String,
+      default: "",
     },
     countryCode: {
       type: String,

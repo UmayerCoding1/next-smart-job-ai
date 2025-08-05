@@ -1,4 +1,6 @@
-import { Apply, IApply } from "@/app/models/Apply";
+
+
+import { Application, IApply } from "@/app/models/Application";
 import { Job } from "@/app/models/Job";
 import { User } from "@/app/models/User";
 import { connectToDatabase } from "@/lib/db";
@@ -64,7 +66,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const existingApply = await Apply.findOne({
+    const existingApply = await Application.findOne({
       job: job,
       applicant: applicant,
     });
@@ -76,7 +78,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const newApply = await Apply.create({
+    const newApply = await Application.create({
       job,
       name,
       email,
@@ -89,29 +91,27 @@ export async function POST(request: NextRequest) {
       expectedSalary,
     });
 
-    const applicantId = new Types.ObjectId(applicant);
-    if (applyedJob.appliedjobs.includes(applicantId)) {
+
+    if (applyedJob.appliedjobs.includes(newApply.applicant)) {
       return NextResponse.json(
         { message: "You have already applied for this job", success: false },
         { status: 400 }
       );
     } else {
-      applyedJob.appliedjobs.push(applicantId);
+      applyedJob.appliedjobs.push(newApply.applicant);
       await applyedJob.save({ validateBeforeSave: false });
     }
 
-
-    if (applicantUser.appliedjobs.includes(applicantId)) {
+    if (applicantUser.appliedjobs.includes(newApply._id)) {
       return NextResponse.json(
         { message: "You have already applied for this job", success: false },
         { status: 400 }
       );
     } else {
-      applicantUser.appliedjobs.push(applicantId);
-      await applyedJob.save({ validateBeforeSave: false });
+      applicantUser.appliedjobs.push(newApply._id);
+      await applicantUser.save({ validateBeforeSave: false });
     }
 
-   
     return NextResponse.json(
       { message: "Job applied successfully", success: true },
       { status: 200 }

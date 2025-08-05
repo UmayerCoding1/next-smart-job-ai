@@ -9,7 +9,7 @@ import { getJob } from "@/service/api";
 import { Edit, User } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { use, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CustomBreadcrumb from "../custom/CustomBreadcrumb";
 
@@ -101,6 +101,9 @@ const ApplyPage = ({id} : {id: string}) => {
   const handleUrlSessionIsValid = () => {
     sessionStorage.setItem("appliedAt", new Date().toISOString());
   };
+
+
+  console.log(user)
   return (
     <div onMouseMove={handleUrlSessionIsValid} className="bg-gray-50">
       <div className="w-full h-[300px] bg-black flex items-center justify-evenly text-white">

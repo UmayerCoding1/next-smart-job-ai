@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Job } from "@/app/models/Job";
 import { Company } from "@/app/models/Company";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
+
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -10,12 +11,16 @@ export async function GET(
   try {
     await connectToDatabase();
     const { id } = await context.params;
-   
+   console.log("Models loaded:", mongoose.modelNames());
      if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid job ID" }, { status: 400 });
     }
 
-    const job = await Job.findById(id).populate("company");
+
+    
+const job = await Job.findById(id).populate("company");
+
+
 
     if (!job) {
       return NextResponse.json(
@@ -23,7 +28,7 @@ export async function GET(
         { status: 404 }
       );
     }
-   console.log(Company);
+
    
     return NextResponse.json({ job, success: true }, { status: 200 });
   } catch (error) {

@@ -13,12 +13,15 @@ export interface IApply {
   appliedAt: Date;
   expectedSalary: number;
   coverLetter: string;
-  jobRelatedQuestions?: string[];
+  jobRelatedQuestions?: {
+    question: string;
+    answer: string;
+  }[];
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export const ApplySchema = new Schema<IApply>({
+export const application = new Schema<IApply>({
   name: { type: String, required: true },
   email: { type: String, required: true },
   job: { type: Schema.Types.ObjectId, ref: "Job", required: true },
@@ -43,4 +46,5 @@ export const ApplySchema = new Schema<IApply>({
 });
 
 
-export const Apply = models?.Apply || model<IApply>("Apply", ApplySchema);
+export const Application = models.Application || model<IApply>("Application", application);
+
