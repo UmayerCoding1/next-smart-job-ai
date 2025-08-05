@@ -4,7 +4,6 @@ import { Application, IApply } from "@/app/models/Application";
 import { Job } from "@/app/models/Job";
 import { User } from "@/app/models/User";
 import { connectToDatabase } from "@/lib/db";
-import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

@@ -11,7 +11,6 @@ import {
   Bell,
   BriefcaseBusiness,
   Camera,
-  CloudDownload,
   Copy,
   FileCheck2,
   HeartHandshake,
@@ -32,10 +31,6 @@ import UpdateAvatar from "./UpdateAvatar";
 import AccountSettingForm from "@/components/form/profile/AccountSettingForm";
 import CompanyProfileForm from "@/components/form/profile/CompanyProfileForm";
 import EducationForm from "@/components/form/profile/EducationForm";
-import ResumeUpload, { ResumeUploadInput } from "../../shared/FileUpload";
-import { Button } from "../button";
-import { toast } from "sonner";
-import PreviesResume from "./PreviesResume";
 import SocialLink from "./SocialLink";
 import PublicProfileModal from "./PublicProfileModal";
 import Resume from "./Resume";

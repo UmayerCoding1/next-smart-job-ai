@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Job } from "@/app/models/Job";
-import { Company } from "@/app/models/Company";
 import mongoose, { Types } from "mongoose";
 
 export async function GET(

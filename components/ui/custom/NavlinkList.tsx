@@ -33,7 +33,7 @@ const NavlinkList = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const authenticatedRoutes = [
-    { lable: "Profile", link: `/${user?.username}`, icon: User },
+    { lable: "Profile", link: `/profile/${user?.username}`, icon: User },
     { lable: "My Applications", link: "/my-applications", icon: FileCheck2 },
     { lable: "Resume Builder", link: "/resume-builder", icon: FilePenLine },
     { lable: "Settings", link: "/settings", icon: Settings },
