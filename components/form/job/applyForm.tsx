@@ -15,6 +15,7 @@ import ResumeUpload, { ResumeUploadInput } from "../../shared/FileUpload";
 import { imagekit } from "@/lib/ImageKitInstance";
 import axios, { isAxiosError } from "axios";
 import { toast } from "sonner";
+import { convertFileToBase64 } from "@/lib/convertFileToBase64";
 
 type ApplyFormProps = {
   user: IUser | null;
@@ -44,14 +45,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
 
   
 
-  const convertFileToBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
-};
+
 
   const handleGetResume =async (pdfdata: {
     url: string;
@@ -59,9 +53,9 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
     file: File ;
   }) => {
     if (pdfdata.file) {
- const base64 = await convertFileToBase64(pdfdata.file);
+ const resumeBase64 = await convertFileToBase64(pdfdata.file);
       const result = await imagekit.upload({
-        file: base64,
+        file: resumeBase64,
         fileName: pdfdata.file.name,
         tags: ["document", "pdf"],
       });

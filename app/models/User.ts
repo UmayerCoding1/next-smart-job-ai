@@ -1,5 +1,6 @@
 import mongoose, { Schema, model, models } from "mongoose";
 import bcrypt from "bcryptjs";
+import { IResume } from "./Resume";
 
 export const ROLE = {
   JOBSEEKER: "jobseeker",
@@ -54,7 +55,7 @@ export interface IUser {
   about?: string;
   avatar?: string;
   coverImage?: string;
-  resume?: string;
+  resume?: mongoose.Types.ObjectId | IResume;
   loginMethod: string;
   googleId?: string;
   facebookId?: string;
@@ -127,8 +128,8 @@ const userSchema = new Schema<IUser>(
       default: "",
     },
     resume: {
-      type: String,
-      default: "",
+      type: Schema.Types.ObjectId,
+      ref: "Resume",
     },
     countryCode: {
       type: String,

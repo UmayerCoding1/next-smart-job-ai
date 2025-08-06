@@ -66,8 +66,10 @@ const Profile = () => {
   useEffect(() => {
     const handleGetCompany = async () => {
       try {
-        const response = await getCompany(user?._id?.toString() || "");
+        if (user?.role === "recruiter") {
+           const response = await getCompany(user?._id?.toString() || "");
         setCompany(response);
+        }
       } catch (error) {
         console.log(error);
       }

@@ -4,6 +4,8 @@ export interface IResume {
   _id: mongoose.Types.ObjectId;
   user: mongoose.Types.ObjectId;
   resumeLink: string;
+  filename: string;
+  size?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -11,6 +13,8 @@ export interface IResume {
 
 const resumeSchema = new Schema<IResume>({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  filename: { type: String, required: true },
+  size: { type: Number },
   resumeLink: { type: String, required: true },
 }, { timestamps: true });
 

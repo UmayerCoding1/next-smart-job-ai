@@ -2,8 +2,10 @@
 
 import React from "react";
 import PdfList from "./PdfList";
+import { IResume } from "@/app/models/Resume";
 
-const PreviesResume = () => {
+const PreviesResume = ({resumes} : {resumes: IResume[] | []}) => {
+  console.log("resume", resumes);
   return (
     <div className="my-5 ">
       {/* <h3>previes resume (only avalable for premium user)</h3> */}
@@ -16,8 +18,8 @@ const PreviesResume = () => {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <PdfList key={index} />
+        {resumes.map((resume, index) => (
+          <PdfList key={index} resume={resume} />
         ))}
       </div>
     </div>

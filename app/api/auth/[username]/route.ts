@@ -25,7 +25,7 @@ export async function PUT(request: NextRequest, context : {params: Promise<{user
         await connectToDatabase();
 
         const userName = await context.params;
-        console.log(userName);
+        
         const body = await request.json();
         // console.log(body);
 
