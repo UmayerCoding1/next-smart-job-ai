@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { toast } from "sonner";
 
  export interface Accountdata {
   fullname:string,
@@ -31,7 +32,9 @@ const AccountSettingForm = () => {
         about: data.about
       };
       const res =await axios.put(`/api/auth/${user?.username}`, accountUpdateData);
-      console.log(res.data);
+      if (res.data.success) {
+        toast.success("Account updated successfully", { duration: 1500 });
+      }
     } catch (error) {
       console.log(error);
     }

@@ -29,13 +29,13 @@ export async function PUT(request: NextRequest, context : {params: Promise<{user
         const body = await request.json();
         // console.log(body);
 
-        const user = await User.findOneAndUpdate({username: userName.username}, body, {new: true});
+        const user = await User.findOneAndUpdate({username: userName.username}, body, {new: true}).populate('resume');
         
         if (!user) {
             return NextResponse.json({ message: "User not found", success: false }, { status: 404 });
         }
 
-        return NextResponse.json({ message: "User updated successfully", success: true }, { status: 200 });
+        return NextResponse.json({ message: "User updated successfully", success: true, user }, { status: 200 });
     } catch (error) {
         console.log('User update error', error);
         return NextResponse.json({ message: "User update error", success: false }, { status: 500 });

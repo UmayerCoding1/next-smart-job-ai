@@ -27,7 +27,7 @@ console.log(mongoose.modelNames());
    
     const user = await User.findById(decoded.id).populate({
     path: "resume",
-    select: "filename size createdAt"
+    select: "filename size createdAt resumeLink"
   }).select("-password -otp"); 
     console.log("user", user.resume);
    

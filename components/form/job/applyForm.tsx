@@ -2,7 +2,7 @@
 import { IJob } from "@/app/models/Job";
 import { IUser } from "@/app/models/User";
 
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import { Textarea } from "../../ui/textarea";
@@ -43,28 +43,23 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
     jobRelatedQuestions: [] as { question: string; answer: string }[],
   });
 
-  
-
-
-
-  const handleGetResume =async (pdfdata: {
+  const handleGetResume = async (pdfdata: {
     url: string;
     name: string;
-    file: File ;
+    file: File;
   }) => {
     if (pdfdata.file) {
- const resumeBase64 = await convertFileToBase64(pdfdata.file);
+      const resumeBase64 = await convertFileToBase64(pdfdata.file);
       const result = await imagekit.upload({
         file: resumeBase64,
         fileName: pdfdata.file.name,
         tags: ["document", "pdf"],
       });
 
-      console.log('result',result);
+      console.log("result", result);
       if (result.url) {
         pdfdata.url = result.url;
         pdfdata.name = pdfdata.file.name;
-        
       }
       setPdfUrl(pdfdata);
       setScore((prev) => prev + 55);
@@ -72,7 +67,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
   };
 
   const calculateScore = (updatedFields = formFields) => {
-    let total = 0;
+    let total = user && user.resume ? 55 : 0;
 
     // Static fields
     if (updatedFields.name) total += 10;
@@ -92,33 +87,35 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
     calculateScore(updated);
   };
 
-const handleDynamicChange = (index: number, value: string | boolean, label: string) => {
-  const updatedAnswers = [...formFields.jobRelatedQuestions];
+  const handleDynamicChange = (
+    index: number,
+    value: string | boolean,
+    label: string
+  ) => {
+    const updatedAnswers = [...formFields.jobRelatedQuestions];
 
-  // If the index already exists, update the answer
-  if (updatedAnswers[index]) {
-    updatedAnswers[index] = {
-      question: label,
-      answer: value.toString(), // Store as string to match your schema
+    // If the index already exists, update the answer
+    if (updatedAnswers[index]) {
+      updatedAnswers[index] = {
+        question: label,
+        answer: value.toString(), // Store as string to match your schema
+      };
+    } else {
+      // If it's a new index, push a new object
+      updatedAnswers.push({
+        question: label,
+        answer: value.toString(),
+      });
+    }
+
+    const updated = {
+      ...formFields,
+      jobRelatedQuestions: updatedAnswers,
     };
-  } else {
-    // If it's a new index, push a new object
-    updatedAnswers.push({
-      question: label,
-      answer: value.toString(),
-    });
-  }
 
-  const updated = {
-    ...formFields,
-    jobRelatedQuestions: updatedAnswers,
+    console.log(updated);
+    setFormFields(updated);
   };
-
-  console.log(updated);
-  setFormFields(updated);
-};
-
-
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -132,38 +129,47 @@ const handleDynamicChange = (index: number, value: string | boolean, label: stri
       }
     });
 
-
     const applydata = {
       name: data.name,
       countryCode: data.countryCode,
       phone: data.phone,
       email: data.email,
       expectedSalary: data.expectedSalary,
-      resumeLink: pdfUrl.url,
+      resumeLink: user && typeof user?.resume === 'object' && 'resumeLink' in user?.resume ? user?.resume?.resumeLink : pdfUrl.url,
       coverLetter: data.coverLetter,
       jobRelatedQuestions: formFields?.jobRelatedQuestions,
       job: job?._id,
-      applicant: user?._id
-    }
+      applicant: user?._id,
+    };
 
     try {
-      const res = await axios.post('/api/jobs/apply', applydata);
+      const res = await axios.post("/api/jobs/apply", applydata);
       if (res.data.success) {
         toast.success(res.data.message, { duration: 1500 });
       }
-    }catch (error: unknown) {
-  if (isAxiosError(error)) {
-    toast.error(error.response?.data?.message || "Something went wrong", { duration: 1500 });
-  } else {
-    toast.error("Something went wrong", { duration: 1500 });
-  }
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Something went wrong", {
+          duration: 1500,
+        });
+      } else {
+        toast.error("Something went wrong", { duration: 1500 });
+      }
 
-  console.error(error);
-}
+      console.error(error);
+    }
 
-    console.log("Form data:",applydata );
+    console.log("Form data:", applydata);
     // console.log(formFields)
   };
+
+ useEffect(() => {
+  setScore((prev) => {
+    const updated = prev + 55;
+    return updated;
+  });
+}, [user?.resume]);
+
 
   return (
     <form
@@ -203,7 +209,6 @@ const handleDynamicChange = (index: number, value: string | boolean, label: stri
             onChange={handleInputChange}
             className="h-14"
             required
-            
           />
         </div>
       </div>
@@ -243,37 +248,60 @@ const handleDynamicChange = (index: number, value: string | boolean, label: stri
         />
       </div>
 
-      <ResumeUpload
-        handleGetFileData={handleGetResume}
-        className={"flex items-center gap-3"}
-      >
-        <ResumeUploadInput
-          handleFileInput={{ id: "resume-upload", className: "w-full" }}
-        />
-        <label
-          htmlFor="resume-upload"
-          className="cursor-pointer transition duration-300 flex items-center justify-center rounded-lg h-14  gap-2 border w-full"
+      {user && user?.resume ? (
+        <div>
+          <Link
+            href={
+              user?.resume &&
+              typeof user.resume === "object" &&
+              "resumeLink" in user.resume
+                ? user.resume.resumeLink
+                : "#"
+            }
+            
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex gap-2"
+          >
+            <div className="w-20 h-14 bg-red-700 rounded-lg flex items-center justify-center ">
+              <span className="text-white text-xl">PDF</span>
+            </div>
+            <span className="text-sm">{user?.resume && typeof user.resume === 'object' && 'filename' in user.resume ? user.resume.filename : ''}</span>
+          </Link>
+        </div>
+      ) : (
+        <ResumeUpload
+          handleGetFileData={handleGetResume}
+          className={"flex items-center gap-3"}
         >
-          <Upload size={13} />
-          Upload PDF
-        </label>
+          <ResumeUploadInput
+            handleFileInput={{ id: "resume-upload", className: "w-full" }}
+          />
+          <label
+            htmlFor="resume-upload"
+            className="cursor-pointer transition duration-300 flex items-center justify-center rounded-lg h-14  gap-2 border w-full"
+          >
+            <Upload size={13} />
+            Upload PDF
+          </label>
 
-        {pdfUrl.url && (
-          <div>
-            <Link
-              href={pdfUrl.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex gap-2"
-            >
-              <div className="w-20 h-14 bg-red-700 rounded-lg flex items-center justify-center ">
-                <span className="text-white text-xl">PDF</span>
-              </div>
-              <span className="text-sm">{pdfUrl.name}</span>
-            </Link>
-          </div>
-        )}
-      </ResumeUpload>
+          {pdfUrl.url && (
+            <div>
+              <Link
+                href={pdfUrl.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-2"
+              >
+                <div className="w-20 h-14 bg-red-700 rounded-lg flex items-center justify-center ">
+                  <span className="text-white text-xl">PDF</span>
+                </div>
+                <span className="text-sm">{pdfUrl.name}</span>
+              </Link>
+            </div>
+          )}
+        </ResumeUpload>
+      )}
 
       {job?.applicationsQuestions?.map((question, index) => {
         const filedName = `question-${index}`;
@@ -286,7 +314,9 @@ const handleDynamicChange = (index: number, value: string | boolean, label: stri
             {question?.answerType === "textarea" ? (
               <Textarea
                 placeholder="Type your message here."
-                onChange={(e) => handleDynamicChange(index, e.target.value, question?.question)}
+                onChange={(e) =>
+                  handleDynamicChange(index, e.target.value, question?.question)
+                }
                 name={filedName}
                 className="h-24 resize-none mt-2"
                 required
@@ -296,7 +326,9 @@ const handleDynamicChange = (index: number, value: string | boolean, label: stri
                 defaultValue=""
                 name={filedName}
                 required
-                onValueChange={(value) => handleDynamicChange(index, value, question?.question)}
+                onValueChange={(value) =>
+                  handleDynamicChange(index, value, question?.question)
+                }
               >
                 <div className="flex items-center gap-3 mt-2">
                   <RadioGroupItem value="yes" id={`r1-${index}`} />
@@ -314,7 +346,11 @@ const handleDynamicChange = (index: number, value: string | boolean, label: stri
                   name={filedName}
                   required
                   onCheckedChange={(checked) =>
-                    handleDynamicChange(index, checked ? "yes" : "no", question?.question)
+                    handleDynamicChange(
+                      index,
+                      checked ? "yes" : "no",
+                      question?.question
+                    )
                   }
                 />
                 <div className="grid gap-2">
@@ -330,7 +366,13 @@ const handleDynamicChange = (index: number, value: string | boolean, label: stri
                   type={question?.answerType}
                   placeholder=""
                   required={question?.required}
-                  onChange={(e) => handleDynamicChange(index, e.target.value, question?.question)}
+                  onChange={(e) =>
+                    handleDynamicChange(
+                      index,
+                      e.target.value,
+                      question?.question
+                    )
+                  }
                   className="h-14"
                 />
               </div>
