@@ -39,7 +39,7 @@ export default async function RootLayout({
             
             <Navbar  />
             <UseAuth />
-            <main>{children}</main>
+            <main className="mt-5">{children}</main>
             <Footer />
            <Toaster closeButton={true} containerAriaLabel="Toaster" position="bottom-right"/>
           </ReduxProvider>

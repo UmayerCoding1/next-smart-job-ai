@@ -2,7 +2,7 @@
 import { IJob } from "@/app/models/Job";
 import { IUser } from "@/app/models/User";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import { Textarea } from "../../ui/textarea";

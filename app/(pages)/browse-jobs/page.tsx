@@ -1,6 +1,6 @@
 'use client';
 import React, { Suspense } from 'react';
-import BrowseJobs from '../../components/ui/job/BrowseJobs';
+import BrowseJobs from '../../../components/ui/job/BrowseJobs';
 
 const page = () => {
   return (

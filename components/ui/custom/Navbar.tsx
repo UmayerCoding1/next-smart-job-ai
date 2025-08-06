@@ -62,7 +62,6 @@ const Navbar = () => {
  const commonNav = [
   { name: "Home", href: "/" },
   { name: "Find Jobs", href: "/browse-jobs" },
-  { name: "Companies", href: "/companies" },
   { name: "Pricing Plan", href: "/pricing" },
   { name: "Customer Support", href: "/support" },
 ];

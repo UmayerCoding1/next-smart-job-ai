@@ -1,5 +1,5 @@
 "use client";
-import { setUser, updateUser } from "@/app/features/user/userSlice";
+import {  updateUser } from "@/app/features/user/userSlice";
 import { IResume } from "@/app/models/Resume";
 import { RootState } from "@/app/redux/store";
 import axios from "axios";
@@ -28,7 +28,7 @@ const PdfList = ({
   const [isOpen, setIsOpen] = useState(false);
   const dispacth = useDispatch();
   useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
+    const handleOutsideClick = () => {
       setIsOpen(false);
     };
     document.addEventListener("click", handleOutsideClick);
