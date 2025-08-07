@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Job } from "@/app/models/Job";
 import mongoose, { Types } from "mongoose";
-
+import '@/app/models/Company'
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
