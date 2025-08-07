@@ -65,9 +65,7 @@ const PdfList = ({
     console.log(resumeId);
   };
 
-  useEffect(() => {
-    console.log(user?.resume, resume._id);
-  }, [user]);
+
 
   console.log(user);
   return (

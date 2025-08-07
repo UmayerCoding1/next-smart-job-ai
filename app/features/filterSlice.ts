@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   JobType: [],
-  DatePosted: String,
+  DatePosted: '',
   ExperienceLavel: [],
 };
 

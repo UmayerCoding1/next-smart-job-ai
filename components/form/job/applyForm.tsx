@@ -168,7 +168,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
     const updated = prev + 55;
     return updated;
   });
-}, [user?.resume]);
+}, [user?.resume,setScore]);
 
 
   return (

@@ -24,7 +24,7 @@ const Resume = () => {
     file?: File | null;
   } | null>(null);
   const [resumes, setResumes] = useState<IResume[] | []>([]);
-  const [isUploading, setUploading] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFileChange = async (pdfdata: {

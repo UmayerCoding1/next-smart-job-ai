@@ -8,7 +8,6 @@ import QueryProvider from "@/lib/QueryProvider";
 import ReduxProvider from "@/lib/ReduxProvider";
 import Navbar from "@/components/ui/custom/Navbar";
 import Footer from "@/components/ui/custom/Footer";
-import { headers } from "next/headers";
 
 const SourceSans = Source_Sans_3({
   weight: ["400", "500", "600", "700"],

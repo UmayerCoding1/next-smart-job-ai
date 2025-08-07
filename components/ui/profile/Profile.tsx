@@ -76,7 +76,7 @@ const Profile = () => {
     };
 
     handleGetCompany();
-  }, [user?._id]);
+  }, [user?._id, user?.role]);
 
 
    useEffect(() => {
