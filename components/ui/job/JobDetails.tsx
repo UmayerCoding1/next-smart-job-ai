@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import mongoose from "mongoose";
 
-// import mongoose from "mongoose";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -22,6 +22,7 @@ const BgImage = "/assets/jods-details-header.jpg";
 
 const JobDetails = ({ job }: { job: IJob }) => {
   const user = useSelector((state: RootState) => state.authR.user);
+  if (!job) return <div>Job not found</div>;
   const {
     title,
     location,
