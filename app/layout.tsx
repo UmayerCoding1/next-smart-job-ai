@@ -1,17 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-
-
-
-import { Source_Sans_3 } from 'next/font/google';
+import { Source_Sans_3 } from "next/font/google";
 import UseAuth from "@/components/ui/custom/useAuth";
 import { Toaster } from "sonner";
 import QueryProvider from "@/lib/QueryProvider";
 import ReduxProvider from "@/lib/ReduxProvider";
 import Navbar from "@/components/ui/custom/Navbar";
 import Footer from "@/components/ui/custom/Footer";
-
+import { headers } from "next/headers";
 
 const SourceSans = Source_Sans_3({
   weight: ["400", "500", "600", "700"],
@@ -29,19 +26,24 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  
-
   return (
     <html lang="en">
       <body className={`${SourceSans.className} bg-white dark:bg-slate-900`}>
         <QueryProvider>
           <ReduxProvider>
-            
-            <Navbar  />
+            <Navbar />
             <UseAuth />
-            <main className="mt-5">{children}</main>
+            <main>
+              <div>
+                {children}
+              </div>
+            </main>
             <Footer />
-           <Toaster closeButton={true} containerAriaLabel="Toaster" position="bottom-right"/>
+            <Toaster
+              closeButton={true}
+              containerAriaLabel="Toaster"
+              position="bottom-right"
+            />
           </ReduxProvider>
         </QueryProvider>
       </body>

@@ -1,11 +1,18 @@
+'use client';
 import { Phone, Facebook, Linkedin, Twitter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const Logo = "/assets/logo.png";
 
 const Footer = () => {
+  const pathName = usePathname();
+  const isDashboard = pathName.startsWith("/dashboard");
+  if (isDashboard) {
+    return null;
+  }
   return (
     <div className="bg-[#263238] text-white px-4 py-16 md:px-8">
       <div className="max-w-7xl mx-auto space-y-16">

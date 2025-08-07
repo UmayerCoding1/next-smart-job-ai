@@ -29,11 +29,6 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   };
 
-  
-  
-
-
-
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -58,18 +53,24 @@ const Navbar = () => {
     }
   }, [isOpenSearch]);
 
- 
- const commonNav = [
-  { name: "Home", href: "/" },
-  { name: "Find Jobs", href: "/browse-jobs" },
-  { name: "Pricing Plan", href: "/pricing" },
-  { name: "Customer Support", href: "/support" },
-];
+  const commonNav = [
+    { name: "Home", href: "/" },
+    { name: "Find Jobs", href: "/browse-jobs" },
+    { name: "Pricing Plan", href: "/pricing" },
+    { name: "Customer Support", href: "/support" },
+  ];
 
-const recruiterNav = user?.role === "recruiter" ? [{ name: "Candidates", href: "/candidates" }] : [];
+  const recruiterNav =
+    user?.role === "recruiter"
+      ? [{ name: "Candidates", href: "/candidates" }]
+      : [];
 
-const navitem = [...commonNav, ...recruiterNav];
+  const navitem = [...commonNav, ...recruiterNav];
 
+  const isDashboard = pathname.startsWith("/dashboard");
+  if (isDashboard) {
+    return null;
+  }
   return (
     <>
       <header
@@ -78,21 +79,26 @@ const navitem = [...commonNav, ...recruiterNav];
         } transition-all duration-300 ease-in-out bg-white`}
       >
         <div className="lg:max-w-7xl mx-auto bg-gray-100 px-2 py3 mb-3 rounded-lg lg:flex  items-center justify-between ">
-           <ul className="flex items-center justify-between gap-2 lg:gap-7">
+          <ul className="flex items-center justify-between gap-2 lg:gap-7">
             {navitem.map((item) => (
-              <Link href={item?.href || "#"} key={item?.name} className={`text-sm lg:text-sm font-medium   flex items-center justify-center h-10 ${pathname === item?.href ? "text-blue-600 border-b-2 border-blue-500" : "text-gray-500"}`}>{item?.name}</Link>
-             
-
-
+              <Link
+                href={item?.href || "#"}
+                key={item?.name}
+                className={`text-sm lg:text-sm font-medium   flex items-center justify-center h-10 ${
+                  pathname === item?.href
+                    ? "text-blue-600 border-b-2 border-blue-500"
+                    : "text-gray-500"
+                }`}
+              >
+                {item?.name}
+              </Link>
             ))}
-             
-           </ul>
+          </ul>
 
-
-           <p className="lg:flex items-center gap-2 text-gray-600 hidden ">
+          <p className="lg:flex items-center gap-2 text-gray-600 hidden ">
             <Mail size={13} className="cursor-pointer" />
             <span>smartjonai@gmail.com</span>
-           </p>
+          </p>
         </div>
         <nav className="max-w-7xl mx-auto  px-1 flex items-center justify-between">
           <section>
@@ -115,77 +121,74 @@ const navitem = [...commonNav, ...recruiterNav];
           </section>
 
           <section className="flex items-center gap-4">
-           
             {user ? (
-            <section className="flex items-center gap-2">
-              
-              <GostButton onClick={toggleSearch}>
-                <Search size={30} />
-              </GostButton>
-
-              <div className="relative ">
-                <GostButton>
-                  <Bell size={30} />
+              <section className="flex items-center gap-2">
+                <GostButton onClick={toggleSearch}>
+                  <Search size={30} />
                 </GostButton>
 
-                <span className="absolute -top-2 right-0 w-5 h-5 flex items-center font-medium justify-center bg-blue-300 text-sm rounded-full  ">
-                  5
-                </span>
-              </div>
+                <div className="relative ">
+                  <GostButton>
+                    <Bell size={30} />
+                  </GostButton>
 
-              <div>
-                <Button className="cursor-pointer">
-                  <LayoutDashboard size={30} />
-                  Dashboard
-                </Button>
-              </div>
+                  <span className="absolute -top-2 right-0 w-5 h-5 flex items-center font-medium justify-center bg-blue-300 text-sm rounded-full  ">
+                    5
+                  </span>
+                </div>
 
-              <div className="flex items-center bg-gray-100  rounded-2xl cursor-pointer">
+                <div>
+                  <Link href={`/dashboard/${user?.role}`}>
+                    <Button className="cursor-pointer">
+                      <LayoutDashboard size={30} />
+                      Dashboard
+                    </Button>
+                  </Link>
+                </div>
+
+                <div className="flex items-center bg-gray-100  rounded-2xl cursor-pointer">
+                  <Sheet>
+                    <div className="flex items-center gap-2 p-1">
+                      <div>
+                        <button className="bg-black text-white w-10 h-10 rounded-full cursor-pointer">
+                          UH
+                        </button>
+                      </div>
+
+                      <>
+                        <SheetTrigger className="cursor-pointer">
+                          <Menu size={30} className="cursor-pointer" />
+                        </SheetTrigger>
+                      </>
+
+                      <div>
+                        <NavlinkList />
+                      </div>
+                    </div>
+                  </Sheet>
+                </div>
+              </section>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link href="/login">
+                  <Button className="cursor-pointer bg-gradient-to-r from-blue-500 to-blue-700 text-white">
+                    <span>Login</span>
+                    <span>/</span>
+                    <span>Register</span>
+                  </Button>
+                </Link>
+
                 <Sheet>
-                  <div className="flex items-center gap-2 p-1">
-                    <div>
-                      <button className="bg-black text-white w-10 h-10 rounded-full cursor-pointer">
-                        UH
-                      </button>
-                    </div>
+                  <SheetTrigger className="cursor-pointer">
+                    <Menu size={30} className="cursor-pointer" />
+                  </SheetTrigger>
 
-                    <>
-                      <SheetTrigger className="cursor-pointer">
-                        <Menu size={30} className="cursor-pointer" />
-                      </SheetTrigger>
-                    </>
-
-                    <div>
-                      <NavlinkList />
-                    </div>
+                  <div>
+                    <NavlinkList />
                   </div>
                 </Sheet>
               </div>
-            </section>
-          ) : (
-            <div className="flex items-center gap-2">
-              
-              <Link href="/login">
-                <Button className="cursor-pointer bg-gradient-to-r from-blue-500 to-blue-700 text-white">
-                  <span>Login</span>
-                  <span>/</span>
-                  <span>Register</span>
-                </Button>
-              </Link>
-
-              <Sheet>
-                
-                    <SheetTrigger className="cursor-pointer">
-                      <Menu size={30} className="cursor-pointer" />
-                    </SheetTrigger>
-                  
-
-                <div>
-                  <NavlinkList  />
-                </div>
-              </Sheet>
-            </div>
-          )}
+            )}
           </section>
         </nav>
       </header>

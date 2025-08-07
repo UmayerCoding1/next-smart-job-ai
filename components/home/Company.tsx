@@ -3,7 +3,7 @@ import React from "react";
 
 const GoogleImage = "/assets/google-logo.png";
 
-const Company = ({ isHeader = true }: { isHeader: boolean }) => {
+const Company = ({ isHeader = true }: { isHeader?: boolean }) => {
   return (
     <div className="">
       {isHeader && (

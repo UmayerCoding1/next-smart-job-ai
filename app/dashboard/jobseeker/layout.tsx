@@ -1,0 +1,32 @@
+import Navbar from "@/components/shared/dashboard/Navbar";
+import Sidebar from "@/components/shared/dashboard/Sidebar";
+
+
+// app/dashboard/layout.tsx
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className=" ">
+        <div className="flex max-h-screen overflow-hidden ">
+          <header>
+            <Sidebar/>
+          </header>
+
+          <div className="flex-1 ">
+            <div>
+             <Navbar/>
+            </div>
+            <div className="w-full bg-gray-300 h-full overflow-auto scrollbar-hide">
+              {children}
+              
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+  );
+}
