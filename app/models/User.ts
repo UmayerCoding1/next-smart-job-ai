@@ -88,7 +88,8 @@ export interface IUser {
     expiresAt: Date;
     isActive: boolean;
     paymentId?: string;
-  }
+  },
+  previesAvatar?: string[]
   status: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -248,9 +249,14 @@ const userSchema = new Schema<IUser>(
         default: false,
       },
       paymentId: {
-        type: String, // optional: store Stripe/SSLCommerz transaction ID
+        type: String, 
       },
     },
+    previesAvatar: [
+      {
+        type: String,
+      }
+    ],
     status: {
       type: String,
       default: Status.ACTIVE,

@@ -47,20 +47,7 @@ const NavlinkList = () => {
     { lable: "Policy", link: "/policy", icon: Shield },
   ];
 
-  const handleLogOut = async () => {
-    try {
-      const res = await axios.post("/api/auth/logout", {
-        withCredentials: true,
-      });
-
-      if (res.data.message) {
-        dispatch(setUser(null));
-        router.push("/");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
 
   return (
     <SheetContent>
@@ -148,7 +135,7 @@ const NavlinkList = () => {
               <div>
                 {user ? (
                   
-                    <Logout handleLogout={handleLogOut}>Logout</Logout>
+                    <Logout>Logout</Logout>
                  
                 ) : (
                   <Link href="/login">

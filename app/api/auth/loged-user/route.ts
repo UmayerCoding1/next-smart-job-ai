@@ -1,18 +1,16 @@
 import { User } from "@/app/models/User";
 import { cookies } from "next/headers";
 import { connectToDatabase } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import "@/app/models/Resume";
+
 export async function GET() {
   try {
     await connectToDatabase();
 
-    
-    const token = (await cookies()).get("token")?.value as unknown as string; 
-   
-     
+    const token = (await cookies()).get("token")?.value as unknown as string;
 
     if (!token) {
       return NextResponse.json(
@@ -20,17 +18,20 @@ export async function GET() {
         { status: 401 }
       );
     }
-console.log(mongoose.modelNames());
-    
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
-   
-   
-    const user = await User.findById(decoded.id).populate({
-    path: "resume",
-    select: "filename size createdAt resumeLink"
-  }).select("-password -otp"); 
+    console.log(mongoose.modelNames());
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      id: string;
+    };
+
+    const user = await User.findById(decoded.id)
+      .populate({
+        path: "resume",
+        select: "filename size createdAt resumeLink",
+      })
+      .select("-password -otp");
     console.log("user", user.resume);
-   
+
     if (!user) {
       return NextResponse.json(
         { message: "User not found", success: false },
@@ -49,4 +50,5 @@ console.log(mongoose.modelNames());
     );
   }
 }
+
 

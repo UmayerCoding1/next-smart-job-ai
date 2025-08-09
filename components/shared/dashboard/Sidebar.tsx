@@ -99,7 +99,7 @@ const Sidebar = () => {
                     />
                     <p
                       className={`${
-                        pathname === item.url  ? "bg-blue-100 text-blue-500" : ""
+                        pathname === item.url  ? "bg-blue-100 text-blue-500 " : ""
                       } hover:bg-blue-100 w-full p-3 rounded-tl-2xl rounded-bl-2xl text-sm font-medium hover:text-blue-500`}
                     >
                       {item.name}

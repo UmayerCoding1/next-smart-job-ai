@@ -59,6 +59,7 @@ const Profile = () => {
   const user = useSelector((state: RootState) => state.authR.user);
   const [company, setCompany] = useState<ICompany | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>("Account Settings");
+  const [isOpen, setIsOpen] = useState(false);
   const [isOpenPublicProfileModla, setIsOpenPublicProfileModal] = useState(false);
   const userTabs = gettabs(user?.role || "");
 
@@ -121,8 +122,8 @@ const Profile = () => {
               />
 
               <div className="absolute z-50   bottom-1 right-2  mt-2 p-1 flex   items-center   gap-1   rounded-full cursor-pointer active:scale-105">
-                <Dialog>
-                  <UpdateAvatar user={user} UserImage={UserImage} />
+                <Dialog open={isOpen} >
+                  <UpdateAvatar user={user} UserImage={UserImage} setIsOpen={setIsOpen}/>
                 </Dialog>
               </div>
             </div>

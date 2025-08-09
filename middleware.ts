@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { JwtPayload } from "jsonwebtoken";
 
-interface JwtPayload {
-  id: string;
-  email: string;
-  role?: string;
-  exp?: number;
-  iat?: number;
-}
+
+
 
 function decodeJWT(token: string): JwtPayload | null {
   try {
-    const [headers, payload, ds] = token.split(".");
+    const [headers, payload, signature] = token.split(".");
     if (!payload) throw new Error("Invalid JWT");
 
     const decoded = atob(
@@ -20,64 +16,64 @@ function decodeJWT(token: string): JwtPayload | null {
         .padEnd(payload.length + ((4 - (payload.length % 4)) % 4), "=")
     );
 
-    const jsonPayload: JwtPayload = JSON.parse(decoded);
-    console.log("jsonPayload", token);
-    return jsonPayload;
+    return JSON.parse(decoded);
   } catch (err) {
     console.error("JWT Decode Error:", err);
     return null;
   }
 }
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token")?.value;
 
-  const protectedRoute = ["/dashboard", "/profile"];
-  const protectedApi = ["/api/auth/loged-user", "/api/auth/resume"];
-
-  const isProtectedRoute = protectedRoute.some((route) =>
+  const protectedRoutes = ["/dashboard", "/profile"];
+  const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );
-  const isProtectedApi = protectedApi.some((api) => pathname.startsWith(api));
 
-  if (isProtectedRoute || isProtectedApi) {
-    if (!token) {
-      if (isProtectedApi) {
-        return new NextResponse(JSON.stringify({ message: "Unauthorized" }), {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        });
-      } else {
-        return NextResponse.redirect(new URL("/login", req.url));
-      }
-    }
-
-    const decoded = decodeJWT(token);
-    console.log("decoded", decoded);
-    if (!decoded || !decoded.id) {
-      if (isProtectedApi) {
-        return new NextResponse(JSON.stringify({ message: "Invalid token" }), {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        });
-      } else {
-        return NextResponse.redirect(new URL("/login", req.url));
-      }
-    }
-
-    return NextResponse.next();
+  if (!isProtectedRoute) {
+    return NextResponse.next(); // Allow public routes
   }
 
-  return NextResponse.next();
+
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+
+  const decoded = decodeJWT(token);
+  if (!decoded?.id) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  try {
+  
+    
+
+    const role = decoded.role;
+
+    // 🔍 Step 4: Role-based Route Protection
+    if (pathname.startsWith("/dashboard")) {
+      if (
+        (role === "jobseeker" && !pathname.startsWith("/dashboard/jobseeker")) ||
+        (role === "recruiter" && !pathname.startsWith("/dashboard/recruiter")) ||
+        (role === "admin" && !pathname.startsWith("/dashboard/admin"))
+      ) {
+        return new NextResponse("Forbidden: Role not authorized", { status: 403 });
+      }
+    }
+
+    return NextResponse.next(); // ✅ Everything OK
+  } catch (error) {
+    console.error("Middleware Error:", error);
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 }
 
 export const config = {
   matcher: [
     "/dashboard/:path*",
     "/profile/:path*",
-    "/api/auth/loged-user",
-    "/api/auth/resume",
-    "/login",
   ],
 };
