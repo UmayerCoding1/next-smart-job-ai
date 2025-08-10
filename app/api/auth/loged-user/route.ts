@@ -1,7 +1,7 @@
 import { User } from "@/app/models/User";
 import { cookies } from "next/headers";
 import { connectToDatabase } from "@/lib/db";
-import { NextRequest, NextResponse } from "next/server";
+import {  NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import "@/app/models/Resume";
@@ -18,7 +18,7 @@ export async function GET() {
         { status: 401 }
       );
     }
-    console.log(mongoose.modelNames());
+
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
       id: string;

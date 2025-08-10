@@ -7,7 +7,7 @@ import { resumeCache } from "@/lib/cache";
     .limit(3)
     .lean();
 
-  resumeCache.set(userId, latestResumes); // 🟢 update the cache
+  resumeCache.set(userId, latestResumes); 
   return latestResumes;
 };
 

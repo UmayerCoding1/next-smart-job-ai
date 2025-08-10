@@ -33,7 +33,7 @@ export async function middleware(req: NextRequest) {
   );
 
   if (!isProtectedRoute) {
-    return NextResponse.next(); // Allow public routes
+    return NextResponse.next(); 
   }
 
 

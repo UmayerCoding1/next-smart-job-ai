@@ -10,7 +10,6 @@ export async function GET(
     const userName = await contex.params;
 
     const user = await User.findOne({ username: userName.username });
-    console.log("user", user);
     if (!user) {
       return NextResponse.json(
         { message: "User not found", success: false },
@@ -33,7 +32,7 @@ export async function PUT(
     const userName = await context.params;
 
     const body = await request.json();
-    // console.log(body);
+   
 
     const user = await User.findOne({ username: userName.username });
     if (!user) {
@@ -48,7 +47,7 @@ export async function PUT(
         const oldAvatar = user?.avatar;
 
         if (user.previesAvatar && user.previesAvatar.length >= 3) {
-          console.log(user.previesAvatar.length);
+         
           user.previesAvatar.shift();
           await User.findOneAndUpdate(
             { username: userName.username },
@@ -82,12 +81,12 @@ export async function PUT(
       }
 
       if (body.imageName === "coverImage") {
+        
         const user = await User.findOneAndUpdate(
           { username: userName.username },
           { coverImage: body.coverImage },
           { new: true }
-        ).populate("resume");
-
+        )
         if (!user) {
           return NextResponse.json(
             { message: "User not found", success: false },
@@ -96,7 +95,7 @@ export async function PUT(
         }
 
         return NextResponse.json(
-          { message: "Cover image updated successfully", success: true },
+          { message: "Cover image updated successfully", success: true,user },
           { status: 200 }
         );
       }
