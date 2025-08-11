@@ -54,7 +54,7 @@ const Sidebar = () => {
     <div
       className={`${
         isOpen ? "w-64" : "w-20 p-2 flex flex-col items-center"
-      }  pl-4 pt-2 h-screen transition-all duration-300 ease-in-out `}
+      }  pl-4 pt-2 h-screen transition-all duration-300 ease-in-out hidden lg:block `}
     >
       <div>
         <Link href={'/'}>

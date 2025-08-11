@@ -16,11 +16,11 @@ export default function DashboardLayout({
             <Sidebar/>
           </header>
 
-          <div className="flex-1 ">
+          <div className="w-full lg:flex-1 ">
             <div>
              <Navbar/>
             </div>
-            <div className="w-full bg-gray-100 h-full overflow-auto scrollbar-hide p-1">
+            <div className="w-full bg-gray-100 h-full overflow-auto scrollbar-hide p-1 ">
               {children}
               
             </div>

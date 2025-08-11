@@ -7,7 +7,7 @@ import { Toaster } from "sonner";
 import QueryProvider from "@/lib/QueryProvider";
 import ReduxProvider from "@/lib/ReduxProvider";
 import Navbar from "@/components/ui/custom/Navbar";
-import Footer from "@/components/ui/custom/Footer";
+import Footer from "@/components/ui/custom/Footer"
 
 const SourceSans = Source_Sans_3({
   weight: ["400", "500", "600", "700"],
@@ -16,7 +16,7 @@ const SourceSans = Source_Sans_3({
 
 export const metadata: Metadata = {
   title: "Smart Job AI",
-  icons: "favicon.png",
+  icons: "favicon.ico",
   description: "AI-powered job platform",
 };
 
