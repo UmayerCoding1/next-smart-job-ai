@@ -3,7 +3,7 @@ import { IUser } from "@/app/models/User";
 import { imagekit } from "@/lib/ImageKitInstance";
 import axios from "axios";
 import { Camera } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
@@ -17,7 +17,7 @@ const UpdateCoverImage = ({
 
   setIsUploadCoverImage,
 }: Props) => {
-  const [coverImageUrl, setCoverImageUrl] = useState<string>("");
+  
   const dispacth = useDispatch();
 
   async function handleUploadCoverImage(

@@ -12,11 +12,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MessageDrawer from "./MessageDrower";
 import Notificationa from "./Notification";
-
 
 const UserImage = "/assets/user-image.png";
 const Navbar = () => {
@@ -28,27 +27,29 @@ const Navbar = () => {
   const notificationRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (isOpenMessageDrower) {
+      document.body.style.overflowX = "hidden";
+    } else {
+      document.body.style.overflowX = "hidden";
+    }
+  }, [isOpenMessageDrower]);
 
   useEffect(() => {
-      if (isOpenMessageDrower) {
-        document.body.style.overflowX = "hidden";
-      } else {
-        document.body.style.overflowX = "hidden";
+    const handleOutSiteClick = (e: MouseEvent) => {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(e.target as Node)
+      ) {
+        setIsOpenNotification(false);
       }
-    }, [isOpenMessageDrower]);
+    };
+    document.addEventListener("click", handleOutSiteClick);
+    return () => {
+      document.removeEventListener("click", handleOutSiteClick);
+    };
+  }, [isOpenNotification]);
 
-    useEffect(() => {
-      const handleOutSiteClick = (e: MouseEvent) => {
-         if (notificationRef.current && !notificationRef.current.contains(e.target as Node)) {
-          setIsOpenNotification(false);
-         }
-      }
-      document.addEventListener("click", handleOutSiteClick);
-      return () => {
-        document.removeEventListener("click", handleOutSiteClick);
-      }
-    }, [isOpenNotification]);
-    
   return (
     <div className="p-2 flex items-center justify-between">
       <div className="flex items-center gap-2">
@@ -74,18 +75,19 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center  gap-5">
-      
-            <Search className=" bg-gray-200 w-8 h-8 rounded-full p-2 cursor-pointer lg:hidden" />
-          
+        <Search className=" bg-gray-200 w-8 h-8 rounded-full p-2 cursor-pointer lg:hidden" />
 
-
-        <div onClick={() => setIsOpenNotification(!isOpenNotification)} ref={notificationRef} className="relative cursor-pointer mt-1">
+        <div
+          onClick={() => setIsOpenNotification(!isOpenNotification)}
+          ref={notificationRef}
+          className="relative cursor-pointer mt-1"
+        >
           <Bell size={20} className="text " />
           <div className="absolute -top-3 -right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
             <span className="text-sm text-white font-medium">12</span>
           </div>
 
-         {isOpenNotification && <Notificationa />}
+          {isOpenNotification && <Notificationa />}
         </div>
         <div
           onClick={() => setIsOpenMessageDrower(!isOpenMessageDrower)}
@@ -124,10 +126,28 @@ const Navbar = () => {
         </div>
       </div>
 
-      <MessageDrawer
-        isOpenMessageDrower={isOpenMessageDrower}
-        setIsOpenMessageDrower={setIsOpenMessageDrower}
-      />
+      <div
+        onClick={() => setIsOpenMessageDrower(false)}
+        className={`absolute top-0 left-0 z-50 w-full h-screen bg-black/30 transition-opacity duration-300 ease-in-out  ${
+          isOpenMessageDrower
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+         <div
+      onClick={(e) => e.stopPropagation()}
+        className={`absolute top-0 z-50 right-0 w-[296px] max-h-screen overflow-auto scrollbar-hide bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
+          isOpenMessageDrower ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {isOpenMessageDrower && (
+          <MessageDrawer
+            isOpenMessageDrower={isOpenMessageDrower}
+            setIsOpenMessageDrower={setIsOpenMessageDrower}
+          />
+        )}
+        </div>
+      </div>
     </div>
   );
 };

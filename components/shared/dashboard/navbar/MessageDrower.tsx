@@ -5,7 +5,6 @@ import React from "react";
 
 const UserImage = "/assets/user-image.png";
 const MessageDrawer = ({
-  isOpenMessageDrower,
   setIsOpenMessageDrower,
 }: {
   isOpenMessageDrower: boolean;
@@ -14,21 +13,9 @@ const MessageDrawer = ({
 
   
   return (
-    <div
-    onClick={() => setIsOpenMessageDrower(false)}
-      className={`absolute top-0 left-0 w-full h-screen bg-black/30 transition-opacity duration-300 ease-in-out  ${
-        isOpenMessageDrower
-          ? "opacity-100 pointer-events-auto"
-          : "opacity-0 pointer-events-none"
-      }`}
-    >
+    <>
       {/* Drawer */}
-      <div
-      onClick={(e) => e.stopPropagation()}
-        className={`absolute top-0 right-0 w-[296px] max-h-screen overflow-auto scrollbar-hide bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
-          isOpenMessageDrower ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
+     
         {/* Header */}
         <div className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white h-14 flex items-center justify-between px-3 py-2">
           <Minus
@@ -66,8 +53,7 @@ const MessageDrawer = ({
             </div>
           ))}
         </div>
-      </div>
-    </div>
+    </>
   );
 };
 
