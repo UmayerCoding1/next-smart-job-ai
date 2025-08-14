@@ -70,7 +70,8 @@ const MultiBarChartWithLabels = () => {
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height="85%">
+    
+  <ResponsiveContainer width="100%" height="85%">
         <BarChart data={filteredData} barGap={13}  margin={{ top: 20, right: 20, left: 0, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey={filter==='monthly' ? 'month' : 'year'} />
@@ -98,6 +99,7 @@ const MultiBarChartWithLabels = () => {
         </BarChart>
       </ResponsiveContainer>
     </div>
+
   );
 };
 

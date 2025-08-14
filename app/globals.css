@@ -173,6 +173,30 @@
 }
 
 
-body .main{
-  margin-top: 0px !important;
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-bg-move {
+  background-size: 200% 200%;
+  animation: bgMove 8s ease infinite;
+}
+
+/* Animated gradient text for icon */
+.animated-gradient-text {
+  background: linear-gradient(270deg, #3b82f6, #9333ea, #f59e0b);
+  background-size: 300% 300%;
+  animation: bgMove 6s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@layer base {
+  .recharts-rectangle:focus,
+  .recharts-rectangle:active {
+    outline: none !important;
+    stroke: none !important;
+  }
 }

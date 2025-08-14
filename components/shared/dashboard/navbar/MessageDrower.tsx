@@ -31,7 +31,7 @@ const MessageDrawer = ({
         </div>
 
         <div className="p-2">
-          {Array.from({ length: 130 }).map((_, index) => (
+          {Array.from({ length: 30 }).map((_, index) => (
             <div  key={index} className="flex items-center gap-4 px-3 py-2 border-b">
               <div className="relative">
                 <Image

@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { JwtPayload } from "jsonwebtoken";
 
-
-
-
 function decodeJWT(token: string): JwtPayload | null {
   try {
     const [headers, payload, signature] = token.split(".");
@@ -33,34 +30,39 @@ export async function middleware(req: NextRequest) {
   );
 
   if (!isProtectedRoute) {
-    return NextResponse.next(); 
+    return NextResponse.next();
   }
-
 
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-
   const decoded = decodeJWT(token);
+
   if (!decoded?.id) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  try {
-  
-    
+  const currentTime = Math.floor(Date.now() / 1000);
+  if (decoded.exp && decoded.exp <= currentTime) {
+    console.warn("JWT Token expired");
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 
+  try {
     const role = decoded.role;
 
-    // 🔍 Step 4: Role-based Route Protection
     if (pathname.startsWith("/dashboard")) {
       if (
-        (role === "jobseeker" && !pathname.startsWith("/dashboard/jobseeker")) ||
-        (role === "recruiter" && !pathname.startsWith("/dashboard/recruiter")) ||
+        (role === "jobseeker" &&
+          !pathname.startsWith("/dashboard/jobseeker")) ||
+        (role === "recruiter" &&
+          !pathname.startsWith("/dashboard/recruiter")) ||
         (role === "admin" && !pathname.startsWith("/dashboard/admin"))
       ) {
-        return new NextResponse("Forbidden: Role not authorized", { status: 403 });
+        return new NextResponse("Forbidden: Role not authorized", {
+          status: 403,
+        });
       }
     }
 
@@ -72,8 +74,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/profile/:path*",
-  ],
+  matcher: ["/dashboard/:path*", "/profile/:path*"],
 };

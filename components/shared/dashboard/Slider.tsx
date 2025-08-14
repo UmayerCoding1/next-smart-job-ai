@@ -19,9 +19,9 @@ const Slider = ({ sliderData }: { sliderData: ISliderData }) => {
   useEffect(() => {
     const updateCardsPerView = () => {
       if (window.innerWidth < 768) {
-        setCardsPerView(1);
+        setCardsPerView(1); 
       } else {
-        setCardsPerView(3);
+        setCardsPerView(3); 
       }
     };
     updateCardsPerView();
@@ -30,7 +30,7 @@ const Slider = ({ sliderData }: { sliderData: ISliderData }) => {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 800);
+    const timer = setTimeout(() => setLoading(false), 800); 
     return () => clearTimeout(timer);
   }, []);
 
@@ -50,22 +50,22 @@ const Slider = ({ sliderData }: { sliderData: ISliderData }) => {
     ? containerRef.current.offsetWidth
     : 0;
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-40 w-full">
-        <motion.div
-          className="w-10 h-10 rounded-full bg-blue-500"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{
-            duration: 0.4,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-40 w-full">
+  //       <motion.div
+  //         className="w-10 h-10 rounded-full bg-blue-500"
+  //         initial={{ scale: 0 }}
+  //         animate={{ scale: 1 }}
+  //         transition={{
+  //           duration: 0.4,
+  //           repeat: Infinity,
+  //           repeatType: "reverse",
+  //         }}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   return (
     <motion.div
@@ -119,7 +119,11 @@ const Slider = ({ sliderData }: { sliderData: ISliderData }) => {
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="text-4xl font-bold text-gray-800">
-                      <CountUp end={card.value} duration={1.5} separator="," />
+                      <CountUp
+                        end={card.value}
+                        duration={1.5}
+                        separator=","
+                      />
                     </h2>
                     {card.trend === "up" ? (
                       <ArrowUpFromDot
@@ -140,33 +144,31 @@ const Slider = ({ sliderData }: { sliderData: ISliderData }) => {
 
                 {/* Floating Icons */}
                 <div className="relative flex items-center justify-center">
-                  {[0, 1, 2].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute"
-                      style={{
-                        top: `${i * 24}px`, 
-                        right: `${i * 2}px`,
-                      }}
-                      initial={{ y: -10, opacity: 0 }}
-                      animate={{ y: 40, opacity: [0, 1, 1.5, 0] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        delay: i * 0.4, 
-                        ease: "easeInOut",
-                      }}
-                    >
-                      <card.icon
-                        size={28}
-                        style={{ color: card.iconColor }}
-                        className={
-                          i % 2 === 0 ? "opacity-20 -rotate-45" : "opacity-10"
-                        }
-                      />
-                    </motion.div>
-                  ))}
-                </div>
+  {[0, 1, 2].map((i) => (
+    <motion.div
+      key={i}
+      className="absolute"
+      style={{
+        top: `${i * 24}px`, // spacing between icons
+        right: `${i * 2}px`,
+      }}
+      initial={{ y: -10, opacity: 0 }}
+      animate={{ y: 40, opacity: [0, 1, 1.5, 0] }}
+      transition={{
+        duration: 2,
+        repeat: Infinity,
+        delay: i * 0.4, // staggered drop effect
+        ease: "easeInOut",
+      }}
+    >
+      <card.icon
+        size={28}
+        style={{ color: card.iconColor }}
+        className={i % 2 === 0 ? "opacity-20 -rotate-45" : "opacity-10"}
+      />
+    </motion.div>
+  ))}
+</div>
               </div>
               <p className="text-sm text-gray-500 mt-3">{card.subtitle}</p>
             </motion.div>
