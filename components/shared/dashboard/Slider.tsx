@@ -106,9 +106,10 @@ const Slider = ({ sliderData }: { sliderData: ISliderData }) => {
           {sliderData.sliderItems.map((card, index) => (
             <motion.div
               key={card.id}
-              className="h-40 flex-shrink-0 px-6 py-4 rounded-2xl shadow-lg border border-gray-100 bg-gradient-to-br from-white to-gray-50 hover:shadow-xl transition-shadow duration-300"
+              className={`h-32  flex-shrink-0 px-6 py-4 rounded-2xl shadow-lg border border-gray-100  hover:shadow-xl transition-shadow duration-300`}
               style={{
                 width: `${100 / cardsPerView}%`,
+                 backgroundColor: `${card.color}4D`
               }}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -163,7 +164,7 @@ const Slider = ({ sliderData }: { sliderData: ISliderData }) => {
     >
       <card.icon
         size={28}
-        style={{ color: card.iconColor }}
+        style={{ color: card.color }}
         className={i % 2 === 0 ? "opacity-20 -rotate-45" : "opacity-10"}
       />
     </motion.div>

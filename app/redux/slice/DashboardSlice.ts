@@ -7,7 +7,7 @@ interface DashboardState {
 
 
 const initialState: DashboardState = {
-   isOpen: false
+   isOpen: true
 }
 
 export const  dashboardSlice = createSlice({

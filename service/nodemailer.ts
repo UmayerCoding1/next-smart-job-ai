@@ -7,14 +7,12 @@ const transporter = nodemailer.createTransport({
   port: 465,
   auth:{
     user: process.env.NODEMAILER_USER!,
-    pass: process.env.NODEMAILER_PASS!
+    pass: process.env.NODEMAILER_PASS!  
   }
 });
 
 
-export const sendOtpWithNodemailer = async (to: string,sub: string,otp: number) => {
-  console.log(to,sub,otp);
-  
+export const sendOtpWithNodemailer = async (to: string,sub: string,otp: number) => {  
    transporter.sendMail({
     to,
     subject: sub,

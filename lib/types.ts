@@ -11,6 +11,6 @@ export interface ISliderData {
     value: number;
     subtitle: string;
     icon: React.ElementType;
-    iconColor: string;
+    color: string;
     trend: "up" | "down" | "neutral";
   }

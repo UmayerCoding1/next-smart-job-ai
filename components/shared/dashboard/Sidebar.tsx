@@ -18,7 +18,7 @@ const smaleLogo = "/assets/Ai.png";
 const Sidebar = () => {
   const isOpen = useSelector((state: RootState) => state.dashboardR.isOpen);
   const pathname = usePathname();
-
+ console.log(isOpen)
   const navItem: {
     name: string;
     url: string;
@@ -111,7 +111,7 @@ const Sidebar = () => {
                       size={pathname === item.url ? 24 : 20}
                       className={`mr-2 ${
                         pathname === item.url
-                          ? "fill-blue-500  text-transparent bg-blue-100  p-2  rounded-lg  "
+                          ? "fill-white  text-transparent bg-blue-500  p-2  rounded-lg  "
                           : "text-black/70  hover:text-blue-500 hover:bg-blue-100  hover:rounded-lg "
                       } mb-5 `}
                     />

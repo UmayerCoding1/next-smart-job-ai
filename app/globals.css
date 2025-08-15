@@ -200,3 +200,11 @@
     stroke: none !important;
   }
 }
+
+.recharts-sector:focus {
+  outline: none;
+}
+
+.recharts-sector:active {
+  outline: none;
+}

@@ -9,6 +9,15 @@ const interviewSchedules = [
   "2 septembar 2025, 7:00 PM",
 ];
 
+const colors50 = [
+  '#FF638480', // Red
+  '#36A2EB80', // Blue
+  '#FFCE5680', // Yellow
+  '#4BC0C080', // Teal
+  '#9966FF80', // Purple
+  '#FF9F4080', // Orange
+];
+
 // Convert string dates to Date objects
 const parseScheduledDays = (arr: string[]) =>
   arr.map((str) => {
@@ -51,10 +60,16 @@ const Calendar = () => {
     }
   };
 
+
+  const randomColor = colors50[Math.floor(Math.random() * colors50.length)];
+  console.log(randomColor);
   return (
-    <div className="p-4 bg-white shadow-md rounded-md w-full max-w-md">
-     
-      <div className="flex justify-between items-center mb-4">
+    <div className="p-2 bg-white  w-full max-w-md h-auto">
+     <h2 className='text-2xl font-medium mb-4'>Interview Schedule</h2>
+      
+
+      <div className='shadow-md rounded-md border border-gray-200 py-2'>
+        <div className="flex justify-between items-center mb-4">
         <button
           className="px-3 py-1 cursor-pointer rounded-md"
           onClick={handlePrevMonth}
@@ -99,7 +114,8 @@ const Calendar = () => {
           return (
             <div
               key={day}
-              className={`py-2 rounded-md ${isScheduled ? "bg-blue-800 text-white" : ""}`}
+              className={`w-7 h-7 flex items-center justify-center rounded-full  `}
+               style={{ backgroundColor: isScheduled ? randomColor : '' }}
             >
               {isScheduled ? (
                  <Link href={'/'}> {day}</Link>
@@ -110,6 +126,7 @@ const Calendar = () => {
             </div>
           );
         })}
+      </div>
       </div>
     </div>
   );
