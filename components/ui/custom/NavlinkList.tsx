@@ -17,12 +17,11 @@ import {
 
 import Image from "next/image";
 import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { Button } from "../button";
 import Logout from "../../action/logout";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { setUser } from "@/app/features/user/userSlice";
+
+
 
 const UserImage = "/assets/user.png";
 
@@ -30,8 +29,6 @@ const NavlinkList = () => {
   const user = useSelector((state: RootState) => state.authR.user);
   const firstName = user?.fullname.split(" ")[0];
   const lastName = user?.fullname.split(" ")[1];
-  const router = useRouter();
-  const dispatch = useDispatch();
   const authenticatedRoutes = [
     { lable: "Profile", link: `/profile/${user?.username}`, icon: User },
     { lable: "My Applications", link: "/my-applications", icon: FileCheck2 },

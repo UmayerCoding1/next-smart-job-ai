@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../dialog";
-import { Camera, FileImage, Trash2, X } from "lucide-react";
+import { Camera, FileImage,  X } from "lucide-react";
 import Image from "next/image";
 import { Progress } from "../progress";
 import { Button } from "../button";
@@ -31,7 +31,7 @@ interface avatarImagePreviewData {
   name: string;
   size: number;
 }
-const UpdateAvatar = ({ user, UserImage, setIsOpen }: Props) => {
+const UpdateAvatar = ({ user,  setIsOpen }: Props) => {
   const [avatarImagePreview, setAvatarImagePreview] =
     useState<avatarImagePreviewData | null>(null);
   const [imageError, setImageError] = useState<{

@@ -50,22 +50,22 @@ const Slider = ({ sliderData }: { sliderData: ISliderData }) => {
     ? containerRef.current.offsetWidth
     : 0;
 
-  // if (loading) {
-  //   return (
-  //     <div className="flex justify-center items-center h-40 w-full">
-  //       <motion.div
-  //         className="w-10 h-10 rounded-full bg-blue-500"
-  //         initial={{ scale: 0 }}
-  //         animate={{ scale: 1 }}
-  //         transition={{
-  //           duration: 0.4,
-  //           repeat: Infinity,
-  //           repeatType: "reverse",
-  //         }}
-  //       />
-  //     </div>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-40 w-full">
+        <motion.div
+          className="w-10 h-10 rounded-full bg-blue-500"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{
+            duration: 0.4,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <motion.div

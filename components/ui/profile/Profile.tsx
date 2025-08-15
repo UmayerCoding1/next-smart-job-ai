@@ -10,7 +10,6 @@ import { getCompany } from "@/service/api";
 import {
   Bell,
   BriefcaseBusiness,
-  Camera,
   Copy,
   FileCheck2,
   HeartHandshake,

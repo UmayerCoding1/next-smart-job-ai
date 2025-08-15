@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip,  ResponsiveContainer } from 'recharts';
 
 const appliSuccessData = {
   TotalApplication: 40,

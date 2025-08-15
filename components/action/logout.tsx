@@ -3,7 +3,7 @@
 import { setUser } from "@/app/features/user/userSlice";
 import axios from "axios";
 import { LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
+
 import React from "react";
 import { useDispatch } from "react-redux";
 
@@ -14,7 +14,6 @@ interface LogoutProps {
 
 const Logout = ({ children}: LogoutProps) => {
   const dispatch = useDispatch();
-  const router = useRouter();
    const handleLogOut = async () => {
     try {
       const res = await axios.post("/api/auth/logout", {

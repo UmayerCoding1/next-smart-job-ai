@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { connectToDatabase } from "@/lib/db";
 import {  NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
+
 import "@/app/models/Resume";
 
 export async function GET() {
