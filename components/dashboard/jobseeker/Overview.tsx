@@ -18,6 +18,8 @@ import { RootState } from "@/app/redux/store";
 import SuccessRatePieChart from "@/components/shared/dashboard/chart/PieChart";
 import RecentActivities from "./RecentActivities";
 import { Button } from "@/components/ui/button";
+import AiJobMatch from "./AiJobMatch";
+import AICareerPath from "./AICareerPath";
 
 const Overview = () => {
   const user = useSelector((state: RootState) => state.authR.user);
@@ -103,8 +105,9 @@ const Overview = () => {
   };
 
   return (
-    <div className="lg:flex gap-2  max-h-screen my-2">
-      <section className="flex-1 max-h-screen overflow-auto scrollbar-hide mb-2 lg:mb-0">
+    <div>
+      <div className="lg:flex gap-2  max-h-screen my-2">
+      <section className="w-[78%] max-h-screen overflow-auto scrollbar-hide mb-2 lg:mb-0">
         <div className="w-full h-44 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-lg p-4 text-white relative">
           <h2 className="text-2xl font-medium">
             {greeting}, {user?.fullname}
@@ -130,15 +133,18 @@ const Overview = () => {
         </div>
         <Slider sliderData={sliderData} />
 
-        <div className="flex gap-2 my-5">
-          <RecentActivities />
-          <RecentActivities />
+        <div className="">
+          <AiJobMatch/>
+        
         </div>
+
+        
 
         {/* <ApplicationLineChart /> */}
         <div className="lg:flex gap-5  mt-5 w-full ">
           <div className={`${isOpen ? "w-[55%]" : "flex-1"}`}>
             <BarChartFilter />
+            
           </div>
 
           <div
@@ -150,13 +156,22 @@ const Overview = () => {
           </div>
         </div>
 
-        <div className="h-screen"></div>
+        <div className="flex gap-2 my-5">
+          <RecentActivities />
+          <RecentActivities />
+        </div>
+
+       
       </section>
 
       {/* Right Section */}
-      <section className="lg:w-[296px]  px-4 bg-white shadow max-h-screen ">
+      <section className="lg:w-[28%]  px-4 bg-white shadow max-h-screen ">
         <Calender />
+        <AICareerPath/>
       </section>
+    </div>
+
+    <div className="h-10"></div>
     </div>
   );
 };

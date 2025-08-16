@@ -2,21 +2,14 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
-
+import {Calendar as CalendarIcon} from 'lucide-react';
 const interviewSchedules = [
   "16 august 2025, 6:00 PM",
   "22 august 2025, 8:00 PM",
   "2 septembar 2025, 7:00 PM",
 ];
 
-const colors50 = [
-  '#FF638480', // Red
-  '#36A2EB80', // Blue
-  '#FFCE5680', // Yellow
-  '#4BC0C080', // Teal
-  '#9966FF80', // Purple
-  '#FF9F4080', // Orange
-];
+
 
 // Convert string dates to Date objects
 const parseScheduledDays = (arr: string[]) =>
@@ -61,14 +54,13 @@ const Calendar = () => {
   };
 
 
-  const randomColor = colors50[Math.floor(Math.random() * colors50.length)];
-  console.log(randomColor);
+
   return (
-    <div className="p-2 bg-white  w-full max-w-md h-auto">
-     <h2 className='text-2xl font-medium mb-4'>Interview Schedule</h2>
+    <div className="p-2 bg-white  w-full max-w-md h-auto shadow-md rounded-lg">
+     <h2 className='text-lg font-medium mb-4 flex items-center gap-2 text-blue-500'><CalendarIcon size={13}/> Interview Schedule</h2>
       
 
-      <div className='shadow-md rounded-md border border-gray-200 py-2'>
+      <div className='py-2 px-2'>
         <div className="flex justify-between items-center mb-4">
         <button
           className="px-3 py-1 cursor-pointer rounded-md"
@@ -100,11 +92,11 @@ const Calendar = () => {
 
       {/* Weekdays */}
       <div className="grid grid-cols-7 gap-1 text-center font-semibold mb-1">
-        {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map((d) => <div key={d}>{d}</div>)}
+        {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map((d) => <div key={d} className='text-blue-800/70 text-sm'>{d}</div>)}
       </div>
 
       {/* Empty cells for first day offset */}
-      <div className="grid grid-cols-7 gap-1 text-center">
+      <div className="grid grid-cols-7 gap-4 text-center">
         {Array.from({ length: firstDay }).map((_, idx) => <div key={`empty-${idx}`} />)}
 
         {/* Render Days */}
@@ -114,8 +106,8 @@ const Calendar = () => {
           return (
             <div
               key={day}
-              className={`w-7 h-7 flex items-center justify-center rounded-full  `}
-               style={{ backgroundColor: isScheduled ? randomColor : '' }}
+              className={`w-7 h-7 flex items-center justify-center  rounded-full  ${isScheduled ? 'bg-blue-500 text-white ' : ''}`}
+               
             >
               {isScheduled ? (
                  <Link href={'/'}> {day}</Link>
@@ -127,7 +119,11 @@ const Calendar = () => {
           );
         })}
       </div>
+
+      
       </div>
+
+      
     </div>
   );
 };

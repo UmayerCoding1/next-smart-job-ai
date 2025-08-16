@@ -5,13 +5,17 @@ import { getAllUserIDB } from '@/utils/indexedDB';
 import { iDBUserData } from '@/lib/types';
 
 const LoginPage = () => {
-    const [popup, setPopup] = useState(true);
+    const [popup, setPopup] = useState(false);
   const [idbUser, setIdbUser] = useState<iDBUserData[]>([]);
 
   useEffect(() => {
     const handleIdbUser = async () => {
+      
       const user = await getAllUserIDB();
-      setIdbUser(user);
+      if(user.length > 0) {
+       
+        setIdbUser(user);
+      }
     };
     handleIdbUser();
 

@@ -69,7 +69,7 @@ const Slider = ({ sliderData }: { sliderData: ISliderData }) => {
 
   return (
     <motion.div
-      className="w-full relative"
+      className="w-full relative my-5"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}

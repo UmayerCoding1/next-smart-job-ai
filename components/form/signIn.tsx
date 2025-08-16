@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,6 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/app/features/user/userSlice";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { getAllUserIDB } from "@/utils/indexedDB";
 import { iDBUserData } from "@/lib/types";
 import { Button } from "../ui/button";
 
