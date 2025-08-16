@@ -14,3 +14,13 @@ export interface ISliderData {
     color: string;
     trend: "up" | "down" | "neutral";
   }
+
+
+  export interface iDBUserData {
+     iid: string;
+     id: string;
+     name: string;
+     email: string;
+     password: string;
+     createdAt: number
+  }

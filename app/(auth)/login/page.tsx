@@ -1,10 +1,11 @@
-import SignIN from '@/components/form/signIn';
+
+import LoginPage from '@/components/ui/loginPage';
 import React from 'react';
 
 const page = () => {
   return (
     <>
-     <SignIN/> 
+     <LoginPage/>
     </>
   );
 };

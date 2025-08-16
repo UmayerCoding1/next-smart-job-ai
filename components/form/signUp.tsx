@@ -23,6 +23,8 @@ import * as z from "zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { addUserIDB } from "@/utils/indexedDB";
+import bcrypt from "bcryptjs";
 
 const logo = "/assets/logo.png";
 
@@ -67,6 +69,9 @@ const SignUp = () => {
     resolver: zodResolver(signUpSchema),
   });
 
+  const iIdNumber = Math.floor(Math.random() * 1000000);
+  const now = new Date();
+  const secound = Math.floor(now.getTime() / 1000);
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
       setIsLoading(true);
@@ -84,6 +89,14 @@ const SignUp = () => {
       if (res.data.success) {
         toast.success("Account created successfully");
         if (!res.data.user.isOtpVerified) {
+          await addUserIDB({
+            iid: `SJAIID${iIdNumber}`,
+            id: res.data.user._id,
+            name: res.data.user.fullname,
+            email: res.data.user.email,
+            password: await bcrypt.hash(data.password, 10),
+            createdAt: secound,
+          }); // store user id in indexedDB
           setIsLoading(false);
           localStorage.setItem("unverifyed_user_traits", res.data.user.email);
           router.push("/verify");
@@ -94,8 +107,7 @@ const SignUp = () => {
       }
     } catch (error) {
       console.log(error);
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };

@@ -16,13 +16,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const emailVerify = await verifyEmail(email);
-    if (!emailVerify) {
-      return NextResponse.json(
-        { message: "Invalid email", success: false },
-        { status: 400 }
-      );
-    }
+    // const emailVerify = await verifyEmail(email);
+    // if (!emailVerify) {
+    //   return NextResponse.json(
+    //     { message: "Invalid email", success: false },
+    //     { status: 400 }
+    //   );
+    // }
 
     const user: IUser | null = await User.findOne({ email });
     if (!user) {
