@@ -18,7 +18,7 @@ export interface IJob {
   salaryrange?: ISalary;
   jobtype: string[];
   skills: string[];
-  education: string[];
+  education?: string[];
   experience: string[];
   experienceLevel: string;
   dedline: Date;
