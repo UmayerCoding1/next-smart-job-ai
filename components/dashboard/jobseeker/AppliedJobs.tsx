@@ -1,159 +1,81 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Progress } from "@/components/ui/progress"
+import { useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+
+import { Search, ChevronRight, ChevronLeft } from "lucide-react";
+// import Link from "next/link";
 import {
-  Search,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import Image from "next/image";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-  Heart,
-  TrendingUp,
-  Users,
-  Star,
-
-  Target,
-  Lightbulb,
-  Coffee,
-  ChevronRight,
-  ChevronLeft,
-} from "lucide-react"
-import Link from "next/link"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useQuery } from "@tanstack/react-query"
-import axios from "axios"
-import { useSelector } from "react-redux"
-import { RootState } from "@/app/redux/store"
-import { IAppliedJob } from "@/app/models/User"
+export interface ApplyedJob {
+  _id: string;
+  applicant: string;
+  appliedAt: string;
+  coverLetter: string;
+  expectedSalary: number;
+  name: string;
+  phone: string;
+  resumeLink: string;
+  status: string;
+  job: {
+    category: string;
+    company: { logo: string; name: string; _id: string };
+    title: string;
+    jobtype: string[];
+    salaryrange: { min: number; max: number; negotiable: boolean };
+    _id: string;
+  };
+}
 
 export default function AppliedJobsPage() {
-  const user =  useSelector((state: RootState) => state.authR.user);
- const [searchTerm, setSearchTerm] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
+  const user = useSelector((state: RootState) => state.authR.user);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // const appliedJobs = [
-  //   {
-  //     id: 1,
-  //     title: "Networking Engineer",
-  //     company: "Microsoft",
-  //     location: "Remote",
-  //     appliedDate: "Feb 2, 2019 19:28",
-  //     status: "Active",
-  //     logo: "https://logo.clearbit.com/microsoft.com",
-  //     salary: "$90k-$120k/month",
-  //     type: "Remote",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Product Designer",
-  //     company: "Dribbble",
-  //     location: "Remote",
-  //     appliedDate: "Dec 7, 2019 23:26",
-  //     status: "Active",
-  //     logo: "https://logo.clearbit.com/dribbble.com",
-  //     salary: "$70k-$90k/month",
-  //     type: "Full Time",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Junior Graphic Designer",
-  //     company: "Canva",
-  //     location: "Remote",
-  //     appliedDate: "Feb 2, 2019 19:28",
-  //     status: "Active",
-  //     logo: "https://logo.clearbit.com/canva.com",
-  //     salary: "$50k-$70k/month",
-  //     type: "Yesterday",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Visual Designer",
-  //     company: "Microsoft",
-  //     location: "Remote",
-  //     appliedDate: "Dec 7, 2019 23:26",
-  //     status: "Active",
-  //     logo: "https://logo.clearbit.com/microsoft.com",
-  //     salary: "$80k-$100k/month",
-  //     type: "Contract Base",
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "Marketing Officer",
-  //     company: "Twitter",
-  //     location: "United States",
-  //     appliedDate: "Dec 8, 2019 21:31",
-  //     status: "Active",
-  //     logo: "https://logo.clearbit.com/twitter.com",
-  //     salary: "$90k-$140k/month",
-  //     type: "Full Time",
-  //   },
-  //   {
-  //     id: 6,
-  //     title: "UI/UX Designer",
-  //     company: "Figma",
-  //     location: "Remote",
-  //     appliedDate: "Dec 20, 2019 07:12",
-  //     status: "Active",
-  //     logo: "https://logo.clearbit.com/figma.com",
-  //     salary: "$100k-$130k/month",
-  //     type: "Full Time",
-  //   },
-  //   {
-  //     id: 7,
-  //     title: "Software Engineer",
-  //     company: "Google",
-  //     location: "New York",
-  //     appliedDate: "Mar 20, 2019 19:43",
-  //     status: "Active",
-  //     logo: "https://logo.clearbit.com/google.com",
-  //     salary: "$120k-$180k/month",
-  //     type: "Full Time",
-  //   },
-  //   {
-  //     id: 8,
-  //     title: "Front End Developer",
-  //     company: "Facebook",
-  //     location: "Michigan",
-  //     appliedDate: "Mar 20, 2019 19:43",
-  //     status: "Active",
-  //     logo: "https://logo.clearbit.com/facebook.com",
-  //     salary: "$90k-$140k/month",
-  //     type: "Full Time",
-  //   },
-  // ]
+  
 
-  const {data: appliedJobs = []} = useQuery(({
+  const { data: appliedJobs = [] } = useQuery({
     queryKey: ["appliedJobs", user?._id],
     queryFn: async () => {
-      const res = await  axios.get(`/api/jobseekers/${user?._id}/applications`);
+      const res = await axios.get(`/api/jobseekers/${user?._id}/applications`);
       return res.data.applications;
     },
-  }));
+     enabled: !!user?._id, 
+  staleTime: 10 * 60 * 1000, 
+  gcTime: 10 * 60 * 1000,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
+  });
 
-  console.log(appliedJobs)
-
-// const filteredJobs = appliedJobs.filter((job:IAppliedJob[]) => {
-//     const matchesSearch =
-//       job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       job.company.toLowerCase().includes(searchTerm.toLowerCase())
-//     return matchesSearch
-//   })
-
-//   const totalPages = Math.ceil(filteredJobs.length / itemsPerPage)
-//   const startIndex = (currentPage - 1) * itemsPerPage
-//   const paginatedJobs = filteredJobs.slice(startIndex, startIndex + itemsPerPage)
+  console.log(appliedJobs);
 
  
 
-//   const stats = {
-//     total: appliedJobs.length,
-//     active: appliedJobs.filter((job) => ["under_review", "interview_scheduled", "pending"].includes(job.status)).length,
-//     interviews: appliedJobs.filter((job) => job.status === "interview_scheduled").length,
-//     responseRate: Math.round((appliedJobs.filter((job) => job.status !== "pending").length / appliedJobs.length) * 100),
-//   }
+  const totalPages = Math.ceil(appliedJobs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedJobs = appliedJobs.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+ 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
@@ -161,8 +83,12 @@ export default function AppliedJobsPage() {
       <div className="bg-white border-b border-blue-100 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Your Job Applications</h1>
-            <p className="text-gray-600 mt-1">Keep track of your journey and celebrate every step forward! 🌟</p>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Your Job Applications
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Keep track of your journey and celebrate every step forward! 🌟
+            </p>
           </div>
           <div className="flex items-center gap-4">
             <div className="relative">
@@ -174,11 +100,158 @@ export default function AppliedJobsPage() {
                 className="pl-10 w-64"
               />
             </div>
+
+            <div>
+               <Select>
+      <SelectTrigger className="w-[100px]">
+        <SelectValue placeholder="Status" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Allication status</SelectLabel>
+          {['pending', 'reviewed', 'interview', 'rejected', 'accepted'].map((item,inx) =><SelectItem key={inx} value={item}>{item}</SelectItem> )}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+            </div>
           </div>
         </div>
       </div>
 
-     
+      <div className="p-6">
+        {/* Table */}
+        <Card className="overflow-hidden shadow-sm">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-gray-50 border-b">
+                <TableHead className="font-medium text-gray-700 py-4">
+                  JOB
+                </TableHead>
+                <TableHead className="font-medium text-gray-700">
+                  DATE APPLIED
+                </TableHead>
+                <TableHead className="font-medium text-gray-700">
+                  STATUS
+                </TableHead>
+                <TableHead className="font-medium text-gray-700">
+                  ACTION
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {appliedJobs.map((job: ApplyedJob) => (
+                <TableRow key={job._id} className="border-b hover:bg-gray-50">
+                  <TableCell className="py-4">
+                    <div className="flex items-center gap-4">
+                      {/* Company Logo */}
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-lg flex-shrink-0">
+                        {job.job.company.logo ? (
+                          <Image
+                            src={job.job.company.logo}
+                            alt={job.job.company.name}
+                            width={400}
+                            height={400}
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-lg">
+                            {job.job.company.name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-gray-900 mb-1">
+                          {job.job.title}
+                        </div>
+                        <div className="text-sm text-gray-600 mb-1">
+                          {job.job.company.name}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge
+                            variant="outline"
+                            className="text-xs bg-blue-50 text-blue-700 border-blue-200"
+                          >
+                            {job.job.jobtype
+                              .map((jobtype: string) => jobtype)
+                              .join(", ")}
+                          </Badge>
+                          <span className="text-xs text-gray-500">
+                            ${job.job.salaryrange.max}k-$
+                            {job.job.salaryrange.min}k
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="text-sm text-gray-600">
+                      {new Date(job.appliedAt).toLocaleDateString()}
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    <Badge className="bg-green-100 text-green-800 border-green-200 hover:bg-green-100">
+                      ✓ {job.status}
+                    </Badge>
+                  </TableCell>
+
+                  <TableCell>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-blue-600 border-blue-200 hover:bg-blue-50 bg-transparent"
+                    >
+                      View Details
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
+
+        {/* Pagination */}
+        <div className="flex items-center justify-center gap-2 mt-6">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+            className="w-8 h-8 p-0"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <Button
+              key={page}
+              variant={currentPage === page ? "default" : "outline"}
+              size="sm"
+              onClick={() => setCurrentPage(page)}
+              className={`w-8 h-8 p-0 ${
+                currentPage === page
+                  ? "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              {page}
+            </Button>
+          ))}
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              setCurrentPage(Math.min(totalPages, currentPage + 1))
+            }
+            disabled={currentPage === totalPages}
+            className="w-8 h-8 p-0"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
     </div>
-  )
+  );
 }

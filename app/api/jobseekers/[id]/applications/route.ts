@@ -18,14 +18,14 @@ export async function GET(
   .populate({
     path: "job", // populate job
     select:
-      "-applicationsQuestions -appliedjobs -benefits -description -education -experience -holidayPolicy -requirements -skills -workTime -__v -updatedAt -createdAt",
+      "-applicationsQuestions -appliedjobs -benefits -description -education -experience -holidayPolicy -requirements -skills -workTime -__v -updatedAt ",
     populate: {
       path: "company", // populate job.company
       select: "name logo", // select only name and logo from company
     },
   });
 
-    console.log("applications", applications);
+   
 
     return NextResponse.json({ applications, success: true }, { status: 200 });
   } catch (error) {
