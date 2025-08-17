@@ -5,6 +5,7 @@ import {
   Bookmark,
   BriefcaseBusiness,
   LayoutDashboard,
+  Sparkles,
   User,
 } from "lucide-react";
 import Image from "next/image";
@@ -43,6 +44,11 @@ const Sidebar = () => {
       name: "Job Alerts",
       url: "/dashboard/jobseeker/job-alerts",
       icon: BellRing,
+    },
+    {
+      name: "AI Fetures",
+      url: "/dashboard/jobseeker/ai-features",
+      icon: Sparkles,
     },
     {
       name: "my Profile",
