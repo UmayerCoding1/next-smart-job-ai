@@ -109,7 +109,7 @@ const Navbar = () => {
           />
 
           {isOpenDrop && (
-            <div className="absolute top-16 right-0 w-44 h-28 bg-white  shadow-md  rounded-lg p-3 flex flex-col gap-3">
+            <div className="absolute top-16 right-0 w-44 h-28 z-10 bg-white  shadow-md  rounded-lg p-3 flex flex-col gap-3">
               <Link
                 href={`/profile/${user?.username}`}
                 className="flex items-center justify-between gap-2 p-2 hover:bg-gray-100 rounded-lg"

@@ -8,6 +8,14 @@ const OfficeWork = '/assets/about/office-work.jpeg';
 const GrilAss = '/assets/about/gril-ass.jpeg';
 const BusinessWomen = '/assets/about/business-women.jpeg';
 const Miting = '/assets/about/miting.jpeg';
+
+
+export const metadata = {
+  title: 'About us | Smart Job AI',
+  description: 'About us page of Smart Job AI AI-powered job platform.',
+}
+
+
 const page = () => {
   console.log("about us");
   const links = [{ href: "/", label: "Home" }];

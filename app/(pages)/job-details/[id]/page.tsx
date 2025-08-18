@@ -2,7 +2,15 @@
 import JobDetails from '@/components/ui/job/JobDetails';
 import React, { Suspense } from 'react';
 import JobDetailsLoading from './loading';
+import { title } from 'process';
 
+export async function generateMetadata({params}: {params: {id: string}}) {
+    const job = await getJob(params.id);
+    return {
+        title: job.title + " | Smart Job AI",
+        description: job.description,
+    };
+}
 
 // const BASE_URL = "http://localhost:3000";
 const BASE_URL = "https://next-smart-job-ai.vercel.app";

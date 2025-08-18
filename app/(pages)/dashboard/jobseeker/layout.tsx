@@ -4,7 +4,7 @@ import { Metadata } from "next";
 
 
 export const metadata: Metadata = {
-  title: "Smart Job AI",
+  title: "Smart Job AI | Dashboard",
   icons: "favicon.ico",
   description: "AI-powered job platform",
 };

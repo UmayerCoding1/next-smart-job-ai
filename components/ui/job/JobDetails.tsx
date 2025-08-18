@@ -160,7 +160,7 @@ const  company = job.company;
                 user
                   ? `${
                       job!._id
-                    }/apply`
+                    }/apply?title=${job.title}`
                   : "/login"
               }
               onClick={handleApply}

@@ -8,6 +8,7 @@ import { Button } from "../button";
 import FacebookIcon from "@/components/custom-icon/FacebookIcon";
 import Link from "next/link";
 import GithubIcon from "@/components/custom-icon/GithubIcon";
+import InstagramIcon from "@/components/custom-icon/InstagramIcon";
 
 interface Props {
   setIsOpenPublicProfileModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -122,7 +123,15 @@ const PublicProfileModal = ({ setIsOpenPublicProfileModal, user }: Props) => {
                           <GithubIcon size={20}/>
                         </Link>
                       )}
+
+                       {link.platform === "Instagram" && (
+                        <Link href={link.link} target="_blank">
+                         
+                          <InstagramIcon size={20}/>
+                        </Link>
+                      )}
                     </li>
+                    
                   ))}
                 </ul>
               ) : (

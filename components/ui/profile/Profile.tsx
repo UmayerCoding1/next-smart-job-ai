@@ -171,11 +171,32 @@ const Profile = () => {
               </div>
 
               <div className="flex items-center gap-4 mt-2">
-                <FacebookIcon size={20} />
-                <TwitterIcon size={20} />
-                <LinkedInIcon size={20} />
-                <InstagramIcon size={20} />
-                <GithubIcon size={20} />
+                {user?.socialLinks && user.socialLinks.length > 0 && (
+                <ul className="flex items-center gap-3">
+                  {user.socialLinks.map((link, idx) => (
+                    <li key={idx}>
+                      {link.platform === "Facebook" && (
+                        <Link href={link.link} target="_blank">
+                          
+                          <FacebookIcon size={20}/>
+                        </Link>
+                      )}
+                      {link.platform === "Github" && (
+                        <Link href={link.link} target="_blank">
+                         
+                          <GithubIcon size={20}/>
+                        </Link>
+                      )}
+                      {link.platform === "Instagram" && (
+                        <Link href={link.link} target="_blank">
+                         
+                          <InstagramIcon size={20}/>
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+)}
               </div>
             </div>
           </div>

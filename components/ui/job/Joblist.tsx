@@ -30,7 +30,7 @@ const Joblist = ({ job }: { job: IJob }) => {
     <>
       <FadeRight>
         <Link
-          href={`/job-details/${job._id}`}
+          href={`/job-details/${job._id}?title=${title}`}
           onMouseEnter={() => handleMouseEnter(jobId!)}
           onMouseLeave={handleMouseLeave}
           onClick={() => handleClick(jobId!)}
