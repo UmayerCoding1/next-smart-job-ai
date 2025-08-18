@@ -17,6 +17,7 @@ export interface IApply {
     question: string;
     answer: string;
   }[];
+  isRead?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -37,6 +38,7 @@ export const application = new Schema<IApply>({
     },
   ],
   coverLetter: { type: String , required: true },
+  isRead: { type: Boolean, default: false },
   status: {
     type: String,
     enum: ["pending", "reviewed", "interview", "rejected", "accepted"],

@@ -1,135 +1,81 @@
-"use client";
-import { RootState } from "@/app/redux/store";
-import {
-  BellRing,
-  Bookmark,
-  BriefcaseBusiness,
-  LayoutDashboard,
-  Sparkles,
-  User,
-} from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React, { ComponentType } from "react";
-import { useSelector } from "react-redux";
+"use client"
+import type { RootState } from "@/app/redux/store"
+import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import type { ComponentType } from "react"
+import { useSelector } from "react-redux"
 
-const logo = "/assets/logo.png";
-const smaleLogo = "/assets/Ai.png";
-const Sidebar = () => {
-  const isOpen = useSelector((state: RootState) => state.dashboardR.isOpen);
-  const pathname = usePathname();
- console.log(isOpen)
-  const navItem: {
-    name: string;
-    url: string;
-    icon: ComponentType<{ className: string; size: number }>;
-  }[] = [
-    {
-      name: "Overview",
-      url: "/dashboard/jobseeker",
-      icon: LayoutDashboard,
-    },
-    {
-      name: "Applied jobs",
-      url: "/dashboard/jobseeker/applied-jobs",
-      icon: BriefcaseBusiness,
-    },
-    {
-      name: "Saved jobs",
-      url: "/dashboard/jobseeker/saved-jobs",
-      icon: Bookmark,
-    },
-    {
-      name: "Job Alerts",
-      url: "/dashboard/jobseeker/job-alerts",
-      icon: BellRing,
-    },
-    {
-      name: "AI Fetures",
-      url: "/dashboard/jobseeker/ai-features",
-      icon: Sparkles,
-    },
-    {
-      name: "my Profile",
-      url: "/profile",
-      icon: User,
-    },
-  ];
+const logo = "/assets/logo.png"
+const smaleLogo = "/assets/Ai.png"
+const Sidebar = ({
+  navItem,
+}: { navItem: { name: string; url: string; icon: ComponentType<{ className: string; size: number }> }[] }) => {
+  const isOpen = useSelector((state: RootState) => state.dashboardR.isOpen)
+  const pathname = usePathname()
+
   return (
     <div
       className={`${
-        isOpen ? "w-64" : "w-20 p-2 flex flex-col items-center"
-      }  pl-4 pt-2 h-screen transition-all duration-300 ease-in-out hidden lg:block `}
+        isOpen ? "w-64" : "w-20"
+      } h-screen transition-all duration-300 ease-in-out hidden lg:block bg-black text-white`}
     >
-      <div>
-        <Link href={'/'}>
-        {isOpen ? (
-          <Image
-            src={logo}
-            alt="logo"
-            width={800}
-            height={800}
-            className=" w-40 "
-          />
-        ) : (
-          <Image
-            src={smaleLogo}
-            alt="logo"
-            width={800}
-            height={800}
-            className=" w-12 "
-          />
-        )}
+      <div className={`${isOpen ? "p-4" : "p-3"} flex justify-center border-b border-gray-800`}>
+        <Link href={"/"}>
+          {isOpen ? (
+            <Image src={logo || "/placeholder.svg"} alt="logo" width={800} height={800} className="w-40" />
+          ) : (
+            <Image src={smaleLogo || "/placeholder.svg"} alt="logo" width={800} height={800} className="w-12" />
+          )}
         </Link>
       </div>
 
-      <div className="mt-5 ">
-        <ul className="space-y-2">
-          {navItem.map((item, index) => {
-            const Icon = item.icon;
+      <div className={`${isOpen ? "p-4" : "p-2"} flex-1`}>
+        <ul className="space-y-1">
+          {navItem?.map((item, index) => {
+            const Icon = item.icon
             return (
-              <li key={index} className="mb-3">
+              <li key={index} className="relative">
+                {pathname === item.url && (
+                  <div className="absolute left-0 top-0 w-full  h-full bg-gradient-to-r from-blue-500/40 to-blue-700/0 ml-1 rounded-r">
+                    
+                     <div className="absolute left-0 top-0 w-1  h-full bg-blue-500 rounded-r "></div>
+                    
+                  </div>
+                )}
                 {isOpen ? (
-                  <Link
-                    href={item.url}
-                    className="flex items-center  rounded-md"
-                  >
+                  <Link href={item.url} className="flex items-center rounded-md transition-colors duration-200">
                     <Icon
                       size={20}
-                      className={`mr-2 ${
-                        pathname === item.url
-                          ? "fill-blue-500  text-transparent"
-                          : ""
-                      }`}
+                      className={`ml-4 mr-3 ${pathname === item.url ? "fill-blue-500 text-transparent" : "text-white"}`}
                     />
-                    <p
+                    <div
                       className={`${
-                        pathname === item.url  ? "bg-blue-100 text-blue-500 " : ""
-                      } hover:bg-blue-100 w-full p-3 rounded-tl-2xl rounded-bl-2xl text-sm font-medium hover:text-blue-500`}
+                        pathname === item.url ? " text-blue-500" : "text-white"
+                      }  hover:text-blue-500 flex-1 py-3 pr-4 rounded-r-2xl text-sm font-medium transition-colors duration-200`}
                     >
                       {item.name}
-                    </p>
+                    </div>
                   </Link>
                 ) : (
-                  <Link href={item.url} className="mb-4">
+                  <Link href={item.url} className="flex justify-center py-3">
                     <Icon
-                      size={pathname === item.url ? 24 : 20}
-                      className={`mr-2 ${
+                      size={20}
+                      className={`${
                         pathname === item.url
-                          ? "fill-white  text-transparent bg-blue-500  p-2  rounded-lg  "
-                          : "text-black/70  hover:text-blue-500 hover:bg-blue-100  hover:rounded-lg "
-                      } mb-5 `}
+                          ? "fill-white text-transparent bg-blue-500 p-2 rounded-lg"
+                          : "text-gray-400 hover:text-blue-500 hover:bg-blue-100 hover:rounded-lg p-2"
+                      } transition-colors duration-200`}
                     />
                   </Link>
                 )}
               </li>
-            );
+            )
           })}
         </ul>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

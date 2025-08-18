@@ -1,5 +1,7 @@
+import JobseekerSidebar from "@/components/dashboard/jobseeker/JobseekerSidebar";
 import Navbar from "@/components/shared/dashboard/navbar/Navbar";
-import Sidebar from "@/components/shared/dashboard/Sidebar";
+
+
 import { Metadata } from "next";
 
 
@@ -15,12 +17,13 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  
   return (
     <html lang="en">
       <body >
         <div className="flex max-h-screen overflow-hidden ">
           <header>
-            <Sidebar/>
+           <JobseekerSidebar/>
           </header>
 
           <div className="w-full lg:flex-1 ">
