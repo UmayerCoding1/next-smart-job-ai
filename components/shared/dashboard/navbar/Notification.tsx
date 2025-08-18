@@ -5,7 +5,7 @@ import React from 'react';
 const UserImage = "/assets/user-image.png";
 const Notificationa = () => {
     return (
-        <div onClick={(e) => e.stopPropagation()} className='absolute top-8 right-0 w-[296px]  bg-white shadow-lg border border-gray-200 rounded-lg p-2' >
+        <div onClick={(e) => e.stopPropagation()} className='absolute top-8 right-0 w-[296px] z-10  bg-white shadow-lg border border-gray-200 rounded-lg p-2' >
             {Array.from({ length: 5 }).map((_, index) => (
                 <div key={index}  className="flex items-center gap-4 px-3 py-2 border-b ">
                           <div className="relative">

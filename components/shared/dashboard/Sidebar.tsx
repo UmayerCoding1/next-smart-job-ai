@@ -1,5 +1,6 @@
 "use client"
 import type { RootState } from "@/app/redux/store"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -58,6 +59,8 @@ const Sidebar = ({
                     </div>
                   </Link>
                 ) : (
+                  <Tooltip  >
+                    <TooltipTrigger asChild >
                   <Link href={item.url} className="flex justify-center py-3">
                     <Icon
                       size={20}
@@ -68,6 +71,11 @@ const Sidebar = ({
                       } transition-colors duration-200`}
                     />
                   </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>{item.name}</p>
+                  </TooltipContent>
+                  </Tooltip>
                 )}
               </li>
             )
