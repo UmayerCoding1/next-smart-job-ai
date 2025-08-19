@@ -161,8 +161,6 @@
   z-index: 1;
 }
 
-
-
 @keyframes scroll {
   from {
     transform: translateX(0);
@@ -171,7 +169,6 @@
     transform: translateX(-100%);
   }
 }
-
 
 @keyframes bgMove {
   0% { background-position: 0% 50%; }
