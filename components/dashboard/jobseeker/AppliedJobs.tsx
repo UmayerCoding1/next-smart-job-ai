@@ -69,11 +69,11 @@ export default function AppliedJobsPage() {
  
 
   const totalPages = Math.ceil(appliedJobs.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedJobs = appliedJobs.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  // const startIndex = (currentPage - 1) * itemsPerPage;
+  // const paginatedJobs = appliedJobs.slice(
+  //   startIndex,
+  //   startIndex + itemsPerPage
+  // );
 
  
 

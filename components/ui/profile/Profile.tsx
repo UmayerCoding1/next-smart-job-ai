@@ -4,8 +4,8 @@ import { RootState } from "@/app/redux/store";
 import FacebookIcon from "@/components/custom-icon/FacebookIcon";
 import GithubIcon from "@/components/custom-icon/GithubIcon";
 import InstagramIcon from "@/components/custom-icon/InstagramIcon";
-import LinkedInIcon from "@/components/custom-icon/LinkedInIcon";
-import TwitterIcon from "@/components/custom-icon/TwitterIcon";
+// import LinkedInIcon from "@/components/custom-icon/LinkedInIcon";
+// import TwitterIcon from "@/components/custom-icon/TwitterIcon";
 import { getCompany } from "@/service/api";
 import {
   Bell,

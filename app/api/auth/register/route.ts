@@ -19,15 +19,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // const emailVerify = await verifyEmail(email);
+    const emailVerify = await verifyEmail(email);
     
     
-    // if (!emailVerify) {
-    //   return NextResponse.json(
-    //     { message: "Invalid email", success: false },
-    //     { status: 400 }
-    //   );
-    // }
+    if (!emailVerify) {
+      return NextResponse.json(
+        { message: "Invalid email", success: false },
+        { status: 400 }
+      );
+    }
 
     if (password !== confirmPassword) {
       return NextResponse.json(

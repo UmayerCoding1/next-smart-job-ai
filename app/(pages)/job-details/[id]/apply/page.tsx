@@ -1,13 +1,17 @@
-import ApplyPage from '@/components/ui/job/ApplyPage'
-import React, { Suspense } from 'react'
-import ApplyPageLoading from './loading';
-import { title } from 'process';
-import { getJob } from '@/service/api';
+import ApplyPage from "@/components/ui/job/ApplyPage";
+import React, { Suspense } from "react";
+import ApplyPageLoading from "./loading";
+import { Metadata } from "next";
 
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ title: string | string[] | undefined }>;
+};
 
-export async function generateMetadata({  searchParams } : { searchParams: { title: string } }) {
-
-  const jobTitle = searchParams?.title || "Apply Job";
+export async function generateMetadata({
+  searchParams,
+}: Props): Promise<Metadata> {
+  const jobTitle = (await searchParams).title;
 
   return {
     title: `${jobTitle} | Apply Now - Smart Job AI`,
@@ -15,13 +19,13 @@ export async function generateMetadata({  searchParams } : { searchParams: { tit
   };
 }
 
-export default async function page(Context: { params: Promise<{ id: string }> }) {
-  const id = await Context.params;
+export default async function page({ params }: Props) {
+  const id = (await params).id;
   return (
     <div>
-       <Suspense fallback={<ApplyPageLoading/>}>
-        <ApplyPage id={id.id}/>
-       </Suspense>
+      <Suspense fallback={<ApplyPageLoading />}>
+        <ApplyPage id={id} />
+      </Suspense>
     </div>
-  )
+  );
 }

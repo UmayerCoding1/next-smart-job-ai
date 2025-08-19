@@ -1,6 +1,6 @@
 import RecruiterSildbar from "@/components/dashboard/recruiter/RecruiterSildbar";
 import Navbar from "@/components/shared/dashboard/navbar/Navbar";
-import Sidebar from "@/components/shared/dashboard/Sidebar";
+
 
 import { Metadata } from "next";
 

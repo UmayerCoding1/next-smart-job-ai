@@ -3,9 +3,11 @@ import { RootState } from "@/app/redux/store";
 import AppTable from "@/components/shared/Table";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Bot, BotMessageSquare, Briefcase } from "lucide-react";
+import { Award, Bot, BotMessageSquare, Briefcase, Calendar, Clock, FileText, SquarePlus, Users } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import RecentActivity from "./RecentActivity";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 export interface JobRow {
   job: string;
   applied: number;
@@ -178,6 +180,57 @@ const Overview = () => {
           </AppTable>
         </div>
       </section>
+
+
+      <section className="flex gap-3 ">
+          <div className="bg-white p-4 shadow rounded h-auto w-full lg:w-1/2">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Clock size={13}/>
+                  <h2 className="text-lg font-semibold">Recent Activity</h2>
+                </div>
+                <p>Latest updates from your recruitment pipeline</p>
+              </div>
+
+              <RecentActivity/>
+          </div>
+
+          <Card className="w-full lg:w-1/2 h-96">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Quick Actions
+                </CardTitle>
+                <CardDescription>Common tasks to get you started</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <Button className="w-full justify-start bg-transparent" variant="outline">
+                    <SquarePlus className="h-4 w-4 mr-2" />
+                    Post a New Job
+                  </Button>
+                  <Button className="w-full justify-start bg-transparent" variant="outline">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Review Applications
+                  </Button>
+                  <Button className="w-full justify-start bg-transparent" variant="outline">
+                    <Users className="h-4 w-4 mr-2" />
+                    Browse Candidates
+                  </Button>
+                  <Button className="w-full justify-start bg-transparent" variant="outline">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Schedule Interviews
+                  </Button>
+                  <Button className="w-full justify-start bg-transparent" variant="outline">
+                    <Award className="h-4 w-4 mr-2" />
+                    Send Offers
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+      </section>
+
+      <div className="h-20"></div>
     </div>
   );
 };
