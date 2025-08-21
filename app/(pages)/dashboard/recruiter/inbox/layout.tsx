@@ -13,9 +13,9 @@ export default function DashboardLayout({
   return (
     <html lang="en">
       <body >
-         <div className='w-full max-h-screen overflow-hidden bg-red-300  flex'>
+         <div className='w-full max-h-screen overflow-hidden   flex'>
             <InboxSideBar/>
-            <div className='flex-1 bg-emerald-500 h-full'>
+            <div className='flex-1'>
                 {children}
             </div>
         </div>

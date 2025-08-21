@@ -48,7 +48,7 @@ const InboxSideBar = () => {
   const pathname = usePathname();
 
   return (
-    <div className="w-[350px] bg-gray-100 max-h-screen   flex">
+    <div className="w-[350px] bg-gray-100 max-h-screen   flex ">
       <div className=" p-2 border-r border-gray-300 flex flex-col gap-3">
         {inboxLink.map((link, index) => {
           const Icon = link.icon;
