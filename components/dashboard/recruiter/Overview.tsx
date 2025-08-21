@@ -84,7 +84,7 @@ const Overview = () => {
     },
   ];
   return (
-    <div>
+    <div className="lg:px-[30px]">
       <div className="w-full h-44 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-lg p-4 text-white relative">
         <h2 className="text-2xl font-medium">
           {greeting}, {user?.fullname}
