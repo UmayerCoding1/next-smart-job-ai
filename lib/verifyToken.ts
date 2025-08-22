@@ -7,7 +7,7 @@ export const verifyToken = (token: string): JwtPayload & { id: string } | null =
       return null;
       
     }
-    console.log(' verify token',token);
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload & {
       id: string;
     };

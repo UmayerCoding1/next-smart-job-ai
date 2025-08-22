@@ -61,7 +61,7 @@ const Sidebar = ({
         <ul className="space-y-1">
           {navItem?.map((item, index) => {
             const Icon = item.icon;
-            const isActive = item.url === "/dashboard/recruiter" ? pathname === "/dashboard/recruiter" : pathname.startsWith(item.url);
+            const isActive = item.url === "/dashboard/recruiter" || item.url === "/dashboard/jobseeker" ? pathname === "/dashboard/recruiter" || pathname === "/dashboard/jobseeker" : pathname.startsWith(item.url);
             return (
               <li key={index} className="relative">
                 {isActive && (

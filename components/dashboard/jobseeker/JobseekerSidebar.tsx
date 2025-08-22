@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { BellRing, Bookmark, BriefcaseBusiness, LayoutDashboard, Sparkles, User } from "lucide-react";
+import { BellRing, Bookmark, BriefcaseBusiness, Inbox, LayoutDashboard, Sparkles, User } from "lucide-react";
 import Sidebar from '@/components/shared/dashboard/Sidebar';
 const JobseekerSidebar = () => {
      const navItem = [
@@ -30,9 +30,9 @@ const JobseekerSidebar = () => {
       icon: Sparkles,
     },
     {
-      name: "my Profile",
-      url: "/profile",
-      icon: User,
+      name: "Inbox",
+      url: "/dashboard/jobseeker/inbox",
+      icon: Inbox,
     },
   ];
     return (

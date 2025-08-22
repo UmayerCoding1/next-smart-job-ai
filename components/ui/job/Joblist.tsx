@@ -50,14 +50,7 @@ const Joblist = ({ job }: { job: IJob }) => {
               ))}
             </div>
 
-            <div>
-              <SaveButton
-                isOnlyIcon={true}
-                defaultStyle={false}
-                className="p-0"
-                jobId={(job!._id as mongoose.Types.ObjectId).toString()}
-              />
-            </div>
+            
           </div>
 
           <div>

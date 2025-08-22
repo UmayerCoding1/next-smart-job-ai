@@ -47,3 +47,5 @@ export const getCompany = async (id: string) => {
     return null;
   }
 };
+
+
