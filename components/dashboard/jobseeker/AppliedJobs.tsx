@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -46,15 +46,17 @@ export interface ApplyedJob {
 export default function AppliedJobsPage() {
   const user = useSelector((state: RootState) => state.authR.user);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchTerm);
+  const [filterByStatus, setFilterByStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 2;
 
   
 
   const { data: appliedJobs = [] } = useQuery({
-    queryKey: ["appliedJobs", user?._id],
+    queryKey: ["appliedJobs", user?._id, debouncedSearchValue, currentPage, itemsPerPage, filterByStatus],
     queryFn: async () => {
-      const res = await axios.get(`/api/jobseekers/${user?._id}/applications`);
+      const res = await axios.get(`/api/jobseekers/${user?._id}/applications?search=${debouncedSearchValue}&page=${currentPage}&limit=${itemsPerPage}&status=${filterByStatus}`);
       return res.data.applications;
     },
      enabled: !!user?._id, 
@@ -64,7 +66,7 @@ export default function AppliedJobsPage() {
   refetchOnReconnect: false,
   });
 
-  console.log(appliedJobs);
+
 
  
 
@@ -75,8 +77,25 @@ export default function AppliedJobsPage() {
   //   startIndex + itemsPerPage
   // );
 
- 
 
+ useEffect(() => {
+const handler = setTimeout(() => {
+  setDebouncedSearchValue(searchTerm);
+},1000);
+
+
+return () => {
+  clearTimeout(handler);
+}
+
+ }, [searchTerm]);
+ 
+useEffect(() => {
+    if (debouncedSearchValue) {
+      console.log("Searching for:", debouncedSearchValue);
+      // 🔍 Call your API here
+    }
+  }, [debouncedSearchValue]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       {/* Header */}
@@ -96,13 +115,16 @@ export default function AppliedJobsPage() {
               <Input
                 placeholder="Search applications..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  
+                }}
                 className="pl-10 w-64"
               />
             </div>
 
             <div>
-               <Select>
+               <Select onValueChange={(value) => setFilterByStatus(value)}>
       <SelectTrigger className="w-[100px]">
         <SelectValue placeholder="Status" />
       </SelectTrigger>

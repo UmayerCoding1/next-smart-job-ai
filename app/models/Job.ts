@@ -129,5 +129,7 @@ export const JobSchema = new Schema<IJob>(
 JobSchema.index({ company: 1, title: 1 });
 JobSchema.index({ jobtype: 1, status: 1 });
 JobSchema.index({ location: 1, status: 1 });
+JobSchema.index({ title: "text" });
+
 
 export const Job = models.Job || model<IJob>("Job", JobSchema);
