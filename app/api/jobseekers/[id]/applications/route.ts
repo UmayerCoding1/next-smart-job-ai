@@ -16,6 +16,8 @@ export async function GET(
     const searchQuery = new URL(request.url).searchParams;
     const search = searchQuery.get("search") || "";
     const filterStatus = searchQuery.get("status") || "";
+    const page = searchQuery.get("page") || 1;
+    const limit = searchQuery.get("limits") || 2;
     // const 
 
     const searchTrimed = search.trim();
@@ -32,7 +34,7 @@ if (searchTrimed) {
   jobIds = jobs.map(j => j._id);
 }
 
-const filter: any = { applicant: id };
+const filter: FilterQuery<IJob> = { applicant: id };
 
 // If we have jobIds from search, add them
 if (searchTrimed && jobIds.length > 0) {
@@ -48,19 +50,22 @@ if (filterStatus) {
   const applications = await Application.find(filter)
   .select("-jobRelatedQuestions -countryCode -__v")
   .populate({
-    path: "job", // populate job
+    path: "job",
     select:
       "-applicationsQuestions -appliedjobs -benefits -description -education -experience -holidayPolicy -requirements -skills -workTime -__v -updatedAt ",
     populate: {
-      path: "company", // populate job.company
-      select: "name logo", // select only name and logo from company
+      path: "company", 
+      select: "name logo", 
     },
-  });
+  }).limit(Number(limit)).skip((Number(page) - 1) * Number(limit));
 
+
+  const totalPages = Math.ceil(await Application.countDocuments(filter) / Number(limit));
+  console.log(totalPages);
 
   console.log('call api jobseeker applications');
 
-    return NextResponse.json({ applications, success: true }, { status: 200 });
+    return NextResponse.json({ applications,pagination:{totalPages} , success: true }, { status: 200 });
   } catch (error) {
     console.log("jobseeker applications error", error);
     return new Response("Internal Server Error", { status: 500 });

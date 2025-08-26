@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 
-import { Search, ChevronRight, ChevronLeft } from "lucide-react";
+import { Search, ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
 // import Link from "next/link";
 import {
   Table,
@@ -47,16 +47,30 @@ export default function AppliedJobsPage() {
   const user = useSelector((state: RootState) => state.authR.user);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchTerm);
+  const [isLoading, setIsLoading] = useState(true);
   const [filterByStatus, setFilterByStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 2;
 
-  
+  const getApplicatinCachDataLoading = () => {
+    const cacheData = sessionStorage.getItem('appliedJobsCacheData');
+    return cacheData;
+  };
 
   const { data: appliedJobs = [] } = useQuery({
     queryKey: ["appliedJobs", user?._id, debouncedSearchValue, currentPage, itemsPerPage, filterByStatus],
     queryFn: async () => {
+       setIsLoading(true);
+       console.log('call')
       const res = await axios.get(`/api/jobseekers/${user?._id}/applications?search=${debouncedSearchValue}&page=${currentPage}&limit=${itemsPerPage}&status=${filterByStatus}`);
+      if(res.data.applications) {
+        setIsLoading(false);
+        setTotalPages(res.data.pagination.totalPages);
+        const cachedDataLoading = getApplicatinCachDataLoading();
+        if(!cachedDataLoading) sessionStorage.setItem('appliedJobsCacheData', JSON.stringify(true)); 
+        
+      };
       return res.data.applications;
     },
      enabled: !!user?._id, 
@@ -70,7 +84,7 @@ export default function AppliedJobsPage() {
 
  
 
-  const totalPages = Math.ceil(appliedJobs.length / itemsPerPage);
+
   // const startIndex = (currentPage - 1) * itemsPerPage;
   // const paginatedJobs = appliedJobs.slice(
   //   startIndex,
@@ -90,12 +104,17 @@ return () => {
 
  }, [searchTerm]);
  
-useEffect(() => {
-    if (debouncedSearchValue) {
-      console.log("Searching for:", debouncedSearchValue);
-      // 🔍 Call your API here
-    }
-  }, [debouncedSearchValue]);
+
+ useEffect(() => {
+  const cachedDataLoading = getApplicatinCachDataLoading();
+  if(cachedDataLoading) {
+    setIsLoading(false);
+  }
+
+
+
+ },[])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       {/* Header */}
@@ -143,6 +162,11 @@ useEffect(() => {
       <div className="p-6">
         {/* Table */}
         <Card className="overflow-hidden shadow-sm">
+
+          {isLoading ? <div className="h-[400px] flex items-center justify-center w-full ">
+                <Loader2 size={40} className="animate-spin"/>
+            </div>:
+          
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50 border-b">
@@ -230,7 +254,7 @@ useEffect(() => {
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+          </Table>}
         </Card>
 
         {/* Pagination */}
