@@ -21,6 +21,7 @@ export const getAllJobs = async (
   
 };
 export const getJob = async (jobId: string) => {
+  console.log('api jobId', jobId);
   const res = await fetch(`/api/jobs/${jobId}`);
   const data = await res.json();
   console.log(data.job);

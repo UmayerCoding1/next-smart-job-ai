@@ -32,7 +32,7 @@ export default function DashboardLayout({
             </div>
             <div className="w-full bg-gray-100 h-full overflow-auto scrollbar-hide lg:px-[30px] py-1 ">
               {children}
-              
+              <div className="w-full h-20"></div>
             </div>
           </div>
         </div>

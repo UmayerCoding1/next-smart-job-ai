@@ -17,7 +17,9 @@ export async function GET(
 
 
     
-const job = await Job.findById(id).populate("company");
+ const job = await Job.findById(id)
+      .select("-appliedjobs")
+      .populate("company"); 
 
 
 

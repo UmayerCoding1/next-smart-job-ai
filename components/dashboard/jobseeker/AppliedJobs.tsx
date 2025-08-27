@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import Image from "next/image";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import Link from "next/link";
 
 export interface ApplyedJob {
   _id: string;
@@ -110,10 +111,9 @@ return () => {
   if(cachedDataLoading) {
     setIsLoading(false);
   }
-
-
-
  },[])
+
+ console.log(appliedJobs)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
@@ -243,6 +243,7 @@ return () => {
                   </TableCell>
 
                   <TableCell>
+                    <Link href={`/dashboard/jobseeker/applied-jobs/${job.job._id}?title=${job.job.title}`}>
                     <Button
                       variant="outline"
                       size="sm"
@@ -250,6 +251,7 @@ return () => {
                     >
                       View Details
                     </Button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
