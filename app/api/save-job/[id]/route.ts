@@ -71,15 +71,17 @@ export async function GET(
       {
         $project: {
           _id: 1, // SaveJob _id
-          userId: 1, // SaveJob userId
-          jobId: 1, // SaveJob jobId
-          createdAt: 1, // SaveJob createdAt
-          updatedAt: 1, // SaveJob updatedAt
-          "job._id": 1,
-          "job.title": 1,
-          "job.jobtype": 1,
-          "job.salaryrange": 1,
-          "job.company": 1,
+          userId: 1,
+          jobId: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          job: {
+            _id: "$job._id",
+            title: "$job.title",
+            jobtype: "$job.jobtype",
+            salaryrange: "$job.salaryrange",
+            company: "$job.company",
+          },
         },
       },
     ]);
@@ -112,10 +114,11 @@ export async function GET(
       "name _id logo"
     );
 
+
     const total = totalCountAgg[0]?.total || 0;
 
     const saveJobsDataFormat = savedJobs.map((saveJob) => ({
-      ...saveJob.job,
+      ...saveJob,
       company: saveJob.job.company ? company : null,
     }));
 

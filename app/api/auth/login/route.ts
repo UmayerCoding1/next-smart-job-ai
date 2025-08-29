@@ -4,6 +4,7 @@ import { veridedPassword, verifyEmail } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import setCookies from "@/lib/setCookies";
 
 export async function POST(request: NextRequest) {
   try {
@@ -67,6 +68,17 @@ export async function POST(request: NextRequest) {
       
       maxAge: 2 * 24 * 60 * 60 * 1000, 
     });
+
+      
+
+
+    if(!user._id) return;
+    
+       setCookies('auth', user._id.toString(),{
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+       });
+
     return NextResponse.json(
       { message: "Login successful", success: true, user },
       { status: 200 }

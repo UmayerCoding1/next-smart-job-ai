@@ -1,10 +1,11 @@
 import { User } from "@/app/models/User";
 import { cookies } from "next/headers";
 import { connectToDatabase } from "@/lib/db";
-import {  NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
 import "@/app/models/Resume";
+import setCookies from "@/lib/setCookies";
 
 export async function GET() {
   try {
@@ -18,7 +19,6 @@ export async function GET() {
         { status: 401 }
       );
     }
-
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
       id: string;
@@ -39,6 +39,11 @@ export async function GET() {
       );
     }
 
+   setCookies('auth', user._id.toString(),{
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+   });
+
     return NextResponse.json({ user, success: true }, { status: 200 });
   } catch (error) {
     console.log("logged user get error", error);
@@ -50,5 +55,3 @@ export async function GET() {
     );
   }
 }
-
-

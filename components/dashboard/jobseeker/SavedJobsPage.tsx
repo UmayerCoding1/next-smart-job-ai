@@ -24,12 +24,13 @@ export interface IJob {
       max: number;
       negotiable: boolean;
     };
-    company: {
+    
+  },
+  company: {
       _id: string;
       name: string;
       logo: string;
     };
-  },
   createdAt: string;
   updatedAt: string;
 }
@@ -63,6 +64,9 @@ console.log(savedJobs);
         return "bg-gray-100 text-gray-800 border-gray-200"
     }
   }
+
+
+  
 
   if(isLoading){
     return <SaveJobLoading/>
@@ -110,11 +114,11 @@ console.log(savedJobs);
                     <div className="flex items-center gap-4">
                       {/* Company Logo */}
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-lg flex-shrink-0">
-                        {job?.job?.company?.name.charAt(0)}
+                        {job?.company?.name.charAt(0)}
                       </div>
                       <div className="min-w-0">
                         <div className="font-semibold text-gray-900 mb-1">{job?.job?.title}</div>
-                        <div className="text-sm text-gray-600 mb-1">{job?.job?.company?.name}</div>
+                        <div className="text-sm text-gray-600 mb-1">{job?.company?.name}</div>
                         <div className="flex items-center gap-2">
                           <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
                             {job?.job?.jobtype.map((jobtype: string) => jobtype).join(", ")}
