@@ -1,18 +1,12 @@
-
 import CustomBreadcrumb from "@/components/ui/custom/CustomBreadcrumb";
 import JobDetails from "@/components/ui/job/JobDetails";
-import { Metadata } from "next";
 import React from "react";
 
-type Props = {
-  params: Promise<{ id: string }>;
-  searchParams: { title?: string };
-};
-
 export const generateMetadata = async ({
-  params,
-  searchParams
-}: Props): Promise<Metadata> => {
+  searchParams,
+}: {
+  searchParams: Promise<{ title: string }>;
+}) => {
   const jobTitle = (await searchParams).title;
   console.log(jobTitle);
   const title = await new Promise((resolve) => {
@@ -35,17 +29,20 @@ const getJob = async (jobId: string) => {
   return data.job;
 };
 
-const page = async ({ params }: Props) => {
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const jobId = (await params).id;
   if (!jobId) return null;
 
   const job = await getJob(jobId);
-  if (!job) return <div>
-    Loading . . . 
-  </div>
+  if (!job) return <div>Loading . . .</div>;
   return (
     <>
-    <CustomBreadcrumb link={[{ href: "/dashboard/jobseeker/applied-jobs", label: "Applied Jobs" }]} currentPage={job.title} />
+      <CustomBreadcrumb
+        link={[
+          { href: "/dashboard/jobseeker/applied-jobs", label: "Applied Jobs" },
+        ]}
+        currentPage={job.title}
+      />
       <JobDetails job={job} />
     </>
   );

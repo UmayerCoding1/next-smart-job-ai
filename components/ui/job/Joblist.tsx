@@ -7,11 +7,10 @@ import React from "react";
 
 import Link from "next/link";
 
-import mongoose from "mongoose";
 import useDebouncedPrefetch from "@/hooks/useDebouncedPrefetch";
 import { getJob } from "@/service/api";
 import FadeRight from "@/components/animations/FadeRight";
-import SaveButton from "@/components/button/SaveButton";
+
 
 const CompanyDefaultLogo = "/assets/companu-default-logo.png";
 

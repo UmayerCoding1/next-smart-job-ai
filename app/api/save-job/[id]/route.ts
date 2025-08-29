@@ -1,14 +1,11 @@
-import { IJob } from "@/app/models/Job";
 import { SaveJob } from "@/app/models/SaveJob";
 import { User } from "@/app/models/User";
 import { verifyToken } from "@/lib/verifyToken";
-import { FilterQuery } from "mongoose";
+
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import {Types} from 'mongoose'; 
+import { Types } from "mongoose";
 import { Company } from "@/app/models/Company";
-
-
 
 export async function GET(
   request: Request,
@@ -23,8 +20,6 @@ export async function GET(
     const search = searchParams.get("search") || "";
     const skip = (page - 1) * limit;
 
-
-
     //  Validate userId
     if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
@@ -35,57 +30,59 @@ export async function GET(
     const userObjectId = new Types.ObjectId(id);
 
     //  Aggregation for saved jobs
-  const savedJobs = await SaveJob.aggregate([
-  // Match only the logged-in user's saved jobs
-  { 
-    $match: { userId: userObjectId } 
-  },
+    const savedJobs = await SaveJob.aggregate([
+      // Match only the logged-in user's saved jobs
+      {
+        $match: { userId: userObjectId },
+      },
 
-  // Lookup job details
-  {
-    $lookup: {
-      from: "jobs",
-      localField: "jobId",
-      foreignField: "_id",
-      as: "job",
-    },
-  },
-  { $unwind: { path: "$job", preserveNullAndEmptyArrays: false } },
-
-  // Optional search filter on job title
-  ...(search
-    ? [
-        {
-          $match: {
-            "job.title": { $regex: search, $options: "i" },
-          },
+      // Lookup job details
+      {
+        $lookup: {
+          from: "jobs",
+          localField: "jobId",
+          foreignField: "_id",
+          as: "job",
         },
-      ]
-    : []),
+      },
+      { $unwind: { path: "$job", preserveNullAndEmptyArrays: false } },
 
-  // Lookup company details using job.company (ObjectId)
+      // Optional search filter on job title
+      ...(search
+        ? [
+            {
+              $match: {
+                "job.title": { $regex: search, $options: "i" },
+              },
+            },
+          ]
+        : []),
 
-  // Sort by save date (or createdAt from SaveJob)
-  { $sort: { createdAt: -1 } },
+      // Lookup company details using job.company (ObjectId)
 
-  // Pagination
-  { $skip: skip },
-  { $limit: limit },
+      // Sort by save date (or createdAt from SaveJob)
+      { $sort: { createdAt: -1 } },
 
-  // Project only needed fields
-  {
-    $project: {
-      _id: 1,
-      createdAt: 1,
-      "job._id": 1,
-      "job.title": 1,
-      "job.jobtype": 1,
-      "job.salaryrange": 1,
-      "job.company": 1
-    },
-  },
-]);
+      // Pagination
+      { $skip: skip },
+      { $limit: limit },
 
+      // Project only needed fields
+      {
+        $project: {
+          _id: 1, // SaveJob _id
+          userId: 1, // SaveJob userId
+          jobId: 1, // SaveJob jobId
+          createdAt: 1, // SaveJob createdAt
+          updatedAt: 1, // SaveJob updatedAt
+          "job._id": 1,
+          "job.title": 1,
+          "job.jobtype": 1,
+          "job.salaryrange": 1,
+          "job.company": 1,
+        },
+      },
+    ]);
 
     // Count total for pagination
     const totalCountAgg = await SaveJob.aggregate([
@@ -111,21 +108,20 @@ export async function GET(
       { $count: "total" },
     ]);
 
+    const company = await Company.findById(savedJobs[0]?.job?.company).select(
+      "name _id logo"
+    );
 
-    const company = await Company.findById(savedJobs[0]?.job?.company).select('name _id logo');
-    
     const total = totalCountAgg[0]?.total || 0;
-
-
 
     const saveJobsDataFormat = savedJobs.map((saveJob) => ({
       ...saveJob.job,
-      company : saveJob.job.company ? company : null
-    }))
+      company: saveJob.job.company ? company : null,
+    }));
 
     return NextResponse.json(
       {
-      savedJobs: saveJobsDataFormat,
+        savedJobs: saveJobsDataFormat,
         pagination: {
           total,
           page,
@@ -141,7 +137,6 @@ export async function GET(
     return new Response("Internal Server Error", { status: 500 });
   }
 }
-
 
 export async function DELETE(
   request: Request,

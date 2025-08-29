@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ArchiveX, File, Inbox, Send, Trash } from "lucide-react";
+import {  Inbox } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";

@@ -6,11 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Search, ChevronLeft, ChevronRight, Trash2 } from "lucide-react"
+import { Search, ChevronLeft,Trash2 } from "lucide-react"
 import { useSelector } from "react-redux"
 import { RootState } from "@/app/redux/store"
 import useGetSaveJobs from "@/hooks/getSaveJobs"
-import { ISaveJob } from "@/app/models/SaveJob"
 import SaveJobLoading from "@/app/(pages)/dashboard/jobseeker/saved-jobs/loading"
 
 
