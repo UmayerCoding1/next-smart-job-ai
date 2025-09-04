@@ -26,7 +26,7 @@ export default function DashboardLayout({
            <JobseekerSidebar/>
           </header>
 
-          <div className="w-full lg:flex-1 ">
+          <div className="w-full lg:flex-1 relative">
             <div>
              <Navbar/>
             </div>

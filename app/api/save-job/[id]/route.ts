@@ -81,6 +81,7 @@ export async function GET(
             jobtype: "$job.jobtype",
             salaryrange: "$job.salaryrange",
             company: "$job.company",
+            dedline: "$job.dedline",
           },
         },
       },
