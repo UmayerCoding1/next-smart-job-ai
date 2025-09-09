@@ -4,18 +4,18 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 
-const useGetSaveJobs = (userId: string,page?: number, limit?: number, search?: string) => {
-    const {data: savedJobs = [], isLoading} = useQuery({
-        queryKey: ['savedJobs', userId, page, limit, search],
+const useGetSaveJobs = (userId: string,page?: number, limit?: number) => {
+    const {data: savedJobs = [], isLoading, refetch} = useQuery({
+        queryKey: ['savedJobs', userId, page, limit],
         queryFn: async () => {
-            const response =await axios.get(`/api/save-job/${userId}?page=${page}&limit=${limit}&search=${search}`);
+            const response =await axios.get(`/api/save-job/${userId}?page=${page}&limit=${limit}`);
             return response.data;
 
         }
     });
 
 
-    return {savedJobs: savedJobs?.savedJobs, pagination : savedJobs?.pagination,  isLoading};
+    return {savedJobs: savedJobs?.savedJobs, pagination : savedJobs?.pagination,  isLoading,refetch};
 } 
 
 export default useGetSaveJobs

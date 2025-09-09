@@ -46,6 +46,7 @@ const SaveButton = ({
         toast.success(response.data.message, { duration: 1500 });
       }
     } catch (error) {
+      console.log(error);
       const err = error as AxiosError<{ message: string }>;
 
       const errorMessage =
@@ -53,6 +54,9 @@ const SaveButton = ({
           ? err.response?.data?.message
           : "An error occurred";
       toast.error(errorMessage, { duration: 1500 });
+    }
+    finally{
+      setIsLoading(false);
     }
   };
 

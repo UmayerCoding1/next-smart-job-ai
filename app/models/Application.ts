@@ -7,7 +7,7 @@ export interface IApply {
   email: string;
   applicant: mongoose.Types.ObjectId;
   resumeLink: string;
-  countryCode: string;
+  countryCode?: string;
   phone: string;
   status: string;
   appliedAt: Date;
@@ -30,7 +30,7 @@ export const application = new Schema<IApply>({
   applicant: { type: Schema.Types.ObjectId, ref: "User", required: true },
   resumeLink: { type: String, required: true },
   expectedSalary: { type: Number, required: true },
-  countryCode: { type: String, required: true },
+  countryCode: { type: String },
   phone: { type: String, required: true },
   jobRelatedQuestions: [
     {

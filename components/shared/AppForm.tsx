@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Input as DefaultInput } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
 
 type AppFormProps = {
   children: React.ReactNode;
@@ -51,6 +52,8 @@ const AppForm = ({ children, submitFn }: AppFormProps) => {
 
 export default AppForm;
 
+// ---------------------
+
 export const Input = ({
   handleInput,
   className,
@@ -58,14 +61,16 @@ export const Input = ({
   accept,
   ref,
   imageandleChange,
+  label,
 }: {
   handleInput: {
     type: string;
     name: string;
     required?: boolean;
     placeholder?: string;
-    value?: string;
+    value?: string | number;
   };
+  label?: boolean;
   className?: string;
   id?: string;
   accept?: string;
@@ -93,12 +98,19 @@ export const Input = ({
 
   return (
     <>
+      {label && (
+        <Label htmlFor={handleInput.name}>
+          {handleInput.name.toUpperCase()}
+        </Label>
+      )}
       {handleInput.type === "textarea" ? (
         <Textarea
           value={formdata[handleInput.name] || handleInput.value || ""}
           name={handleInput.name}
           onChange={handleChange}
-          className={`${className ? className : "w-full h-40 resize-none"}`}
+          className={`${
+            className ? className : "w-full h-40 resize-none mb-2"
+          }`}
           placeholder={
             handleInput.placeholder ? handleInput.placeholder : handleInput.name
           }
@@ -111,7 +123,7 @@ export const Input = ({
           placeholder={
             handleInput.placeholder ? handleInput.placeholder : handleInput.name
           }
-          className={className ? className : "w-full h-10"}
+          className={className ? className : "w-full h-10 mb-2"}
           value={formdata[handleInput.name] || handleInput.value || ""}
           onChange={imageandleChange}
           id={id}
@@ -126,7 +138,7 @@ export const Input = ({
           placeholder={
             handleInput.placeholder ? handleInput.placeholder : handleInput.name
           }
-          className={className ? className : "w-full h-10"}
+          className={className ? className : "w-full h-10 mb-2"}
           value={formdata[handleInput.name] || handleInput.value || ""}
           onChange={handleChange}
         />

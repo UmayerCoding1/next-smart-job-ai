@@ -17,7 +17,7 @@ export async function GET(
     const search = searchQuery.get("search") || "";
     const filterStatus = searchQuery.get("status") || "";
     const page = searchQuery.get("page") || 1;
-    const limit = searchQuery.get("limits") || 2;
+    const limit = parseInt(searchQuery.get("limit") || "10");
     // const 
 
     const searchTrimed = search.trim();

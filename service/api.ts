@@ -1,4 +1,6 @@
+import { IJob } from "@/app/models/Job";
 import axios from "axios";
+import { string } from "zod";
 
 export const getAllJobs = async (
   category?: string,
@@ -18,13 +20,18 @@ export const getAllJobs = async (
     console.log(error);
     return [];
   }
-  
 };
+
+const jobCache: Record<string, IJob> = {};
 export const getJob = async (jobId: string) => {
-  console.log('api jobId', jobId);
+  console.log("api jobId", jobId);
+  console.log("api jobCache", jobCache);
+  if (jobCache[jobId]) return jobCache[jobId];
   const res = await fetch(`/api/jobs/${jobId}`);
+
   const data = await res.json();
-  console.log(data.job);
+
+  jobCache[jobId] = data.job;
 
   return data.job;
 };
@@ -48,5 +55,3 @@ export const getCompany = async (id: string) => {
     return null;
   }
 };
-
-

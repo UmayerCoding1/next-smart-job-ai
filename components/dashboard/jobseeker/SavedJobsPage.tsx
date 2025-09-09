@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import useGetSaveJobs from "@/hooks/getSaveJobs";
@@ -13,6 +13,9 @@ import SaveJobLoading from "@/app/(pages)/dashboard/jobseeker/saved-jobs/loading
 import { useRouter } from "next/navigation";
 import SaveJobTable from "./SaveJobTable";
 import JobApplyModale from "./JobApplyModale";
+import { toast } from "sonner";
+import { getJob } from "@/service/api";
+import axios from "axios";
 
 export interface IJob {
   _id: string;
@@ -26,6 +29,7 @@ export interface IJob {
       negotiable: boolean;
     };
     dedline: string;
+    appliedjobs: string[];
   };
   company: {
     _id: string;
@@ -38,23 +42,20 @@ export interface IJob {
 export default function SavedJobsPage() {
   const user = useSelector((state: RootState) => state.authR.user);
   const [openApplyModal, setOpenApplyModal] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+
+  const [isApplyLoding, setIsApplyLoding] = useState(false);
+  const [isDeletedLoding, setIsDeletedLoding] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const { savedJobs, pagination, isLoading } = useGetSaveJobs(
+  const { savedJobs, pagination, isLoading , refetch } = useGetSaveJobs(
     user?._id?.toString() || "",
     currentPage,
-    itemsPerPage,
-    searchTerm
+    itemsPerPage
   );
   const router = useRouter();
 
-  // const handleRemoveJob = (jobId: number) => {
-  //   // Handle removing job from saved list
-  //   console.log("Removing job:", jobId);
-  // };
 
-  console.log(openApplyModal)
+
 
   const getStatusColor = (dedlineDate: string) => {
     const now = new Date();
@@ -75,6 +76,45 @@ export default function SavedJobsPage() {
     const bActive = getStatusColor(b.job.dedline) ? 1 : 0;
     return bActive - aActive;
   });
+
+  const handleApplyJobModal = async (jobId: string,savedJobId:string) => {
+    if (!jobId) return;
+    setIsApplyLoding(true);
+    try {
+      const job = await getJob(jobId);
+      console.log(job);
+
+      if (job) {
+        setIsApplyLoding(false);
+        setOpenApplyModal(true);
+       router.replace(`/dashboard/jobseeker/saved-jobs?jobId=${jobId}&savedJobId=${savedJobId}`);
+      }
+    } catch {
+      toast.error("An error occurred", { duration: 1500 });
+    }
+  };
+
+    const handleRemoveJob = async (jobId: string) => {
+    if (!jobId) return;
+    setIsDeletedLoding(true);
+    const savedJobsId =  JSON.parse(localStorage.getItem("savedJobsId") || "[]");
+    savedJobsId.splice(savedJobsId.indexOf(jobId), 1);
+    localStorage.setItem("savedJobsId", JSON.stringify(savedJobsId));
+
+    try {
+      const response = await axios.delete(`/api/save-job/${jobId}`);
+      if (response.data.success) {
+        refetch();
+        toast.success(response.data.message, { duration: 1500 });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("An error occurred", { duration: 1500 });
+    } finally {
+      setIsDeletedLoding(false);
+    }
+  };
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -87,29 +127,26 @@ export default function SavedJobsPage() {
                 Total ({pagination.total})
               </span>
             </h1>
-            {/* <p className="text-gray-600 text-sm mt-1">({filteredJobs.length})</p> */}
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                placeholder="Job title, keyword, company"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 w-80 border-gray-300"
-              />
-            </div>
           </div>
         </div>
       </div>
 
       <div className="p-6">
         {/* Table */}
-        <SaveJobTable
-          storedJob={storedJob}
-          getStatusColor={getStatusColor}
-          setOpenApplyModal={setOpenApplyModal}
-        />
+        <div className="relative ">
+          {isDeletedLoding && (
+            <div className="bg-white/70 w-full h-full absolute top-0 left-0 z-10 flex items-center justify-center ">
+              <Loader2 size={20} className="animate-spin" />
+            </div>
+          )}
+          <SaveJobTable
+            storedJob={storedJob}
+            getStatusColor={getStatusColor}
+            handleApplyJobModal={handleApplyJobModal}
+            isApplyLoding={isApplyLoding}
+            handleRemoveJob={handleRemoveJob}
+          />
+        </div>
 
         {/* Pagination */}
         <div className="flex items-center justify-center gap-2 mt-6">
@@ -168,7 +205,7 @@ export default function SavedJobsPage() {
 
       {openApplyModal && (
         <div className="w-full h-screen absolute top-0 left-0 bg-black/50 flex items-center justify-center">
-          <JobApplyModale setOpenApplyModal={setOpenApplyModal} />
+          <JobApplyModale setOpenApplyModal={setOpenApplyModal} saveDataRefetch={refetch} />
         </div>
       )}
     </div>

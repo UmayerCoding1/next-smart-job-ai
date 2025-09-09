@@ -67,7 +67,7 @@ export interface IUser {
   };
   isOtpVerified: boolean;
   education: IEducation[];
-  savejobs?: mongoose.Types.ObjectId[];
+  saveJobs?: mongoose.Types.ObjectId[];
   appliedjobs?: mongoose.Types.ObjectId[] | IAppliedJob[];
   company?: mongoose.Types.ObjectId;
   postJobs?: mongoose.Types.ObjectId[];
@@ -77,7 +77,8 @@ export interface IUser {
     {
       platform: string;
       link: string;
-  }]
+    }
+  ];
   profileView: {
     count: number;
   };
@@ -88,8 +89,8 @@ export interface IUser {
     expiresAt: Date;
     isActive: boolean;
     paymentId?: string;
-  },
-  previesAvatar?: string[]
+  };
+  previesAvatar?: string[];
   status: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -97,10 +98,7 @@ export interface IUser {
 
 const userSchema = new Schema<IUser>(
   {
-    fullname: {
-      type: String,
-      required: true,
-    },
+    fullname: { type: String, required: true },
     email: {
       type: String,
       required: true,
@@ -173,7 +171,7 @@ const userSchema = new Schema<IUser>(
         year: { type: String },
       },
     ],
-    savejobs: [
+    saveJobs: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Job",
@@ -189,7 +187,7 @@ const userSchema = new Schema<IUser>(
           type: Date,
           default: Date.now,
         },
-      }
+      },
     ],
     company: {
       type: mongoose.Schema.Types.ObjectId,
@@ -219,7 +217,7 @@ const userSchema = new Schema<IUser>(
         link: {
           type: String,
         },
-      }
+      },
     ],
     profileView: {
       count: {
@@ -249,14 +247,15 @@ const userSchema = new Schema<IUser>(
         default: false,
       },
       paymentId: {
-        type: String, 
+        type: String,
       },
     },
     previesAvatar: [
       {
         type: String,
-      }
+      },
     ],
+
     status: {
       type: String,
       default: Status.ACTIVE,

@@ -1,5 +1,3 @@
-
-
 import { Application, IApply } from "@/app/models/Application";
 import { Job } from "@/app/models/Job";
 import { User } from "@/app/models/User";
@@ -9,28 +7,26 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
+    const body = await request.json();
     const {
       name,
       email,
       applicant,
       resumeLink,
       expectedSalary,
-      countryCode,
       phone,
-      jobRelatedQuestions,
       job,
       coverLetter,
-    }: IApply = await request.json();
-
+    }: IApply = body;
+console.log(body);
     if (
       !name ||
       !email ||
       !applicant ||
       !resumeLink ||
       !expectedSalary ||
-      !countryCode ||
+      
       !phone ||
-      !jobRelatedQuestions ||
       !job ||
       !coverLetter
     ) {
@@ -65,35 +61,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const existingApply = await Application.findOne({
-      job: job,
-      applicant: applicant,
-    });
+    // const existingApply = await Application.findOne({
+    //   job: job,
+    //   applicant: applicant,
+    // });
 
-    if (existingApply) {
-      return NextResponse.json(
-        { message: "You have already applied for this job", success: false },
-        { status: 400 }
-      );
-    }
+    // if (existingApply) {
+    //   return NextResponse.json(
+    //     { message: "You have already applied for this job", success: false },
+    //     { status: 400 }
+    //   );
+    // }
 
     const newApply = await Application.create({
       job,
       name,
       email,
       resumeLink,
-      countryCode,
+      countryCode: body.countryCode || "+880",
       applicant,
       phone,
-      jobRelatedQuestions,
+      jobRelatedQuestions: body.jobRelatedQuestions || [],
       coverLetter,
       expectedSalary,
     });
 
-
     if (applyedJob.appliedjobs.includes(newApply.applicant)) {
       return NextResponse.json(
-        { message: "You have already applied for this job", success: false },
+        { message: "You have already applied for this job33", success: false },
         { status: 400 }
       );
     } else {

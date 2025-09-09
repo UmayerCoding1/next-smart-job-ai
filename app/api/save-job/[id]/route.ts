@@ -82,6 +82,7 @@ export async function GET(
             salaryrange: "$job.salaryrange",
             company: "$job.company",
             dedline: "$job.dedline",
+            appliedjobs: "$job.appliedjobs",
           },
         },
       },
@@ -148,6 +149,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+    console.log("id", id);
 
     const token = (await cookies()).get("token")?.value as unknown as string;
     const verifyId = verifyToken(token);
@@ -165,11 +167,8 @@ export async function DELETE(
         { status: 404 }
       );
 
-    const existingSaveJob = await SaveJob.findOneAndDelete({
-      userId: user._id,
-      jobId: id,
-    });
-
+      console.log("user", user._id);
+    const existingSaveJob = await SaveJob.findByIdAndDelete(id);
     if (!existingSaveJob) {
       return NextResponse.json(
         { message: "Save job not found", success: false },

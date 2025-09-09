@@ -52,7 +52,7 @@ export default function AppliedJobsPage() {
   const [filterByStatus, setFilterByStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const itemsPerPage = 2;
+  const itemsPerPage = 10;
 
   const getApplicatinCachDataLoading = () => {
     const cacheData = sessionStorage.getItem('appliedJobsCacheData');
@@ -82,15 +82,6 @@ export default function AppliedJobsPage() {
   });
 
 
-
- 
-
-
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const paginatedJobs = appliedJobs.slice(
-  //   startIndex,
-  //   startIndex + itemsPerPage
-  // );
 
 
  useEffect(() => {
