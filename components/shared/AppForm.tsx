@@ -97,10 +97,10 @@ export const Input = ({
   }, [formdata, handleInput, handleChange]);
 
   return (
-    <>
+    <div className="flex flex-col w-full">
       {label && (
-        <Label htmlFor={handleInput.name}>
-          {handleInput.name.toUpperCase()}
+           <Label htmlFor={handleInput.name} className={`${handleInput.required && "after:content-['*']"}`}>
+          {handleInput.name.charAt(0).toUpperCase() + handleInput.name.slice(1)}
         </Label>
       )}
       {handleInput.type === "textarea" ? (
@@ -143,6 +143,6 @@ export const Input = ({
           onChange={handleChange}
         />
       )}
-    </>
+    </div>
   );
 };
