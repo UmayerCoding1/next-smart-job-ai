@@ -52,8 +52,17 @@ const PostForm = () => {
             <Input handleInput={{type:"text",name:"title",required:true,placeholder:"Job Title"}} label/>
              <Input handleInput={{type:"text",name:"location",required:true,placeholder:"Job Location "}} label/>
            </Row>
-             <Row>
-              <Input handleInput={{type: "dropdown", name: 'category'}} label dropdownValue={['s', 's', 'd', 'e','3' ]}/>
+             <Row className="mt-1">
+              <Input handleInput={{type: "dropdown", name: 'category'}}   label dropdownValue={['engineering', 'design', 'product', 'marketing','sales','Human Resources', 'finance']}/>
+               <Input
+    handleInput={{
+      type: "date",
+      name: "deadline",
+      required: true,
+      placeholder: "Select a deadline",
+    }}
+    label={true}
+  />
            </Row>
             </Column>
 

@@ -3,6 +3,16 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { Input as DefaultInput } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { SelectGroup } from "@radix-ui/react-select";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 type AppFormProps = {
   children: React.ReactNode;
@@ -65,7 +75,7 @@ export const Input = ({
   dropdownValue,
 }: {
   handleInput: {
-    type: 'text' | 'textarea' | "file" | 'chackbox' | 'dropdown';
+    type: "text" | "textarea" | "file" | "chackbox" | "dropdown" | 'date';
     name: string;
     required?: boolean;
     placeholder?: string;
@@ -101,7 +111,10 @@ export const Input = ({
   return (
     <div className="flex flex-col w-full">
       {label && (
-           <Label htmlFor={handleInput.name} className={`${handleInput.required && "after:content-['*']"}`}>
+        <Label
+          htmlFor={handleInput.name}
+          className={`${handleInput.required && "after:content-['*']"}`}
+        >
           {handleInput.name.charAt(0).toUpperCase() + handleInput.name.slice(1)}
         </Label>
       )}
@@ -131,12 +144,40 @@ export const Input = ({
           id={id}
           accept={accept}
           ref={ref}
-        /> 
-      ) : handleInput.type === 'dropdown'  ? <div> 
-        {dropdownValue?.map((item,inx) => <div key={inx}>
-          {item}
-        </div>)}
-      </div> :(
+        />
+      ) : handleInput.type === "dropdown" ? (
+        <div className="w-full h-full">
+          <Select
+        onValueChange={(value) => {
+          
+          handleChange({
+            target: {
+              name: handleInput.name,
+              value: value,
+            },
+          } as React.ChangeEvent<HTMLInputElement>);
+        }}
+      >          
+            <SelectTrigger className="w-full" >
+              <SelectValue placeholder="Select a fruit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {dropdownValue?.map((item,inx) =>  <SelectItem key={inx} value={item}>{item.charAt(0).toUpperCase() + item.slice(1)}</SelectItem>)}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      ) : handleInput.type === 'date' ? <div className="w-full bg-red-50">  
+        <CustomDatePicker
+  name={handleInput.name}
+  value={formdata[handleInput.name]}
+  handleChange={handleChange}
+  required={handleInput.required}
+  className="w-full h-10 p-2 rounded-2xl bg-sky-100 "
+/>
+
+      </div> :  (
         <DefaultInput
           type={handleInput.type}
           name={handleInput.name}
@@ -150,5 +191,38 @@ export const Input = ({
         />
       )}
     </div>
+  );
+};
+
+
+interface Props {
+  name: string;
+  value?: string;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  required?: boolean;
+}
+
+
+const CustomDatePicker = ({ name, value, handleChange, className, required }: Props) => {
+  const selectedDate = value ? new Date(value) : null;
+
+  return (
+    <DatePicker
+      selected={selectedDate}
+      onChange={(date: Date | null) => {
+        if (date) {
+          // convert to YYYY-MM-DD format
+          handleChange({
+            target: { name, value: date.toISOString().split("T")[0] },
+          } as React.ChangeEvent<HTMLInputElement>);
+        }
+      }}
+      minDate={new Date()} // disable past dates
+      placeholderText="Select a date"
+      className={className || " bg-sky-100  h-10 px-3 py-2 border rounded-md shadow-sm"}
+      required={required}
+      dateFormat="yyyy-MM-dd"
+    />
   );
 };
