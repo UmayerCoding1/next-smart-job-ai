@@ -40,18 +40,31 @@ const PostForm = () => {
       <div className=" mt-10 max-w-4xl mx-auto">
         <AppForm submitFn={handleSubmit}>
         <Group>
-           <Row>
-            <Input handleInput={{type:"text",name:"title",required:true,placeholder:"Job Title"}} label={true}/>
-             <Input handleInput={{type:"text",name:"description2",required:true,placeholder:"Job Description"}} label={true}/>
+          
+          <Section> 
+             <TitleAndSubTitle
+              title="Job Basics"
+              subtitle="Provide the essential details of the job to help candidates understand the role at a glance."
+             />
+            
+            <Column>
+             <Row>
+            <Input handleInput={{type:"text",name:"title",required:true,placeholder:"Job Title"}} label/>
+             <Input handleInput={{type:"text",name:"location",required:true,placeholder:"Job Location "}} label/>
            </Row>
+             <Row>
+              <Input handleInput={{type: "dropdown", name: 'category'}} label dropdownValue={['s', 's', 'd', 'e','3' ]}/>
+           </Row>
+            </Column>
 
 
-        <div>
-            <Input handleInput={{type:"text",name:"description",placeholder:"Job Description"}} label={true}/>
-        </div>
+
+
+        
+          </Section>
 
         </Group>
-
+      
         <button className="btn"> submit</button>
       </AppForm>
       </div>
@@ -61,6 +74,13 @@ const PostForm = () => {
 
 export default PostForm;
 
+
+
+
+
+
+
+
 const Group = ({children,className}: {children:React.ReactNode,className?:string}) => {
   return (
     <div className={cn("flex flex-col gap-2",className)}>
@@ -68,6 +88,12 @@ const Group = ({children,className}: {children:React.ReactNode,className?:string
     </div>
   );
 };
+
+const Section = ({children,className} : {children: React.ReactNode, className?: string}) => {
+    return <div className={cn( 'w-full  shadow-lg  px-3 py-5 rounded-xl border border-neutral-200 bg-white dark:bg-neutral-800 mb-3',className)}>
+         {children}
+    </div>
+}
 
 
 const Column = ({children,className}: {children:React.ReactNode,className?:string}) => {
@@ -85,3 +111,11 @@ const Row = ({children,className}: {children:React.ReactNode,className?:string})
     </div>
   );
 };
+
+
+const TitleAndSubTitle = ({title,subtitle} : {title: string, subtitle: string}) => {
+   return <div className="mt-2 mb-4  pb-3 border-b border-neutral-200">
+       <h1 className="text-2xl font-semibold text-neutral-800">{title}</h1>
+       <p className="text-sm font-medium text-neutral-600">{subtitle}</p>
+   </div>
+}

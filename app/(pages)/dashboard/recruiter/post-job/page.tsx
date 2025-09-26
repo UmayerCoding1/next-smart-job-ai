@@ -9,7 +9,7 @@ export const metadata = {
 
 const Page = () => {
   return (
-    <div className=" max-w-5xl mx-auto ">
+    <div className=" max-w-5xl mx-auto overflow-auto max-h-screen scrollbar-hide mb-20 ">
       <PostForm />
     </div>
   );

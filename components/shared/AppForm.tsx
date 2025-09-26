@@ -62,15 +62,17 @@ export const Input = ({
   ref,
   imageandleChange,
   label,
+  dropdownValue,
 }: {
   handleInput: {
-    type: string;
+    type: 'text' | 'textarea' | "file" | 'chackbox' | 'dropdown';
     name: string;
     required?: boolean;
     placeholder?: string;
     value?: string | number;
   };
   label?: boolean;
+  dropdownValue?: string[];
   className?: string;
   id?: string;
   accept?: string;
@@ -129,8 +131,12 @@ export const Input = ({
           id={id}
           accept={accept}
           ref={ref}
-        />
-      ) : (
+        /> 
+      ) : handleInput.type === 'dropdown'  ? <div> 
+        {dropdownValue?.map((item,inx) => <div key={inx}>
+          {item}
+        </div>)}
+      </div> :(
         <DefaultInput
           type={handleInput.type}
           name={handleInput.name}
