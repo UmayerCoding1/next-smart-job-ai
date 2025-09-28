@@ -13,6 +13,10 @@ import {
 import { SelectGroup } from "@radix-ui/react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Requirements from "../dashboard/recruiter/post-job/Requirements";
+import { Switch } from "../ui/switch";
+import { RedioMultiSelectCheckbox } from "../form/Redio-selector";
+
 
 type AppFormProps = {
   children: React.ReactNode;
@@ -72,17 +76,19 @@ export const Input = ({
   ref,
   imageandleChange,
   label,
-  dropdownValue,
+  options,
+  dynamic_add_list_style
 }: {
   handleInput: {
-    type: "text" | "textarea" | "file" | "chackbox" | "dropdown" | 'date';
+    type: "text" | "textarea" | "file" | "chackbox" | "dropdown" | 'date' | 'dynamic_add_list' | 'redio_select';
     name: string;
     required?: boolean;
     placeholder?: string;
     value?: string | number;
   };
   label?: boolean;
-  dropdownValue?: string[];
+  options?: string[];
+  dynamic_add_list_style?: 'row' | 'column';
   className?: string;
   id?: string;
   accept?: string;
@@ -163,21 +169,42 @@ export const Input = ({
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {dropdownValue?.map((item,inx) =>  <SelectItem key={inx} value={item}>{item.charAt(0).toUpperCase() + item.slice(1)}</SelectItem>)}
+                {options?.map((item,inx) =>  <SelectItem key={inx} value={item}>{item.charAt(0).toUpperCase() + item.slice(1)}</SelectItem>)}
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
-      ) : handleInput.type === 'date' ? <div className="w-full bg-red-50">  
+      ) : handleInput.type === 'date' ? <div className="w-full">  
         <CustomDatePicker
   name={handleInput.name}
   value={formdata[handleInput.name]}
   handleChange={handleChange}
   required={handleInput.required}
-  className="w-full h-10 p-2 rounded-2xl bg-sky-100 "
 />
+</div> : 
 
-      </div> :  (
+handleInput.type === 'dynamic_add_list' ? <div className="w-full">
+       <Requirements name={handleInput.name} handleChange={handleChange} style={dynamic_add_list_style || 'column'} />
+</div> : handleInput.type === "chackbox" ? (
+       <div>
+        <Switch
+          name={handleInput.name}
+          // checked={formdata[handleInput.name]}
+          onCheckedChange={(checked) => {
+            
+          }}
+          />
+       </div>
+      ) : handleInput.type === 'redio_select' ? <div>
+        <RedioMultiSelectCheckbox
+  name="experienceLevels"
+  value={(formdata["experienceLevels"]?.split(",") || [])}
+  options={options || []}
+  onChange={handleChange}
+  required
+/>
+      </div> :
+(
         <DefaultInput
           type={handleInput.type}
           name={handleInput.name}
@@ -208,21 +235,31 @@ const CustomDatePicker = ({ name, value, handleChange, className, required }: Pr
   const selectedDate = value ? new Date(value) : null;
 
   return (
-    <DatePicker
-      selected={selectedDate}
-      onChange={(date: Date | null) => {
-        if (date) {
-          // convert to YYYY-MM-DD format
-          handleChange({
-            target: { name, value: date.toISOString().split("T")[0] },
-          } as React.ChangeEvent<HTMLInputElement>);
-        }
-      }}
-      minDate={new Date()} // disable past dates
-      placeholderText="Select a date"
-      className={className || " bg-sky-100  h-10 px-3 py-2 border rounded-md shadow-sm"}
-      required={required}
-      dateFormat="yyyy-MM-dd"
-    />
+   
+  <DatePicker
+  wrapperClassName="w-full"
+    selected={selectedDate}
+    onChange={(date: Date | null) => {
+      if (date) {
+        handleChange({
+          target: { name, value: date.toISOString().split("T")[0] },
+        } as React.ChangeEvent<HTMLInputElement>);
+      }
+    }}
+    minDate={new Date()}
+    placeholderText="Select a date"
+    className={className || "react-datepicker__input   h-10 px-3 py-2 border rounded-md shadow-sm"}
+    required={required}
+    dateFormat="yyyy-MM-dd"
+  />
+
+
   );
 };
+
+
+
+
+
+
+

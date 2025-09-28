@@ -205,3 +205,8 @@
 .recharts-sector:active {
   outline: none;
 }
+
+
+.react-datepicker__input{
+  width: 100% !important;
+}
