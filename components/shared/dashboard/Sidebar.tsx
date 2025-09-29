@@ -78,7 +78,7 @@ const Sidebar = ({
                       size={20}
                       className={`ml-4 mr-3 ${
                         isActive
-                          ? "fill-blue-500 text-transparent"
+                          ? "text-white"
                           : "text-white"
                       }`}
                     />

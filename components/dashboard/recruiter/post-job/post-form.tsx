@@ -1,12 +1,12 @@
 "use client";
-import CustomSwitch from "@/components/form/Switch";
+
 import AppForm, { Input } from "@/components/shared/AppForm";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 import { Eye, Save, Send } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 
 
 const PostForm = () => {
@@ -16,12 +16,13 @@ const PostForm = () => {
   };
 
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-  }
   return (
-    <div className="h-full w-full bg-neutral-100">
-      <div className="flex items-center justify-between">
+    <div className="h-full w-full">
+      
+
+      <div className=" mt-10 max-w-6xl mx-auto">
+        <AppForm submitFn={handleSubmit}>
+          <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-neutral-800  to-neutral-400    ">
             Post a New Job
@@ -32,23 +33,25 @@ const PostForm = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant={"ghost"} className="border border-neutral-300">
+          <Button type="button" variant={"ghost"} className="border border-neutral-300">
             <Eye />
-            Preview
+            <p className="text-shadow-md text-shadow-neutral-300">
+             Preview
+            </p>
           </Button>
-          <Button variant={"ghost"} className="border border-neutral-300">
+          <Button type="button" variant={"ghost"} className="border border-neutral-300">
             <Save />
-            Save Draft
+            <p className="text-shadow-md text-shadow-neutral-300">
+              Save Draft
+            </p>
+            
           </Button>
-          <Button className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
+          <Button type="submit" className="bg-blue-600 hover:bg-blue-700 cursor-pointer group">
             <Send />
-            Publish Job
+            <p className="text-shadow-2xs text-shadow-neutral-700 group-hover:text-shadow-none ">Publish Job</p>
           </Button>
         </div>
       </div>
-
-      <div className=" mt-10 max-w-6xl mx-auto">
-        <AppForm submitFn={handleSubmit}>
         <Group>
           
           <Section> 
@@ -125,7 +128,7 @@ const PostForm = () => {
            </Column>
           </Section>
 
-          <Section>
+          <Section className="relative">
 
             <TitleAndSubTitle
              title="Salary Information"
@@ -136,14 +139,50 @@ const PostForm = () => {
              <Row className="">
               <Label>Negotiable: </Label>
               <Input handleInput={{type:"chackbox",name:"negotiable",placeholder:"Job Location "}} />
+            
              </Row>
+    
+
+              <Row className="items-center">
+              <Input handleInput={{type:"text",name:"min_salary",required:true,placeholder:"Min Salary", defaultValue:"0"}} label/>-
+              <Input handleInput={{type:"text",name:"max_salary",required:true,placeholder:"Max Salary", defaultValue:"0"}} label/>
+              </Row>
+            </Column>
+
+
+            
+          </Section>
+
+          <Section>
+            <TitleAndSubTitle
+             title="Benefits & Perks"
+             subtitle="Highlight the value your company provides to employees."
+            />
+
+
+            <Column>
+              <Input handleInput={{type: "dynamic_add_list", name: 'benefits', required: true}} label/>
+              <Input handleInput={{type: "text", name: 'Vacancies', required: true, defaultValue:"2"}} label/>
+              
+            </Column>
+          </Section>
+          <Section>
+            <TitleAndSubTitle
+             title="Application Process"
+             subtitle="Customize how candidates apply and what information you need."
+            />
+
+
+            <Column>
+              <Input handleInput={{type: "dynamic_add_list", name: 'Application Questions', required: true}} label/>
+              
+              
             </Column>
           </Section>
      
 
         </Group>
       
-        <button className="btn"> submit</button>
       </AppForm>
       </div>
     </div>

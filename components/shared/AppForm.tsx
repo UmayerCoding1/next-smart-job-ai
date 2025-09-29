@@ -79,6 +79,7 @@ export const Input = ({
   label,
   options,
   dynamic_add_list_style
+  
 }: {
   handleInput: {
     type: "text" | "textarea" | "file" | "chackbox" | "dropdown" | 'date' | 'dynamic_add_list' | 'redio_select';
@@ -86,6 +87,7 @@ export const Input = ({
     required?: boolean;
     placeholder?: string;
     value?: string | number;
+    defaultValue?: string | number | boolean;
   };
   label?: boolean;
   options?: string[];
@@ -167,7 +169,7 @@ export const Input = ({
         }}
       >          
             <SelectTrigger className="w-full" >
-              <SelectValue placeholder="Select a fruit" />
+              <SelectValue placeholder={`Select a ${handleInput.name}`} />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -215,6 +217,7 @@ handleInput.type === 'dynamic_add_list' ? <div className="w-full">
           }
           className={className ? className : "w-full h-10 mb-2"}
           value={formdata[handleInput.name] || handleInput.value || ""}
+          defaultValue={formdata[handleInput.name] || handleInput.value || ""}
           onChange={handleChange}
         />
       )}
