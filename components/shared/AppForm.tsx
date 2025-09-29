@@ -14,8 +14,9 @@ import { SelectGroup } from "@radix-ui/react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Requirements from "../dashboard/recruiter/post-job/Requirements";
-import { Switch } from "../ui/switch";
+
 import { RedioMultiSelectCheckbox } from "../form/Redio-selector";
+import CustomSwitch from "../form/Switch";
 
 
 type AppFormProps = {
@@ -95,6 +96,7 @@ export const Input = ({
   ref?: React.RefObject<HTMLInputElement | null>;
   imageandleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
+   const [enabled, setEnabled] = useState(false);
   const context = useContext(AppFormProvider);
 
   if (!context) {
@@ -187,18 +189,17 @@ handleInput.type === 'dynamic_add_list' ? <div className="w-full">
        <Requirements name={handleInput.name} handleChange={handleChange} style={dynamic_add_list_style || 'column'} />
 </div> : handleInput.type === "chackbox" ? (
        <div>
-        <Switch
+        <CustomSwitch
           name={handleInput.name}
-          // checked={formdata[handleInput.name]}
-          onCheckedChange={(checked) => {
-            
-          }}
-          />
+          onChange={handleChange}
+          enabled={enabled}
+          setEnabled={setEnabled}
+        /> 
        </div>
       ) : handleInput.type === 'redio_select' ? <div>
         <RedioMultiSelectCheckbox
-  name="experienceLevels"
-  value={(formdata["experienceLevels"]?.split(",") || [])}
+  name={handleInput.name}
+  value={(formdata[handleInput.name]?.split(",") || [])}
   options={options || []}
   onChange={handleChange}
   required

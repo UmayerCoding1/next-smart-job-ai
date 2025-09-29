@@ -1,12 +1,16 @@
 "use client";
+import CustomSwitch from "@/components/form/Switch";
 import AppForm, { Input } from "@/components/shared/AppForm";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+
 import { Eye, Save, Send } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 
 const PostForm = () => {
+  
   const handleSubmit = (data: { [key: string]: string }) => {
     console.log(data);
   };
@@ -43,7 +47,7 @@ const PostForm = () => {
         </div>
       </div>
 
-      <div className=" mt-10 max-w-4xl mx-auto">
+      <div className=" mt-10 max-w-6xl mx-auto">
         <AppForm submitFn={handleSubmit}>
         <Group>
           
@@ -96,10 +100,44 @@ const PostForm = () => {
             subtitle="Define the type of work, work schedule, and the required level of experience."
             />
 
-            <Row>
-            <Input handleInput={{type: "redio_select",name: "experience level ",required: true,placeholder: "Select a deadline",}}label={true} options={['I', 'Z', 'M']}/>
+           <Column className="gap-4">
+            <Row className="gap-5">
+            <Input handleInput={{type: "redio_select",name: "experience level ",required: true,placeholder: "Select a deadline",}}label={true} options={['Internship', 'Entry', 'Mid', 'Senior', 'Lead']}/>
             <Input handleInput={{type: "redio_select",name: "job jype ",required: true,placeholder: "Select a deadline",}}label={true} options={['Full-time', 'Part-time', 'Internship']}/>
             </Row>
+
+            <Row className="gap-5">
+               <Input handleInput={{type: "redio_select",name: "shift",required: true,placeholder: "Select a deadline",}}label={true} options={['Day', 'Night', 'Flexible']}/>
+               <Input handleInput={{type: "redio_select",name: "work_location_type",required: true,placeholder: "Select a deadline",}}label={true} options={['On-site', 'Hybrid', 'Remote','Flexible']}/>
+            </Row>
+
+
+            <Row>
+             <Label>Work Times :</Label>
+
+              <Column>
+               <Input handleInput={{type: 'text' ,name: 'work_time_start',required: true,placeholder: "Work Time start", }}/>
+               <Input handleInput={{type: 'text' ,name: 'work_time_end',required: true,placeholder: "Work Time end", }}/>
+              </Column>
+            </Row>
+
+             <Input handleInput={{type: "dynamic_add_list", name: 'holiday policy', required: true}} label /> 
+           </Column>
+          </Section>
+
+          <Section>
+
+            <TitleAndSubTitle
+             title="Salary Information"
+             subtitle="Specify salary details clearly to attract the right candidates."
+            />
+
+            <Column>
+             <Row className="">
+              <Label>Negotiable: </Label>
+              <Input handleInput={{type:"chackbox",name:"negotiable",placeholder:"Job Location "}} />
+             </Row>
+            </Column>
           </Section>
      
 

@@ -1,3 +1,4 @@
+import { Input } from "../shared/AppForm";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 
@@ -27,20 +28,23 @@ export const RedioMultiSelectCheckbox = ({
   };
 
   return (
-    <div className="w-full mt-4">
-      
-
+     <div className="w-full mt-4 border-t p-1">
       <div className="grid grid-cols-2 gap-3">
-        {options.map((option) => (
-          <div key={option} className="flex items-center space-x-2">
-            <Checkbox
-              id={option}
-              checked={value.includes(option)}
-              onCheckedChange={() => toggleValue(option)}
-            />
-            <Label htmlFor={option}>{option}</Label>
-          </div>
-        ))}
+       {options.map((option) => {
+          const uniqueValue = option; // ekhane tumi companyId + "-" + name korte paro jodi duplicate thake
+          return (
+            <div key={uniqueValue} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id={uniqueValue}
+                value={uniqueValue}
+                checked={value.includes(uniqueValue)}
+                onChange={() => toggleValue(uniqueValue)}
+              />
+              <Label htmlFor={uniqueValue}>{option}</Label>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
