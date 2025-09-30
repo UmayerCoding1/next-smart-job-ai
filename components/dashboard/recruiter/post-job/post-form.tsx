@@ -4,17 +4,91 @@ import AppForm, { Input } from "@/components/shared/AppForm";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-
+import {v4 as uuidV4} from "uuid"
 import { Eye, Save, Send } from "lucide-react";
 import React from "react";
+import { IDBDraftJobData } from "@/lib/types";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 
 
 const PostForm = () => {
-  
+  const user = useSelector((state: RootState) => state.authR.user);
   const handleSubmit = (data: { [key: string]: string }) => {
-    console.log(data);
+    
+    formatJobData(data);
   };
 
+
+   function formatJobData  (jobData: { [key: string]: string })  {  
+   console.log(jobData);
+   console.log(jobData.benefits);
+   
+
+  const jobTypeArray =  convertToArray(jobData.job_type,"text");
+  const skillsArray =  convertToArray(jobData.skills,'json');
+  const educationArray =  convertToArray(jobData.education,'json');
+  const experienceLevelArray =  convertToArray(jobData.experience_level,'json');
+  const requirementsArray =  convertToArray(jobData.requirements,'json');
+//  const benefitsArray =  convertToArray(jobData.benefits,'text');
+
+  // console.log(benefitsArray)
+
+   const data: IDBDraftJobData =  {
+    title: jobData.title,
+    description: jobData.description,
+    company: user?.company?._id.toString() || "",
+    recruiter: user?._id && user?._id.toString() || "",
+    location: jobData.location,
+    salaryrange: {
+      negotiable: jobData.negotiable === "true" ? true : false,
+      min: Number(jobData.salaryrangeMin),
+      max: Number(jobData.salaryrangeMax),
+    },
+    jobtype: jobTypeArray,
+    skills: skillsArray,
+    education: educationArray,
+    experience: jobData.experience.split(","),
+    experienceLevel: experienceLevelArray,
+    dedline: new Date(jobData.dedline),
+    category: jobData.category,
+  
+    workTime: {
+      start: jobData.work_time_start,
+      end: jobData.work_time_end,
+    },
+   requirements: requirementsArray,
+    // shift: jobData.shift,
+    // benefits: benefitsArray,
+    vacancies: Number(jobData.vacancies),
+    isRemoteAvailable: jobData.is_remote_available === "true" ? true : false,
+    status: "draft",
+    applicationsQuestions: [],
+   
+
+   }
+
+  // console.log(data);
+    
+  }
+
+
+   function convertToArray  (jsonData: string,dataType: 'json' | 'text') {
+    console.log(jsonData);
+
+     if(!jsonData ) return;
+    if(dataType === 'json') {
+
+      const jsonarray = JSON.parse(jsonData);
+      return jsonarray;
+    }else {
+      if(dataType === 'text') {
+         const array =  jsonData.split(",");
+    
+    return array;
+    }
+    }
+  }
 
   return (
     <div className="h-full w-full">
@@ -33,20 +107,15 @@ const PostForm = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button type="button" variant={"ghost"} className="border border-neutral-300">
-            <Eye />
-            <p className="text-shadow-md text-shadow-neutral-300">
-             Preview
-            </p>
-          </Button>
-          <Button type="button" variant={"ghost"} className="border border-neutral-300">
+
+          <Button type="button" variant={"ghost"} className="border border-neutral-300 cursor-pointer active:scale-105">
             <Save />
             <p className="text-shadow-md text-shadow-neutral-300">
               Save Draft
             </p>
             
           </Button>
-          <Button type="submit" className="bg-blue-600 hover:bg-blue-700 cursor-pointer group">
+          <Button type="submit" className="bg-blue-600 hover:bg-blue-700 cursor-pointer group active:scale-105">
             <Send />
             <p className="text-shadow-2xs text-shadow-neutral-700 group-hover:text-shadow-none ">Publish Job</p>
           </Button>
@@ -105,8 +174,8 @@ const PostForm = () => {
 
            <Column className="gap-4">
             <Row className="gap-5">
-            <Input handleInput={{type: "redio_select",name: "experience level ",required: true,placeholder: "Select a deadline",}}label={true} options={['Internship', 'Entry', 'Mid', 'Senior', 'Lead']}/>
-            <Input handleInput={{type: "redio_select",name: "job jype ",required: true,placeholder: "Select a deadline",}}label={true} options={['Full-time', 'Part-time', 'Internship']}/>
+            <Input handleInput={{type: "redio_select",name: "experience_level",required: true,placeholder: "Select a deadline",}}label={true} options={['Internship', 'Entry', 'Mid', 'Senior', 'Lead']}/>
+            <Input handleInput={{type: "redio_select",name: "job_type",required: true,placeholder: "Select a deadline",}}label={true} options={['Full-time', 'Part-time', 'Internship']}/>
             </Row>
 
             <Row className="gap-5">
@@ -174,8 +243,11 @@ const PostForm = () => {
 
 
             <Column>
+              <div className="flex flex-col gap-2 overflow-hidden">
               <Input handleInput={{type: "dynamic_add_list", name: 'Application Questions', required: true}} label/>
-              
+              {/* <Input handleInput={{type: "dropdown", name: 'Application Questions', required: true}} label/> */}
+                
+              </div>
               
             </Column>
           </Section>

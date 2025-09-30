@@ -1,3 +1,4 @@
+import { ISalary } from "@/app/models/Job";
 import React from "react";
 
 export interface ISliderData {
@@ -23,4 +24,39 @@ export interface ISliderData {
      email: string;
      password: string;
      createdAt: number
+  }
+
+
+  export interface IDBDraftJobData {
+     _id?: string;
+      title: string;
+      description: string;
+      company: string;
+      recruiter: string;
+      location: string;
+      salaryrange?: ISalary;
+      jobtype: string[];
+      skills: string[];
+      education?: string[];
+      experience: string[];
+      experienceLevel: string;
+      dedline: Date;
+      category: string;
+      holidayPolicy?: string;
+      workTime: {
+        start: string;
+        end: string;
+      };
+      requirements: string[];
+      shift: string;
+      benefits: string[];
+      vacancies: number;
+      isRemoteAvailable: boolean;
+      status: string;
+      applicationsQuestions: {
+        question: string;
+        answerType: string;
+        required: boolean;
+      }[];
+     
   }

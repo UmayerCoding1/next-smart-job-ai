@@ -29,6 +29,7 @@ export async function GET() {
         path: "resume",
         select: "filename size createdAt resumeLink",
       })
+      .populate({ path: "company", select: "name logo website email location" })
       .select("-password -otp");
     console.log("user", user.resume);
 

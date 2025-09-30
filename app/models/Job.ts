@@ -23,7 +23,7 @@ export interface IJob {
   experienceLevel: string;
   dedline: Date;
   category: string;
-  holidayPolicy: string;
+  holidayPolicy?: string;
   workTime: {
     start: string;
     end: string;

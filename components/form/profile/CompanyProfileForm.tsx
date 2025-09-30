@@ -306,7 +306,7 @@ const CompanyProfileForm = ({
           <Label htmlFor="email">Company Email</Label>
           <Input
             handleInput={{
-              type: "email",
+              type: "text",
               name: "email",
               placeholder: "Your Company Email",
               value: company?.email,
@@ -331,7 +331,7 @@ const CompanyProfileForm = ({
             <Label htmlFor="website link">Website</Label>
             <Input
               handleInput={{
-                type: "url",
+                type: "text",
                 name: "website",
                 placeholder: "Add your website link",
                 value: company?.website,

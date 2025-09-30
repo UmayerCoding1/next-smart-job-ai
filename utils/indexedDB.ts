@@ -25,6 +25,13 @@ const getAllUserIDB = async () => {
     return await db.getAll('users');
 }
 
+
+
+const addDraftJobIDB = async (jobData: iDBUserData) => {
+    const db = await initianizeDB();
+    await db.put('draftJobs', jobData);
+}
+
 export {
     addUserIDB,
     getAllUserIDB

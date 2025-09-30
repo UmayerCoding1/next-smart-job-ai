@@ -1,4 +1,5 @@
 import { Company, ICompany } from "@/app/models/Company";
+import { User } from "@/app/models/User";
 import { connectToDatabase } from "@/lib/db";
 import { withAuth } from "@/lib/withAuth";
 
@@ -53,7 +54,17 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     } else {
-      await Company.create({
+      const requiredExist = await User.findById(recruiter);
+
+      if (!requiredExist) {
+        return NextResponse.json(
+          { message: "Recruiter not found", success: false },
+          { status: 404 }
+        );
+      }
+
+
+    const newCompany =   await Company.create({
         name,
         email,
         description,
@@ -64,6 +75,9 @@ export async function POST(request: NextRequest) {
         industry,
         recruiter
       });
+
+      requiredExist.company = newCompany._id;
+      await requiredExist.save({validateBeforeSave: false});
       return NextResponse.json(
         { message: "Company created successfully", success: true },
         { status: 200 }

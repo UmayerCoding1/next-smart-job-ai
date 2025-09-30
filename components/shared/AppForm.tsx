@@ -17,6 +17,7 @@ import Requirements from "../dashboard/recruiter/post-job/Requirements";
 
 import { RedioMultiSelectCheckbox } from "../form/Redio-selector";
 import CustomSwitch from "../form/Switch";
+import CustomDropdown from "../custom-ui/dropdown";
 
 
 type AppFormProps = {
@@ -156,7 +157,7 @@ export const Input = ({
           ref={ref}
         />
       ) : handleInput.type === "dropdown" ? (
-        <div className="w-full h-full">
+        <div className="w-full h-full flex">
           <Select
         onValueChange={(value) => {
           
@@ -177,6 +178,14 @@ export const Input = ({
               </SelectGroup>
             </SelectContent>
           </Select>
+{/* 
+          <CustomDropdown
+  name={handleInput.name}
+  value={formdata[handleInput.name] || ""}
+  options={options || []}
+  placeholder={`Select a ${handleInput.name}`}
+  onChange={handleChange}
+/> */}
         </div>
       ) : handleInput.type === 'date' ? <div className="w-full">  
         <CustomDatePicker
