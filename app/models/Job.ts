@@ -21,7 +21,7 @@ export interface IJob {
   education?: string[];
   experience: string[];
   experienceLevel: string;
-  dedline: Date;
+  dedline: string;
   category: string;
   holidayPolicy?: string;
   workTime: {
@@ -78,7 +78,7 @@ export const JobSchema = new Schema<IJob>(
       enum: ["internship", "entry", "mid", "senior", "lead"],
     },
     experienceLevel: { type: String, required: true },
-    dedline: { type: Date, required: true },
+    dedline: { type: String , required: true },
     category: { type: String, required: true },
     holidayPolicy: {
       type: String,

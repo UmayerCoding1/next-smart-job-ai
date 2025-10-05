@@ -10,86 +10,88 @@ import React from "react";
 import { IDBDraftJobData } from "@/lib/types";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
+import { addDraftJobIDB } from "@/utils/indexedDB";
 
 
 const PostForm = () => {
   const user = useSelector((state: RootState) => state.authR.user);
+
+  // ----------------- Submit Handler -----------------
   const handleSubmit = (data: { [key: string]: string }) => {
-    
-    formatJobData(data);
+    const jobData = formatJobData(data);
+    console.log("Publish Data:", jobData);
   };
 
-
-   function formatJobData  (jobData: { [key: string]: string })  {  
-   console.log(jobData);
-   console.log(jobData.benefits);
-   
-
-  const jobTypeArray =  convertToArray(jobData.job_type,"text");
-  const skillsArray =  convertToArray(jobData.skills,'json');
-  const educationArray =  convertToArray(jobData.education,'json');
-  const experienceLevelArray =  convertToArray(jobData.experience_level,'json');
-  const requirementsArray =  convertToArray(jobData.requirements,'json');
-//  const benefitsArray =  convertToArray(jobData.benefits,'text');
-
-  // console.log(benefitsArray)
-
-   const data: IDBDraftJobData =  {
-    title: jobData.title,
-    description: jobData.description,
-    company: user?.company?._id.toString() || "",
-    recruiter: user?._id && user?._id.toString() || "",
-    location: jobData.location,
-    salaryrange: {
-      negotiable: jobData.negotiable === "true" ? true : false,
-      min: Number(jobData.salaryrangeMin),
-      max: Number(jobData.salaryrangeMax),
-    },
-    jobtype: jobTypeArray,
-    skills: skillsArray,
-    education: educationArray,
-    experience: jobData.experience.split(","),
-    experienceLevel: experienceLevelArray,
-    dedline: new Date(jobData.dedline),
-    category: jobData.category,
-  
-    workTime: {
-      start: jobData.work_time_start,
-      end: jobData.work_time_end,
-    },
-   requirements: requirementsArray,
-    // shift: jobData.shift,
-    // benefits: benefitsArray,
-    vacancies: Number(jobData.vacancies),
-    isRemoteAvailable: jobData.is_remote_available === "true" ? true : false,
-    status: "draft",
-    applicationsQuestions: [],
-   
-
-   }
-
-  // console.log(data);
+  // ----------------- Save Draft Handler -----------------
+  const saveToDarft = async () => {
+    const form = document.querySelector("form");
     
+    if (!form) return;
+    const formData = new FormData(form);
+    console.log(formData);
+    const data: { [key: string]: string } = {};
+    formData.forEach((value, key) => (data[key] = value.toString()));
+    console.log('sas',data);
+  };
+
+  // ----------------- Formatter -----------------
+  function formatJobData(jobData: { [key: string]: string }) {
+    const jobTypeArray = convertToArray(jobData.job_type, "text");
+    const skillsArray = convertToArray(jobData.skills, "json");
+    const educationArray = convertToArray(jobData.education, "json");
+    const experienceLevelArray = convertToArray(jobData.experience_level, "text");
+    const requirementsArray = convertToArray(jobData.requirements, "json");
+    const benefitsArray = convertToArray(jobData.benefits, "json");
+    const shiftArray = convertToArray(jobData.shift, "text");
+    const application_QuestionsArray = convertToArray(jobData.Application_Questions, "json");
+
+    const data: IDBDraftJobData = {
+      title: jobData.title || "",
+      description: jobData.description || "",
+      company: user?.company?._id?.toString() || "",
+      recruiter: user?._id?.toString() || "",
+      location: jobData.location || "",
+      salaryrange: {
+        negotiable: jobData.negotiable === "true",
+        min: Number(jobData.min_salary) || 0,
+        max: Number(jobData.max_salary) || 0,
+      },
+      jobtype: jobTypeArray || [],
+      skills: skillsArray || [],
+      education: educationArray || [],
+      experience: requirementsArray || [],
+      experienceLevel: experienceLevelArray || [],
+      dedline: jobData.deadline || "",
+      category: jobData.category || "",
+      workTime: {
+        start: jobData.work_time_start || "",
+        end: jobData.work_time_end || "",
+      },
+      requirements: requirementsArray || [],
+      shift: shiftArray || [],
+      benefits: benefitsArray || [],
+      vacancies: Number(jobData.Vacancies) || 0,
+      isRemoteAvailable: jobData.isRemote === "true",
+      applicationsQuestions: application_QuestionsArray || [],
+    };
+
+    return data;
   }
 
-
-   function convertToArray  (jsonData: string,dataType: 'json' | 'text') {
-    console.log(jsonData);
-
-     if(!jsonData ) return;
-    if(dataType === 'json') {
-
-      const jsonarray = JSON.parse(jsonData);
-      return jsonarray;
-    }else {
-      if(dataType === 'text') {
-         const array =  jsonData.split(",");
-    
-    return array;
-    }
+  // ----------------- Helper -----------------
+  function convertToArray(jsonData: string | undefined, dataType: "json" | "text") {
+    if (!jsonData) return [];
+    try {
+      if (dataType === "json") {
+        return JSON.parse(jsonData);
+      } else {
+        return jsonData.split(",").map((item) => item.trim()).filter(Boolean);
+      }
+    } catch (err) {
+      console.error("Invalid array data:", jsonData, err);
+      return [];
     }
   }
-
   return (
     <div className="h-full w-full">
       
@@ -108,7 +110,12 @@ const PostForm = () => {
 
         <div className="flex items-center gap-2">
 
-          <Button type="button" variant={"ghost"} className="border border-neutral-300 cursor-pointer active:scale-105">
+          <Button type="button" variant={"ghost"} className="border border-neutral-300 cursor-pointer active:scale-105"
+            onClick={() => {
+    
+    saveToDarft();
+  }}
+          >
             <Save />
             <p className="text-shadow-md text-shadow-neutral-300">
               Save Draft
@@ -244,7 +251,7 @@ const PostForm = () => {
 
             <Column>
               <div className="flex flex-col gap-2 overflow-hidden">
-              <Input handleInput={{type: "dynamic_add_list", name: 'Application Questions', required: true}} label/>
+              <Input handleInput={{type: "dynamic_add_list", name: 'Application_Questions', required: true}} label/>
               {/* <Input handleInput={{type: "dropdown", name: 'Application Questions', required: true}} label/> */}
                 
               </div>

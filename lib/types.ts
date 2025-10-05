@@ -40,7 +40,7 @@ export interface ISliderData {
       education?: string[];
       experience: string[];
       experienceLevel: string;
-      dedline: Date;
+      dedline: string;
       category: string;
       holidayPolicy?: string;
       workTime: {
@@ -52,11 +52,7 @@ export interface ISliderData {
       benefits: string[];
       vacancies: number;
       isRemoteAvailable: boolean;
-      status: string;
-      applicationsQuestions: {
-        question: string;
-        answerType: string;
-        required: boolean;
-      }[];
+      
+      applicationsQuestions: [];
      
   }

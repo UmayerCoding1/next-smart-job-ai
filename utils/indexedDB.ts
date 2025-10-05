@@ -1,4 +1,4 @@
-import { iDBUserData } from '@/lib/types';
+import { IDBDraftJobData, iDBUserData } from '@/lib/types';
 import {openDB} from 'idb';
 
 
@@ -27,12 +27,13 @@ const getAllUserIDB = async () => {
 
 
 
-const addDraftJobIDB = async (jobData: iDBUserData) => {
+const addDraftJobIDB = async (jobData:IDBDraftJobData) => {
     const db = await initianizeDB();
     await db.put('draftJobs', jobData);
 }
 
 export {
     addUserIDB,
-    getAllUserIDB
+    getAllUserIDB,
+    addDraftJobIDB
 }
