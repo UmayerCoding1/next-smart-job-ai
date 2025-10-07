@@ -11,27 +11,41 @@ import { IDBDraftJobData } from "@/lib/types";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { addDraftJobIDB } from "@/utils/indexedDB";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 const PostForm = () => {
   const user = useSelector((state: RootState) => state.authR.user);
-
+  const router = useRouter();
   // ----------------- Submit Handler -----------------
   const handleSubmit = (data: { [key: string]: string }) => {
     const jobData = formatJobData(data);
-    console.log("Publish Data:", jobData);
+    const eventStatus = localStorage.getItem("eventStatus");
+    if (eventStatus === "draft") {
+      saveToDarft(jobData);
+    } else if (eventStatus === "publish") {
+      
+      console.log("Publish Data:", jobData);
+    }
   };
 
   // ----------------- Save Draft Handler -----------------
-  const saveToDarft = async () => {
-    const form = document.querySelector("form");
+  const saveToDarft = async (jobData: IDBDraftJobData) => {
+   const data = {...jobData, _id: uuidV4()}
+   console.log(data)
+   if (!data) {
+     return toast.error("An error occurred", { duration: 1500 });
+   }
+   try {
+    await addDraftJobIDB(data);
+     toast.success("Job saved to draft successfully", { duration: 1500 });
+     router.push('/dashboard/recruiter')
+   } catch (error) {
+     console.log(error);
+     toast.error("An error occurred", { duration: 1500 });
+   }
     
-    if (!form) return;
-    const formData = new FormData(form);
-    console.log(formData);
-    const data: { [key: string]: string } = {};
-    formData.forEach((value, key) => (data[key] = value.toString()));
-    console.log('sas',data);
   };
 
   // ----------------- Formatter -----------------
@@ -110,10 +124,10 @@ const PostForm = () => {
 
         <div className="flex items-center gap-2">
 
-          <Button type="button" variant={"ghost"} className="border border-neutral-300 cursor-pointer active:scale-105"
+          <Button type="submit" variant={"ghost"} className="border border-neutral-300 cursor-pointer active:scale-105"
             onClick={() => {
     
-    saveToDarft();
+            localStorage.setItem("eventStatus", "draft");
   }}
           >
             <Save />
@@ -122,7 +136,13 @@ const PostForm = () => {
             </p>
             
           </Button>
-          <Button type="submit" className="bg-blue-600 hover:bg-blue-700 cursor-pointer group active:scale-105">
+          <Button
+           type="submit"
+          className="bg-blue-600 hover:bg-blue-700 cursor-pointer group active:scale-105"
+          onClick={() => {
+            localStorage.setItem("eventStatus", "publish");
+          }}
+          >
             <Send />
             <p className="text-shadow-2xs text-shadow-neutral-700 group-hover:text-shadow-none ">Publish Job</p>
           </Button>
@@ -149,7 +169,7 @@ const PostForm = () => {
 
            </Row>
              <Row className="mt-1">
-              <Input handleInput={{type: "dropdown", name: 'category', required: true}}   label options={['engineering', 'design', 'product', 'marketing','sales','Human Resources', 'finance']}/>
+              <Input handleInput={{type: "dropdown", name: 'category', required: true}}   label options={['engineering','Software Development', 'design', 'product', 'marketing','sales','Human Resources', 'finance']}/>
                <Input handleInput={{type: "date",name: "deadline",required: true,placeholder: "Select a deadline",}}label={true}/>
            </Row>
             </Column>        

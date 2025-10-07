@@ -1,39 +1,51 @@
 import { IDBDraftJobData, iDBUserData } from '@/lib/types';
-import {openDB} from 'idb';
+import { openDB } from 'idb';
 
+// A helper function to safely open the database and ensure stores exist
+async function initializeDB() {
+  const dbName = 'samartjoai';
+  const currentDB = await indexedDB.databases();
+  const existingDB = currentDB.find((db) => db.name === dbName);
+  const version = existingDB?.version ? existingDB.version + 1 : 1;
 
-async function initianizeDB() {
-    const db = await openDB('users', 1, {
-        upgrade(db){
-            if(!db.objectStoreNames.contains('users')){
-                db.createObjectStore('users', {keyPath: 'iid'})
-            }
-        }
-    })
+  const db = await openDB(dbName, version, {
+    upgrade(db) {
+      // ✅ Create 'users' store if not exists
+      if (!db.objectStoreNames.contains('users')) {
+        db.createObjectStore('users', { keyPath: 'iid' });
+      }
 
-    return db;
+      // ✅ Create 'draftJobs' store if not exists
+      if (!db.objectStoreNames.contains('draftJobs')) {
+        db.createObjectStore('draftJobs', { keyPath: '_id' });
+      }
+    },
+  });
+
+  return db;
 }
 
-
+// ✅ Add user
 const addUserIDB = async (userData: iDBUserData) => {
-    const db = await initianizeDB();
-    await db.put('users', userData);
-}
+  const db = await initializeDB();
+  await db.put('users', userData);
+};
 
+// ✅ Get all users
 const getAllUserIDB = async () => {
-    const db = await initianizeDB();
-    return await db.getAll('users');
-}
+  const db = await initializeDB();
+  return await db.getAll('users');
+};
 
-
-
-const addDraftJobIDB = async (jobData:IDBDraftJobData) => {
-    const db = await initianizeDB();
-    await db.put('draftJobs', jobData);
-}
+// ✅ Add draft job
+const addDraftJobIDB = async (jobData: IDBDraftJobData) => {
+    console.log('jobData', jobData);
+  const db = await initializeDB();
+  await db.put('draftJobs', jobData);
+};
 
 export {
-    addUserIDB,
-    getAllUserIDB,
-    addDraftJobIDB
-}
+  addUserIDB,
+  getAllUserIDB,
+  addDraftJobIDB,
+};

@@ -19,7 +19,7 @@ export interface IJob {
   jobtype: string[];
   skills: string[];
   education?: string[];
-  experience: string[];
+  experience?: string[];
   experienceLevel: string;
   dedline: string;
   category: string;
