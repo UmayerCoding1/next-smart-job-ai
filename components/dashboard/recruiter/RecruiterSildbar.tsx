@@ -26,12 +26,12 @@ const RecruiterSildbar = () => {
     },
     {
       name: "Applications",
-      url: "/dashboard/recruiter/my-jobs",
+      url: "/dashboard/recruiter/applied-jobs",
       icon: BriefcaseBusiness,
     },
     {
       name: "Save Employees",
-      url: "/dashboard/recruiter/my-jobs",
+      url: "/dashboard/recruiter/saved-employees",
       icon: Bookmark,
     },
     
