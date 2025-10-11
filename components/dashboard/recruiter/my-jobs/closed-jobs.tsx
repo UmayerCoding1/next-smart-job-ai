@@ -1,3 +1,5 @@
+import { IJob } from '@/app/models/Job';
+import JobCard from '@/components/shared/job-card';
 import useMyJobs from '@/hooks/useMyJobs';
 import React, { useState } from 'react';
 
@@ -9,7 +11,15 @@ const ClosedJobs = ({tab}: {tab: string}) => {
     console.log(jobs);
     return (
         <div>
-            {tab}
+             <div className={`grid 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 `}>
+     {
+      jobs?.map((job: IJob,inx: number) => (
+        <JobCard key={inx} job={job} />
+      ))
+     }
+     
+    </div>
+
         </div>
     );
 };
