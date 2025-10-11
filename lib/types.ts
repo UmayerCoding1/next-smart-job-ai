@@ -54,5 +54,6 @@ export interface ISliderData {
       isRemoteAvailable: boolean;
       
       applicationsQuestions: [];
+      status: string;
      
   }

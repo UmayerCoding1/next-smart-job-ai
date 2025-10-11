@@ -12,7 +12,7 @@ export interface IJob {
   _id?: mongoose.Types.ObjectId;
   title: string;
   description: string;
-  company: mongoose.Types.ObjectId;
+  company: mongoose.Types.ObjectId | ICompany;
   recruiter: mongoose.Types.ObjectId;
   location: string;
   salaryrange?: ISalary;

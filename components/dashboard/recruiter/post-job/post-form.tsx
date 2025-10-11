@@ -87,6 +87,7 @@ const PostForm = () => {
       vacancies: Number(jobData.Vacancies) || 0,
       isRemoteAvailable: jobData.isRemote === "true",
       applicationsQuestions: application_QuestionsArray || [],
+      status: "draft",
     };
 
     return data;

@@ -2,7 +2,6 @@ import { Job } from "@/app/models/Job";
 import { connectToDatabase } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
@@ -39,6 +38,10 @@ export async function GET(request: NextRequest) {
           reqruiter: recruiterId,
           dedline: { $gte: today.toISOString() },
         })
+          .populate({
+            path: "company",
+            select: "name  email location",
+          })
           .skip((page - 1) * limit)
           .limit(limit)
           .lean();
@@ -54,6 +57,10 @@ export async function GET(request: NextRequest) {
           reqruiter: recruiterId,
           dedline: { $lt: today.toISOString() },
         })
+          .populate({
+            path: "company",
+            select: "name  email location",
+          })
           .skip((page - 1) * limit)
           .limit(limit)
           .lean();
@@ -66,13 +73,19 @@ export async function GET(request: NextRequest) {
       default:
         const jobs = await Job.find({
           reqruiter: recruiterId,
-        });
+        })
+          .populate({
+            path: "company",
+            select: "name  email location",
+          })
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .lean();
 
         return NextResponse.json({ jobs, success: true }, { status: 200 });
     }
   } catch (error) {
     console.log("Jobs get error", error);
     throw error;
-
   }
 }
