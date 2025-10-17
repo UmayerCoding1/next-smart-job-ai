@@ -17,7 +17,7 @@ import Requirements from "../dashboard/recruiter/post-job/Requirements";
 
 import { RedioMultiSelectCheckbox } from "../form/Redio-selector";
 import CustomSwitch from "../form/Switch";
-import CustomDropdown from "../custom-ui/dropdown";
+
 
 
 type AppFormProps = {
@@ -83,7 +83,7 @@ export const Input = ({
   
 }: {
   handleInput: {
-    type: "text" | "textarea" | "file" | "chackbox" | "dropdown" | 'date' | 'dynamic_add_list' | 'redio_select';
+    type: "text" | 'number' | 'email' |  'password' |"textarea" | "file" | "chackbox" | "dropdown" | 'date' | 'dynamic_add_list' | 'redio_select';
     name: string;
     required?: boolean;
     placeholder?: string;

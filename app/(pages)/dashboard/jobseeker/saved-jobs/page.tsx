@@ -1,6 +1,6 @@
 import SavedJobsPage from "@/components/dashboard/jobseeker/SavedJobsPage";
 import { getCookieInServer } from "@/hooks/getCookie";
-import { cookies } from "next/headers";
+
 // import { getCookieInClient } from "@/hooks/getCookieInClient";
 
 import React from "react";

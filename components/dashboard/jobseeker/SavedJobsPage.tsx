@@ -3,9 +3,9 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
-import { Search, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+
+import {  ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import useGetSaveJobs from "@/hooks/getSaveJobs";

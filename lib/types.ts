@@ -56,4 +56,9 @@ export interface ISliderData {
       applicationsQuestions: [];
       status: string;
      
+
+      //
+
+      appliedjobs?: string[];
+      savedjobs?: string[];
   }

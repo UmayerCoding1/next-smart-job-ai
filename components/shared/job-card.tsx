@@ -3,6 +3,9 @@ import { IJob } from "@/app/models/Job";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IDBDraftJobData } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { DollarSign, Edit, Eye, MapPin, SquarePen, Trash2 } from "lucide-react";
+import { Button } from "../ui/button";
 
 type JobCardProps = {
   job: IJob | IDBDraftJobData;
@@ -11,7 +14,7 @@ type JobCardProps = {
 
 const JobCard = ({ job, setShowApplications }: JobCardProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
-
+  console.log(job);
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -30,7 +33,7 @@ const JobCard = ({ job, setShowApplications }: JobCardProps) => {
       onMouseLeave={() => setShowTooltip(false)}
     >
       {/* Tooltip */}
-          <AnimatePresence>
+      <AnimatePresence>
         {showTooltip && (
           <motion.div
             key="tooltip"
@@ -47,7 +50,9 @@ const JobCard = ({ job, setShowApplications }: JobCardProps) => {
 
       {/* Card Content */}
       <div>
-        <p>{job.status}</p>
+        <p className="bg-neutral-900 text-white inline-block px-4  text-xs rounded-2xl">
+          {job.status}
+        </p>
         <h2 className="text-lg font-bold text-foreground truncate">
           {job.title.slice(0, 30)}
           {job.title.length > 40 && "..."}
@@ -57,9 +62,63 @@ const JobCard = ({ job, setShowApplications }: JobCardProps) => {
             ? job.company.name
             : "Draft job"}
         </p>
+
+        <div className="mt-6 mb-3">
+          <PTag>
+            <MapPin size={13} /> {job.location}
+          </PTag>
+          
+          <PTag>
+            <DollarSign size={13} />
+
+           <p> {job.salaryrange?.min === job.salaryrange?.max
+              ? job.salaryrange?.min ?? "N/A"
+              : `${job.salaryrange?.min ?? "N/A"} - ${
+                  job.salaryrange?.max ?? "N/A"
+                }`}</p>
+          </PTag>
+
+          <PTag className="text-neutral-800 font-medium"><Eye size={13}/>
+             {job?.appliedjobs?.length ?? 0} appilications
+          </PTag>
+        </div>
+
+
+         <div className="mt-6 flex gap-2">
+          <Button variant="outline" size="sm" className="flex-1 bg-transparent">
+            <Edit className="mr-2 h-4 w-4" />
+            Edit
+          </Button>
+          <Button variant="outline" size="sm" className="flex-1 bg-transparent">
+            <Eye className="mr-2 h-4 w-4" />
+            View
+          </Button>
+          <Button variant="ghost" size="sm">
+            <Trash2 className="h-4 w-4 text-destructive" />
+          </Button>
+        </div>
       </div>
     </div>
   );
 };
 
 export default JobCard;
+
+const PTag = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <p
+      className={cn(
+        "text-sm font-medium text-neutral-500 flex items-center gap-2 mt-2",
+        className
+      )}
+    >
+      {children}
+    </p>
+  );
+};

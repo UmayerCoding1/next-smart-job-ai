@@ -10,9 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Trash2 } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 import { IJob } from "./SavedJobsPage";
-import JobApplyModale from "./JobApplyModale";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 
