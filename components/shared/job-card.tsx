@@ -4,15 +4,18 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IDBDraftJobData } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { DollarSign, Edit, Eye, MapPin, SquarePen, Trash2 } from "lucide-react";
+import { DollarSign, Edit, Eye, MapPin, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 
 type JobCardProps = {
   job: IJob | IDBDraftJobData;
   setShowApplications?: React.Dispatch<React.SetStateAction<boolean>>;
+setSelectedJobApplications?: React.Dispatch<
+    React.SetStateAction<{ id: string; title: string, totalAppications: number }>
+  >;
 };
 
-const JobCard = ({ job, setShowApplications }: JobCardProps) => {
+const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCardProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
   console.log(job);
   useEffect(() => {
@@ -78,7 +81,14 @@ const JobCard = ({ job, setShowApplications }: JobCardProps) => {
                 }`}</p>
           </PTag>
 
-          <PTag className="text-neutral-800 font-medium"><Eye size={13}/>
+          <PTag onClick={() => {
+            setShowApplications?.(true);
+            setSelectedJobApplications?.({
+              id: job._id?.toString() ?? '',
+              title: job.title,
+              totalAppications: job?.appliedjobs?.length ?? 0
+            });
+          }} className="text-neutral-800 font-medium cursor-pointer hover:underline hover:text-blue-600"><Eye size={13}/>
              {job?.appliedjobs?.length ?? 0} appilications
           </PTag>
         </div>
@@ -98,21 +108,28 @@ const JobCard = ({ job, setShowApplications }: JobCardProps) => {
           </Button>
         </div>
       </div>
+
+      
     </div>
   );
 };
 
 export default JobCard;
 
+
+interface PTagProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  className?: string;
+  children: React.ReactNode;
+}
+
 const PTag = ({
   children,
   className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => {
+  ...props
+}: PTagProps) => {
   return (
     <p
+      {...props}
       className={cn(
         "text-sm font-medium text-neutral-500 flex items-center gap-2 mt-2",
         className

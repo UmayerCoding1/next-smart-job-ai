@@ -43,8 +43,8 @@ export const application = new Schema<IApply>({
   interviewDate: { type: Date },
   status: {
     type: String,
-    enum: ["pending", "reviewed", "interview", "rejected", "accepted"],
-    default: "pending",
+    enum: [ 'new',"pending", "reviewed", "interview", "rejected", "accepted"],
+    default: "new",
   },
   appliedAt: { type: Date, default: Date.now },
 });

@@ -8,9 +8,15 @@ import { IDBDraftJobData } from "@/lib/types";
 import { getAllDraftJobIDB } from "@/utils/indexedDB";
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import ViewAppication from "./view-appication";
 
 const AllJobs = ({ tab }: { tab: string }) => {
     const [showApplications, setShowApplications] = useState(false);
+    const [selectedJobAppilications, setSelectedJobApplications] = useState<{id:string, title:string, totalAppications: number}>({
+      id: "",
+      title: "",
+      totalAppications: 0
+    });
     const[draftJobs, setDraftJobs] = useState<IDBDraftJobData[]>([]);
   const [page, setPage] = useState(1);
 
@@ -41,19 +47,22 @@ useEffect(() => {
   return (
     <div className="flex transition-all duration-150">
 
-        <div className={`grid ${showApplications ? 'grid-cols-1 md:grid-cols-1 lg:grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'} gap-8 mt-4 `}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 `}>
      {
       allJobs?.map((job: IJob,inx: number) => (
-        <JobCard key={inx} job={job} setShowApplications={setShowApplications}/>
+        <JobCard key={inx} job={job} setShowApplications={setShowApplications} setSelectedJobApplications={setSelectedJobApplications}/>
       ))
      }
      
     </div>
 
-   {showApplications &&  <div className="bg-emerald-400  w-[650px]">
-       all application
+   {showApplications &&  <div className=" bg-black/20  absolute top-0 left-0 w-full h-full flex items-center justify-center">
+      
+ 
 
-       <Button onClick={() => setShowApplications(false)} variant={"destructive"}>Close</Button>
+      <ViewAppication setShowApplications={setShowApplications} selectedJobAppilications={selectedJobAppilications}/>
+      
+
     </div>}
     </div>
   );
