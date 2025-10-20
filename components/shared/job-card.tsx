@@ -4,8 +4,12 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IDBDraftJobData } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { DollarSign, Edit, Eye, MapPin, Trash2 } from "lucide-react";
+import { Check, DollarSign, Edit, Ellipsis, Eye, MapPin } from "lucide-react";
 import { Button } from "../ui/button";
+
+import { toast } from "sonner";
+import axios from "axios";
+import JobStatusChanger from "../dashboard/recruiter/my-jobs/Job-Status-Changer";
 
 type JobCardProps = {
   job: IJob | IDBDraftJobData;
@@ -17,7 +21,7 @@ setSelectedJobApplications?: React.Dispatch<
 
 const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCardProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
-  console.log(job);
+  
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -29,6 +33,25 @@ const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCar
 
     return () => clearInterval(timer);
   }, [showTooltip]);
+
+
+
+
+
+  const handleChangeJobStatus = async (newStatus: string) => {
+    try {
+      const res = await axios.patch(`/api/jobs/${job._id}/status`, { status: newStatus });
+      console.log(res.data);
+      toast.success('Job status updated successfully', { duration: 1500 });
+    } catch (error) {
+      console.log(error);
+      toast.error('An error occurred', { duration: 1500 });
+    }
+  }
+
+
+
+
   return (
     <div
       className="relative w-full border border-gray-300 p-3 rounded-lg hover:shadow-md transition-all duration-200"
@@ -103,9 +126,8 @@ const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCar
             <Eye className="mr-2 h-4 w-4" />
             View
           </Button>
-          <Button variant="ghost" size="sm">
-            <Trash2 className="h-4 w-4 text-destructive" />
-          </Button>
+
+          <JobStatusChanger status={job.status} job={job}/>
         </div>
       </div>
 

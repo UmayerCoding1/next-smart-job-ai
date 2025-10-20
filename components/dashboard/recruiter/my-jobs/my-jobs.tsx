@@ -1,11 +1,13 @@
 "use client";
-import { Briefcase, FilePenLine, FolderOpenDot, Lock } from "lucide-react";
+import { Briefcase, FilePenLine, FolderOpenDot, Lock, Plus } from "lucide-react";
 import React from "react";
 import AllJobs from "./all-jobs";
 import OpenJobs from "./open-jobs";
 import ClosedJobs from "./closed-jobs";
 import DraftJobs from "./draft-jobs";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const MyJobPage = () => {
   const router = useRouter();
@@ -30,12 +32,21 @@ const MyJobPage = () => {
 
   return (
     <div className=" ">
-      <div className="mb-5 px-2">
+     <div className="flex items-center justify-between">
+       <div className="mb-5 px-2">
         <h1 className="text-4xl font-bold text-neutral-800">My Jobs</h1>
         <p className="text-muted-foreground">
           Manage and track all your job postings
         </p>
       </div>
+
+
+      <Link href={'post-job'} >
+       <Button className="cursor-pointer mr-2">
+        <Plus/> Create new job
+       </Button>
+      </Link>
+     </div>
 
       <div className="flex border-t border-neutral-300  ">
         <div className="w-[180px] border-r border-neutral-300 bg-neutral-50 transition-all duration-200 flex flex-col gap-2">

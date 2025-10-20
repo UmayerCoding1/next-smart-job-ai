@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/lib/db";
 import { Job } from "@/app/models/Job";
 import mongoose, { Types } from "mongoose";
 import '@/app/models/Company'
+
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -39,4 +40,19 @@ export async function GET(
       { status: 500 }
     );
   }
+}
+
+
+export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+ try {
+   await connectToDatabase();
+  const {id} = await context.params;
+  console.log(id);
+
+  return NextResponse.json({ message: "Job updated successfully", success: true }, { status: 200 });
+ } catch (error) {
+  console.log(error)
+  return NextResponse.json({ message: "Error", success: false,error }, { status: 500 });
+ }
+ 
 }
