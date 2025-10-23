@@ -76,7 +76,10 @@ const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCar
 
       {/* Card Content */}
       <div>
-        <p className="bg-neutral-900 text-white inline-block px-4  text-xs rounded-2xl">
+        <p className={cn(
+          "bg-neutral-900 text-white inline-block px-4  text-xs rounded-2xl",
+          job.status === "active" ? "bg-green-500" : job.status === "closed" ? "bg-red-500" : job.status === "paused" ? "bg-blue-500" : "bg-gray-500"
+        )}>
           {job.status}
         </p>
         <h2 className="text-lg font-bold text-foreground truncate">

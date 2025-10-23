@@ -160,7 +160,7 @@ export const Input = ({
         <div className="w-full h-full flex">
           <Select
         onValueChange={(value) => {
-          
+         
           handleChange({
             target: {
               name: handleInput.name,
@@ -178,14 +178,7 @@ export const Input = ({
               </SelectGroup>
             </SelectContent>
           </Select>
-{/* 
-          <CustomDropdown
-  name={handleInput.name}
-  value={formdata[handleInput.name] || ""}
-  options={options || []}
-  placeholder={`Select a ${handleInput.name}`}
-  onChange={handleChange}
-/> */}
+
         </div>
       ) : handleInput.type === 'date' ? <div className="w-full">  
         <CustomDatePicker

@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
       experienceLevel,
       dedline,
       category,
-      holidayPolicy,
       requirements,
       workTime,
       applicationsQuestions,
@@ -35,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     const auth = await withAuth(request, { allowedRoles: "recruiter" });
     if (!auth.ok) return auth.response;
-
+console.log(body);
     if (
       !title ||
       !description ||
@@ -51,7 +50,6 @@ export async function POST(request: NextRequest) {
       !requirements ||
       !dedline ||
       !category ||
-      !holidayPolicy ||
       !workTime ||
       !applicationsQuestions
     ) {
@@ -60,6 +58,10 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+
+    console.log(body);
+
 
     const existingCompany = await Company.findById(company);
 
@@ -83,7 +85,6 @@ export async function POST(request: NextRequest) {
       experience,
       dedline,
       category,
-      holidayPolicy,
       experienceLevel,
       requirements,
       workTime,

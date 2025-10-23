@@ -74,7 +74,7 @@ const JobStatusChanger = ({status,job}: {status: string,job:IJob | IDBDraftJobDa
                           item === 'Deleted' && 'bg-red-500 text-white',
                           item.toLowerCase() === status && 'bg-green-500 text-white'
                         )}
-                        onClick={() => changeJobStatus(item)}
+                        onClick={() => changeJobStatus(item.toLowerCase())}
                        >{item} {item.toLowerCase() === status && <Check className="ml-2 text-white"/>}</p>
                      </DropdownMenuItem>
                    ))}

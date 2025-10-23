@@ -1,7 +1,7 @@
 import { Job } from "@/app/models/Job";
 import { connectToDatabase } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-
+import {Types} from "mongoose";
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
@@ -13,6 +13,13 @@ export async function GET(request: NextRequest) {
     const limit = Number(searchParams.get("limit") || 20);
     // const companyId = searchParams.get("company");
 
+//  check if recruiterId is valid on mongodb objectId format
+       let recruiterObjectId: Types.ObjectId | undefined;
+    if (recruiterId && Types.ObjectId.isValid(recruiterId)) {
+      recruiterObjectId = new Types.ObjectId(recruiterId);
+    }
+
+    console.log(recruiterObjectId)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -35,7 +42,7 @@ export async function GET(request: NextRequest) {
       // open jobs
       case "Open":
         const openJobs = await Job.find({
-          reqruiter: recruiterId,
+          recruiter: recruiterObjectId,
           dedline: { $gte: today.toISOString() },
         })
           .populate({
@@ -54,7 +61,7 @@ export async function GET(request: NextRequest) {
       // closed jobs
       case "Closed":
         const closedJobs = await Job.find({
-          reqruiter: recruiterId,
+          recruiter: recruiterObjectId,
           dedline: { $lt: today.toISOString() },
         })
           .populate({
@@ -72,7 +79,7 @@ export async function GET(request: NextRequest) {
 
       default:
         const jobs = await Job.find({
-          reqruiter: recruiterId,
+          recruiter: recruiterObjectId,
         })
           .populate({
             path: "company",

@@ -13,20 +13,33 @@ import { RootState } from "@/app/redux/store";
 import { addDraftJobIDB } from "@/utils/indexedDB";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 
 const PostForm = () => {
   const user = useSelector((state: RootState) => state.authR.user);
   const router = useRouter();
   // ----------------- Submit Handler -----------------
-  const handleSubmit = (data: { [key: string]: string }) => {
+  const handleSubmit =async (data: { [key: string]: string }) => {
+    console.log(data)
     const jobData = formatJobData(data);
     const eventStatus = localStorage.getItem("eventStatus");
     if (eventStatus === "draft") {
       saveToDarft(jobData);
     } else if (eventStatus === "publish") {
       
-      console.log("Publish Data:", jobData);
+     try {
+      const response =await axios.post("/api/jobs", jobData);
+      if (response.data.success) {
+        console.log(response.data)
+        toast.success(response.data.message, { duration: 1500 });
+        // router.push('/dashboard/recruiter')
+      }
+      
+     } catch (error) {
+      console.log(error)
+      toast.error("Job failed to publish", { duration: 1500 });
+     }
     }
   };
 
@@ -50,6 +63,7 @@ const PostForm = () => {
 
   // ----------------- Formatter -----------------
   function formatJobData(jobData: { [key: string]: string }) {
+    
     const jobTypeArray = convertToArray(jobData.job_type, "text");
     const skillsArray = convertToArray(jobData.skills, "json");
     const educationArray = convertToArray(jobData.education, "json");
@@ -88,6 +102,7 @@ const PostForm = () => {
       isRemoteAvailable: jobData.isRemote === "true",
       applicationsQuestions: application_QuestionsArray || [],
       status: "draft",
+      
     };
 
     return data;
@@ -98,9 +113,15 @@ const PostForm = () => {
     if (!jsonData) return [];
     try {
       if (dataType === "json") {
-        return JSON.parse(jsonData);
+        const parsData = JSON.parse(jsonData);
+        
+        const lowarCaseData = parsData.map((item: string) => item.toLowerCase());
+        
+        return lowarCaseData;
       } else {
-        return jsonData.split(",").map((item) => item.trim()).filter(Boolean);
+        const lowarCaseData = jsonData.toLowerCase().split(",").map((item) => item.trim()).filter(Boolean);
+        
+        return lowarCaseData;
       }
     } catch (err) {
       console.error("Invalid array data:", jsonData, err);
@@ -188,7 +209,7 @@ const PostForm = () => {
               <Input handleInput={{type: "dynamic_add_list", name: 'requirements', required: true}} label /> 
               <Input handleInput={{type: "dynamic_add_list", name: 'skills', required: true}} label dynamic_add_list_style="row" /> 
               <Input handleInput={{type: "dynamic_add_list", name: 'education'}} label /> 
-              <Input handleInput={{type: "dynamic_add_list", name: 'responsibilities', required: true}} label /> 
+              
               
             </Column>
           </Section>
@@ -208,7 +229,7 @@ const PostForm = () => {
 
             <Row className="gap-5">
                <Input handleInput={{type: "redio_select",name: "shift",required: true,placeholder: "Select a deadline",}}label={true} options={['Day', 'Night', 'Flexible']}/>
-               <Input handleInput={{type: "redio_select",name: "work_location_type",required: true,placeholder: "Select a deadline",}}label={true} options={['On-site', 'Hybrid', 'Remote','Flexible']}/>
+               {/* <Input handleInput={{type: "redio_select",name: "work_location_type",required: true,placeholder: "Select a deadline",}}label={true} options={['On-site', 'Hybrid', 'Remote','Flexible']}/> */}
             </Row>
 
 
@@ -221,7 +242,7 @@ const PostForm = () => {
               </Column>
             </Row>
 
-             <Input handleInput={{type: "dynamic_add_list", name: 'holiday policy', required: true}} label /> 
+           
            </Column>
           </Section>
 
