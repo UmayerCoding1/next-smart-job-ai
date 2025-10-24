@@ -4,11 +4,10 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IDBDraftJobData } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { Check, DollarSign, Edit, Ellipsis, Eye, MapPin } from "lucide-react";
+import { DollarSign, Edit,  Eye, MapPin } from "lucide-react";
 import { Button } from "../ui/button";
 
-import { toast } from "sonner";
-import axios from "axios";
+
 import JobStatusChanger from "../dashboard/recruiter/my-jobs/Job-Status-Changer";
 
 type JobCardProps = {
@@ -37,17 +36,6 @@ const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCar
 
 
 
-
-  const handleChangeJobStatus = async (newStatus: string) => {
-    try {
-      const res = await axios.patch(`/api/jobs/${job._id}/status`, { status: newStatus });
-      console.log(res.data);
-      toast.success('Job status updated successfully', { duration: 1500 });
-    } catch (error) {
-      console.log(error);
-      toast.error('An error occurred', { duration: 1500 });
-    }
-  }
 
 
 

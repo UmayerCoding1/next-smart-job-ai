@@ -14,7 +14,6 @@ export const RedioMultiSelectCheckbox = ({
   value,
   options,
   onChange,
-  required,
 }: RedioMultiSelectProps) => {
   const toggleValue = (option: string) => {
     const newValues = value.includes(option)

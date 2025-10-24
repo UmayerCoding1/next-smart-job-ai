@@ -14,7 +14,7 @@ export interface IApply {
   expectedSalary: number;
   coverLetter: string;
   jobRelatedQuestions?: {
-    question: string;
+    questionNumber: string | number;
     answer: string;
   }[];
   interviewDate?: Date;
@@ -34,7 +34,7 @@ export const application = new Schema<IApply>({
   phone: { type: String, required: true },
   jobRelatedQuestions: [
     {
-      question: { type: String, required: true },
+      questionNumber: { type: String || Number, required: true },
       answer: { type: String, required: true },
     },
   ],

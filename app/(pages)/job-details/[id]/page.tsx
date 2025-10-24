@@ -27,7 +27,7 @@ export const generateMetadata = async ({
 const BASE_URL = "https://next-smart-job-ai.vercel.app";
 
 const getJob = async (jobId: string) => {
-  const res = await fetch(`${BASE_URL}/api/jobs/${jobId}`);
+  const res = await fetch(`${BASE_URL}/api/jobs/${jobId}`, { cache: "force-cache" });
   const data = await res.json();
 
   return data.job;

@@ -5,9 +5,6 @@ import { IUser } from "@/app/models/User";
 import React, { useEffect, useState } from "react";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
-import { Textarea } from "../../ui/textarea";
-import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
-import { Checkbox } from "../../ui/checkbox";
 import Link from "next/link";
 import { Upload } from "lucide-react";
 import PrimaryButton from "../../button/PrimaryButton";
@@ -40,7 +37,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
     expectedSalary: "",
     resumeUploaded: false,
     coverLetter: "",
-    jobRelatedQuestions: [] as { question: string; answer: string }[],
+    jobRelatedQuestions: [] as { questionNumber: string | number; answer: string }[],
   });
 
   const handleGetResume = async (pdfdata: {
@@ -56,7 +53,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
         tags: ["document", "pdf"],
       });
 
-      console.log("result", result);
+      
       if (result.url) {
         pdfdata.url = result.url;
         pdfdata.name = pdfdata.file.name;
@@ -82,7 +79,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const updated = { ...formFields, [name]: value };
-    console.log(updated);
+   
     setFormFields(updated);
     calculateScore(updated);
   };
@@ -90,20 +87,20 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
   const handleDynamicChange = (
     index: number,
     value: string | boolean,
-    label: string
+    // label: string
   ) => {
     const updatedAnswers = [...formFields.jobRelatedQuestions];
 
     // If the index already exists, update the answer
     if (updatedAnswers[index]) {
       updatedAnswers[index] = {
-        question: label,
+        questionNumber: index + 1,
         answer: value.toString(), // Store as string to match your schema
       };
     } else {
       // If it's a new index, push a new object
       updatedAnswers.push({
-        question: label,
+        questionNumber: index + 1,
         answer: value.toString(),
       });
     }
@@ -113,7 +110,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
       jobRelatedQuestions: updatedAnswers,
     };
 
-    console.log(updated);
+  
     setFormFields(updated);
   };
 
@@ -156,11 +153,10 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
         toast.error("Something went wrong", { duration: 1500 });
       }
 
-      console.error(error);
+     ;
     }
 
-    console.log("Form data:", applydata);
-    // console.log(formFields)
+
   };
 
  useEffect(() => {
@@ -304,79 +300,31 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
       )}
 
       {job?.applicationsQuestions?.map((question, index) => {
+        
         const filedName = `question-${index}`;
         return (
           <div key={index} className="sh">
             <Label htmlFor="name">
-              {index + 1} : {question?.question}
+              {index + 1} : {question}
             </Label>
 
-            {question?.answerType === "textarea" ? (
-              <Textarea
-                placeholder="Type your message here."
-                onChange={(e) =>
-                  handleDynamicChange(index, e.target.value, question?.question)
-                }
-                name={filedName}
-                className="h-24 resize-none mt-2"
-                required
-              />
-            ) : question?.answerType === "radio" ? (
-              <RadioGroup
-                defaultValue=""
-                name={filedName}
-                required
-                onValueChange={(value) =>
-                  handleDynamicChange(index, value, question?.question)
-                }
-              >
-                <div className="flex items-center gap-3 mt-2">
-                  <RadioGroupItem value="yes" id={`r1-${index}`} />
-                  <Label htmlFor={`r1-${index}`}>Yes</Label>
-                </div>
-                <div className="flex items-center gap-3">
-                  <RadioGroupItem value="no" id={`r2-${index}`} />
-                  <Label htmlFor={`r2-${index}`}>No</Label>
-                </div>
-              </RadioGroup>
-            ) : question?.answerType === "checkbox" ? (
-              <div className="flex items-start gap-3 mt-2">
-                <Checkbox
-                  id={`terms-${index}`}
-                  name={filedName}
-                  required
-                  onCheckedChange={(checked) =>
-                    handleDynamicChange(
-                      index,
-                      checked ? "yes" : "no",
-                      question?.question
-                    )
-                  }
-                />
-                <div className="grid gap-2">
-                  <Label htmlFor={`terms-${index}`}>
-                    Accept terms and conditions
-                  </Label>
-                </div>
-              </div>
-            ) : (
               <div>
                 <Input
                   name={filedName}
-                  type={question?.answerType}
+                  type={'text'}
                   placeholder=""
-                  required={question?.required}
+                  required={true}
                   onChange={(e) =>
                     handleDynamicChange(
                       index,
                       e.target.value,
-                      question?.question
+                     
                     )
                   }
                   className="h-14"
                 />
               </div>
-            )}
+            
           </div>
         );
       })}

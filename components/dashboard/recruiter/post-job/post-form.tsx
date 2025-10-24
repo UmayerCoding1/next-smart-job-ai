@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import {v4 as uuidV4} from "uuid"
-import { Eye, Save, Send } from "lucide-react";
+import {  Save, Send } from "lucide-react";
 import React from "react";
 import { IDBDraftJobData } from "@/lib/types";
 import { useSelector } from "react-redux";

@@ -2,7 +2,6 @@
 
 import { IJob } from "@/app/models/Job";
 import JobCard from "@/components/shared/job-card";
-import { Button } from "@/components/ui/button";
 import useMyJobs from "@/hooks/useMyJobs";
 import { IDBDraftJobData } from "@/lib/types";
 import { getAllDraftJobIDB } from "@/utils/indexedDB";

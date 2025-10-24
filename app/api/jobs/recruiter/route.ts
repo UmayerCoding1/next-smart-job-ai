@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       recruiterObjectId = new Types.ObjectId(recruiterId);
     }
 
-    console.log(recruiterObjectId)
+  
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 

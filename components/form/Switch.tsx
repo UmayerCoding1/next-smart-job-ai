@@ -37,7 +37,7 @@ onChange,
         }
 
         toggleSwitch();
-     },[enabled])
+     },[enabled, onChange, name]);
   return (
     <button
       type="button"

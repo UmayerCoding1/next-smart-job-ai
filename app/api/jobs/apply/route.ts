@@ -61,17 +61,17 @@ console.log(body);
       );
     }
 
-    // const existingApply = await Application.findOne({
-    //   job: job,
-    //   applicant: applicant,
-    // });
+    const existingApply = await Application.findOne({
+      job: job,
+      applicant: applicant,
+    });
 
-    // if (existingApply) {
-    //   return NextResponse.json(
-    //     { message: "You have already applied for this job", success: false },
-    //     { status: 400 }
-    //   );
-    // }
+    if (existingApply) {
+      return NextResponse.json(
+        { message: "You have already applied for this job", success: false },
+        { status: 400 }
+      );
+    }
 
     const newApply = await Application.create({
       job,
@@ -106,10 +106,13 @@ console.log(body);
       await applicantUser.save({ validateBeforeSave: false });
     }
 
-    return NextResponse.json(
+     NextResponse.json(
       { message: "Job applied successfully", success: true },
       { status: 200 }
     );
+
+    // AI integration here to check to match the resume with the job description
+    
   } catch (error) {
     console.log("job apply error", error);
     return NextResponse.json(
