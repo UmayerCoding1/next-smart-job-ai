@@ -1,7 +1,7 @@
 import { Job } from "@/app/models/Job";
 import { connectToDatabase } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-import {Types} from "mongoose";
+import { Types } from "mongoose";
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
@@ -13,13 +13,12 @@ export async function GET(request: NextRequest) {
     const limit = Number(searchParams.get("limit") || 20);
     // const companyId = searchParams.get("company");
 
-//  check if recruiterId is valid on mongodb objectId format
-       let recruiterObjectId: Types.ObjectId | undefined;
+    //  check if recruiterId is valid on mongodb objectId format
+    let recruiterObjectId: Types.ObjectId | undefined;
     if (recruiterId && Types.ObjectId.isValid(recruiterId)) {
       recruiterObjectId = new Types.ObjectId(recruiterId);
     }
 
-  
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -71,7 +70,17 @@ export async function GET(request: NextRequest) {
           .skip((page - 1) * limit)
           .limit(limit)
           .lean();
-        console.log(closedJobs.length);
+
+        (async () => {
+          {
+            const jobIds = closedJobs.map((job) => job._id);
+            await Job.updateMany(
+              { _id: { $in: jobIds } },
+              { $set: { status: "closed" } }
+            );
+          }
+        })();
+
         return NextResponse.json(
           { jobs: closedJobs, success: true },
           { status: 200 }

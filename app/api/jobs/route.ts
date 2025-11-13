@@ -6,8 +6,7 @@ import { withAuth } from "@/lib/withAuth";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose, { FilterQuery } from "mongoose";
 
-// shift,vacancies,isRemoteAvailable
-
+// Define the POST method to create a new job posting
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
@@ -109,6 +108,7 @@ console.log(body);
   }
 }
 
+// Define the GET method to retrieve job postings
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
@@ -122,7 +122,9 @@ export async function GET(request: NextRequest) {
     
     const filterString = searchParams.getAll("filter");
     console.log("filterString", filterString);
-    const filter: FilterQuery<IJob> = {};
+    const filter: FilterQuery<IJob> = {
+      status:'active'
+    };
     if (
       filterString &&
       filterString.length > 0 &&
@@ -176,6 +178,9 @@ export async function GET(request: NextRequest) {
     }
 
     const jobs = await Job.find(filter).populate("company");
+
+
+     
 
     return NextResponse.json({ jobs, success: true }, { status: 200 });
   } catch (error) {
