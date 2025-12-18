@@ -30,7 +30,7 @@ useEffect(() => {
    handleGetAllDraftJobIDB();
   }, [tab]);
 
-  // const draftJobs = getAllDraftJobIDB();
+
   if (isLoading) {
     return <div className="w-full h-full flex items-center justify-center">
       <Loader2 size={26} className="animate-spin"/>

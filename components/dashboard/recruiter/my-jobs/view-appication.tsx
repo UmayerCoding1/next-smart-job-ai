@@ -1,3 +1,4 @@
+import Loading from "@/components/shared/loading";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -38,6 +39,7 @@ interface IApply {
     question: string;
     answer: string;
   }[];
+  matchScore: number;
   interviewDate?: Date;
   isRead?: boolean;
   createdAt?: Date;
@@ -54,12 +56,14 @@ const ViewAppication = ({
       const res = await axios.get(
         `/api/jobs/appications/${selectedJobAppilications.id}`
       );
-      console.log(res.data.appications);
+     
       return res.data.appications;
     },
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className="bg-black/50 w-full h-screen flex items-center justify-center">
+    <Loading color="white"/>
+  </div>;
   return (
     <div className="w-[600px]  bg-white px-5  pb-5 rounded-lg ">
       <div className="flex  justify-between py-4 mb-2 border-b border-neutral-300">
@@ -125,11 +129,11 @@ const ViewAppication = ({
                 <div className="bg-emerald-400/30 px-4 py-1 text-neutral-700 flex items-center justify-center text-sm  font-medium rounded-full">
                   {appication.status}
                 </div>
-                <Button>View Application</Button>
+                <Button className="cursor-pointer hover:bg-neutral-700">View Application</Button>
               </div>
 
               <span className=" bg-blue-500 w-10 h-10 absolute top-0 left-0 rounded-full flex items-center justify-center text-sm text-white font-medium">
-                80%
+                {appication.matchScore.toFixed(0)}%
               </span>
             </div>
           ))

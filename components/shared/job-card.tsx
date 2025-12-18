@@ -9,6 +9,8 @@ import { Button } from "../ui/button";
 
 
 import JobStatusChanger from "../dashboard/recruiter/my-jobs/Job-Status-Changer";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type JobCardProps = {
   job: IJob | IDBDraftJobData;
@@ -20,6 +22,7 @@ setSelectedJobApplications?: React.Dispatch<
 
 const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCardProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
+  const router = useRouter();
   
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -113,9 +116,9 @@ const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCar
             <Edit className="mr-2 h-4 w-4" />
             Edit
           </Button>
-          <Button variant="outline" size="sm" className="flex-1 bg-transparent">
-            <Eye className="mr-2 h-4 w-4" />
-            View
+          <Button  variant="outline" size="sm" className="flex-1 bg-transparent">
+            <Link href={`job-details/${job._id}?title=${job.title}`} className="flex items-center gap-1.5"><Eye className="mr-2 h-4 w-4" />
+            View</Link>
           </Button>
 
           <JobStatusChanger status={job.status} job={job}/>

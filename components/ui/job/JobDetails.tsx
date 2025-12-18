@@ -4,9 +4,8 @@ import { IJob } from "@/app/models/Job";
 import PrimaryButton from "@/components/button/PrimaryButton";
 import SaveButton from "@/components/button/SaveButton";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, SquareArrowLeft } from "lucide-react";
 import mongoose from "mongoose";
-
 
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +13,7 @@ import React from "react";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
+import { usePathname } from "next/navigation";
 // import SimilarJob from "./SimilarJob";
 
 const book = "/assets/book-glass.jpg";
@@ -22,6 +22,9 @@ const BgImage = "/assets/jods-details-header.jpg";
 
 const JobDetails = ({ job }: { job: IJob }) => {
   const user = useSelector((state: RootState) => state.authR.user);
+  const pathname = usePathname();
+  const isDashboardRecruiter = pathname.includes("dashboard/recruiter");
+
   if (!job) return <div>Job not found</div>;
   const {
     title,
@@ -40,11 +43,10 @@ const JobDetails = ({ job }: { job: IJob }) => {
     workTime,
     isRemoteAvailable,
     shift,
-    appliedjobs
+    appliedjobs,
   } = job;
-console.log(job);
 
-const  company = job.company;
+  const company = job.company;
   const logoSrc =
     typeof company === "object" && "logo" in company && company.logo
       ? company.logo
@@ -71,17 +73,25 @@ const  company = job.company;
     "Retail",
     "Technology",
     "Energy",
-    
   ];
 
-
   const handleApply = () => {
-     sessionStorage.setItem("appliedAt", new Date().toISOString());
-  }
+    sessionStorage.setItem("appliedAt", new Date().toISOString());
+  };
 
- 
   return (
     <div className="relative">
+      {/* a back icon to use only recruiter  */}
+      {isDashboardRecruiter && (
+        <div
+          onClick={() => {
+            window.history.back();
+          }}
+          className="absolute z-10 bg-white w-10 h-10 rounded-full flex items-center justify-center cursor-pointer"
+        >
+          <SquareArrowLeft size={14} />
+        </div>
+      )}
       <div className="relative">
         <Image
           src={BgImage}
@@ -144,50 +154,44 @@ const  company = job.company;
             </p>
           </div>
 
-          <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-5">
-            <SaveButton
-              jobId={(job!._id as mongoose.Types.ObjectId).toString()}
-            />
+          {!isDashboardRecruiter && user?.role !== "recruiter" && (
+            <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-5">
+              <SaveButton
+                jobId={(job!._id as mongoose.Types.ObjectId).toString()}
+              />
 
-{appliedjobs && user?._id  ? (
-  appliedjobs.map(id => id.toString()).includes(user?._id.toString()) ? (
-    // user has applied — show something
-    <div>Already Applied</div>
-  ) : (
-   
-   <Link
-              href={
-                user
-                  ? `${
-                      job!._id
-                    }/apply?title=${job.title}`
-                  : "/login"
-              }
-              onClick={handleApply}
-              className="w-full lg:w-40"
-            >
-              <PrimaryButton className="w-full lg:w-40 h-9">
-                Apply
-              </PrimaryButton>
-            </Link>
-  )
-) :    <Link
-              href={
-                user
-                  ? `${
-                      job!._id
-                    }/apply`
-                  : "/login"
-              }
-              onClick={handleApply}
-              className="w-full lg:w-40"
-            >
-              <PrimaryButton className="w-full lg:w-40 h-9">
-                Apply
-              </PrimaryButton>
-            </Link>}
-            
-          </div>
+              {appliedjobs && user?._id ? (
+                appliedjobs
+                  .map((id) => id.toString())
+                  .includes(user?._id.toString()) ? (
+                  // user has applied — show something
+                  <div>Already Applied</div>
+                ) : (
+                  <Link
+                    href={
+                      user ? `${job!._id}/apply?title=${job.title}` : "/login"
+                    }
+                    onClick={handleApply}
+                    className="w-full lg:w-40"
+                  >
+                    <PrimaryButton className="w-full lg:w-40 h-9">
+                      Apply
+                    </PrimaryButton>
+                  </Link>
+                )
+              ) : (
+                <Link
+                  href={user ? `${job!._id}/apply` : "/login"}
+                  onClick={handleApply}
+                  className="w-full lg:w-40"
+                >
+                  <PrimaryButton className="w-full lg:w-40 h-9">
+                    Apply
+                  </PrimaryButton>
+                </Link>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="mt-10 lg:flex gap-5  ">
@@ -302,7 +306,7 @@ const  company = job.company;
               </div>
             </div>
 
-             <div className="bg-gray-50 p-3 mt-4">
+            <div className="bg-gray-50 p-3 mt-4">
               <h2 className="text-2xl font-semibold">About Company</h2>
 
               <div className="mt-10">
