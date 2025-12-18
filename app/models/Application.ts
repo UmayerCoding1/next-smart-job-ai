@@ -17,6 +17,7 @@ export interface IApply {
     questionNumber: string | number;
     answer: string;
   }[];
+  matchScore: number;
   interviewDate?: Date;
   isRead?: boolean;
   createdAt?: Date;
@@ -38,17 +39,20 @@ export const application = new Schema<IApply>({
       answer: { type: String, required: true },
     },
   ],
-  coverLetter: { type: String , required: true },
+  coverLetter: { type: String, required: true },
   isRead: { type: Boolean, default: false },
   interviewDate: { type: Date },
+  matchScore: {
+    type: Number,
+    default: 0,
+  },
   status: {
     type: String,
-    enum: [ 'new',"pending", "reviewed", "interview", "rejected", "accepted"],
+    enum: ["new", "pending", "reviewed", "interview", "rejected", "accepted"],
     default: "new",
   },
   appliedAt: { type: Date, default: Date.now },
 });
 
-
-export const Application = models.Application || model<IApply>("Application", application);
-
+export const Application =
+  models.Application || model<IApply>("Application", application);

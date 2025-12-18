@@ -2,6 +2,8 @@ import { Application, IApply } from "@/app/models/Application";
 import { Job } from "@/app/models/Job";
 import { User } from "@/app/models/User";
 import { connectToDatabase } from "@/lib/db";
+import { resumeToText } from "@/service/getPdfData";
+import { savePdfToFile } from "@/service/savePDfToFile";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -18,14 +20,13 @@ export async function POST(request: NextRequest) {
       job,
       coverLetter,
     }: IApply = body;
-console.log(body);
+
     if (
       !name ||
       !email ||
       !applicant ||
       !resumeLink ||
       !expectedSalary ||
-      
       !phone ||
       !job ||
       !coverLetter
@@ -84,6 +85,7 @@ console.log(body);
       jobRelatedQuestions: body.jobRelatedQuestions || [],
       coverLetter,
       expectedSalary,
+      matchScore: 0,
     });
 
     if (applyedJob.appliedjobs.includes(newApply.applicant)) {
@@ -106,18 +108,51 @@ console.log(body);
       await applicantUser.save({ validateBeforeSave: false });
     }
 
-     NextResponse.json(
+    // AI integration here to check to match the resume with the job description
+
+    try {
+      const matchScore = await getMatchScore(
+        resumeLink,
+        newApply.job.toString()
+      );
+
+      console.log("score type", typeof matchScore);
+      // important: allow 0 score
+      if (matchScore !== undefined && matchScore !== null) {
+        // const updatedApply = await Application.findById(newApply._id);
+        newApply.matchScore = matchScore;
+        await newApply.save();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return NextResponse.json(
       { message: "Job applied successfully", success: true },
       { status: 200 }
     );
-
-    // AI integration here to check to match the resume with the job description
-    
   } catch (error) {
     console.log("job apply error", error);
     return NextResponse.json(
       { message: "Job apply error", success: false },
       { status: 500 }
     );
+  }
+}
+
+export async function getMatchScore(resumeLink: string, jobId: string) {
+  try {
+    if (!resumeLink) return 0;
+    const pdf = await savePdfToFile(resumeLink);
+    if (!pdf) {
+      return 0;
+    }
+
+    const pdfData = await resumeToText(pdf, jobId);
+
+    if (!pdfData) return 0;
+
+    return pdfData;
+  } catch (error) {
+    console.log(error);
   }
 }

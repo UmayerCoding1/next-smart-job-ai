@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
@@ -43,8 +44,10 @@
     "lucide-react": "^0.525.0",
     "mongoose": "^8.16.4",
     "motion": "^12.23.7",
-    "next": "15.4.3",
+    "next": "^15.4.10",
     "nodemailer": "^7.0.5",
+    "openai": "^6.9.1",
+    "pdf-parse": "^2.4.5",
     "react": "19.1.0",
     "react-countup": "^6.5.3",
     "react-datepicker": "^8.7.0",
@@ -56,6 +59,7 @@
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1",
     "tailwind-scrollbar-hide": "^4.0.0",
+    "unpdf": "^1.4.0",
     "uuid": "^13.0.0",
     "zod": "^4.0.8"
   },

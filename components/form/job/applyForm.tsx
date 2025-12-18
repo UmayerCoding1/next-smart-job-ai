@@ -145,6 +145,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
         toast.success(res.data.message, { duration: 1500 });
       }
     } catch (error: unknown) {
+      console.log(error)
       if (isAxiosError(error)) {
         toast.error(error.response?.data?.message || "Something went wrong", {
           duration: 1500,
