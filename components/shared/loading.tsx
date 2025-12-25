@@ -9,9 +9,9 @@ const Loading = ({
 }: {
   className?: string;
   size?: string | number;
-  color?: 'black' | 'white';
+  color?: 'black' | 'white' | 'gray';
 }) => {
-    const loderColor = `text-${color}`
+    const loderColor = color === 'gray' ? 'text-neutral-400' : `text-${color}`;
   return (
     <div>
       <Loader2 className={cn(className, "animate-spin ", loderColor )} size={size} />

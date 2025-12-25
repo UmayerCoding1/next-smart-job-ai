@@ -74,6 +74,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    
+
+    
+
     const newApply = await Application.create({
       job,
       name,
@@ -86,7 +90,10 @@ export async function POST(request: NextRequest) {
       coverLetter,
       expectedSalary,
       matchScore: 0,
+      recruiter: applyedJob.recruiter
     });
+
+
 
     if (applyedJob.appliedjobs.includes(newApply.applicant)) {
       return NextResponse.json(

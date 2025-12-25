@@ -17,7 +17,7 @@ export const withAuth = async (
   { ok: true; userId: mongoose.Types.ObjectId | string} | { ok: false; response: NextResponse }
 > => {
   const token = (await cookies()).get("token")?.value as unknown as string;
-
+   
   if (!token) {
     return {
       ok: false,
@@ -42,7 +42,7 @@ export const withAuth = async (
   const user = await User.findById(veriFyToken.id);
 
 
-   console.log("Token verified", veriFyToken);
+   
   if (options.allowedRoles !== user.role) {
     return {
       ok: false,

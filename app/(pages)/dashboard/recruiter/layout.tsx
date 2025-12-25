@@ -19,8 +19,7 @@ export default function DashboardLayout({
 }) {
      
   return (
-    <html lang="en">
-      <body >
+   
         <div className="flex max-h-screen overflow-hidden ">
           <header>
            <RecruiterSildbar/>
@@ -36,7 +35,6 @@ export default function DashboardLayout({
             </div>
           </div>
         </div>
-      </body>
-    </html>
+     
   );
 }

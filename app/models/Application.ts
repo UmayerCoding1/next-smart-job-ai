@@ -3,6 +3,7 @@ import mongoose, { Schema, model, models } from "mongoose";
 export interface IApply {
   _id?: mongoose.Types.ObjectId;
   job: mongoose.Types.ObjectId;
+  recruiter: mongoose.Types.ObjectId;
   name: string;
   email: string;
   applicant: mongoose.Types.ObjectId;
@@ -28,6 +29,7 @@ export const application = new Schema<IApply>({
   name: { type: String, required: true },
   email: { type: String, required: true },
   job: { type: Schema.Types.ObjectId, ref: "Job", required: true },
+  recruiter: {type: Schema.Types.ObjectId, ref: "User", required: true},
   applicant: { type: Schema.Types.ObjectId, ref: "User", required: true },
   resumeLink: { type: String, required: true },
   expectedSalary: { type: Number, required: true },

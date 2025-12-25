@@ -26,7 +26,7 @@ const RecruiterSildbar = () => {
     },
     {
       name: "Applications",
-      url: "/dashboard/recruiter/applied-jobs",
+      url: "/dashboard/recruiter/applications",
       icon: BriefcaseBusiness,
     },
     {
