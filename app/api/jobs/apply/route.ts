@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
       job,
       coverLetter,
     }: IApply = body;
+console.log(body)
 
     if (
       !name ||
@@ -76,7 +77,7 @@ export async function POST(request: NextRequest) {
 
     
 
-    
+   
 
     const newApply = await Application.create({
       job,
@@ -94,7 +95,7 @@ export async function POST(request: NextRequest) {
     });
 
 
-
+console.log(newApply);
     if (applyedJob.appliedjobs.includes(newApply.applicant)) {
       return NextResponse.json(
         { message: "You have already applied for this job33", success: false },

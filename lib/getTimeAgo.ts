@@ -1,4 +1,5 @@
 export const getTimeAgo = (time: Date | string): string => {
+  console.log(time)
   const now = new Date();
   const applicationTime = new Date(time);
 

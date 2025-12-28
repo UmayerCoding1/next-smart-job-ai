@@ -103,7 +103,7 @@ const ApplyPage = ({id} : {id: string}) => {
   };
 
 
-  console.log(user)
+ 
   return (
     <div onMouseMove={handleUrlSessionIsValid} className="bg-gray-50">
       <div className="w-full h-[300px] bg-black flex items-center justify-evenly text-white">

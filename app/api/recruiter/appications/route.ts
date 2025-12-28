@@ -15,7 +15,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     const query = new URL(req.url).searchParams;
     const searchQuery = query.get("search") || "";
 
-    const applications = await Application.find({recruiter: verifiedUser.userId,}).populate({path: "job", select: "title category dedline"}).populate({path: "applicant", select: "fullname  avatar"}); 
+    const applications = await Application.find({recruiter: verifiedUser.userId,}).populate({path: "job", select: "title category dedline createdAt"}).populate({path: "applicant", select: "fullname  avatar"}); 
 
     if (!applications) {
       return NextResponse.json(

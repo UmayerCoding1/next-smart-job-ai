@@ -37,7 +37,7 @@ const ApplicationListing = ({ searchQuery }: { searchQuery: string }) => {
       )}
 
       {isOpenApplicationDetais && (
-        <div className="fixed inset-0 w-full h-screen bg-black/50 z-10 flex items-center justify-center">
+        <div onClick={() => setIsOpenApplicationDetais(false)} className="fixed inset-0 w-full h-screen bg-black/50 z-10 flex items-center justify-center">
             <ApplicationDetails isOpenApplicationDetais setIsOpenApplicationDetais={setIsOpenApplicationDetais} applicationData={application}/>
         </div>
       )}

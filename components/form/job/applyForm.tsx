@@ -37,7 +37,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
     expectedSalary: "",
     resumeUploaded: false,
     coverLetter: "",
-    jobRelatedQuestions: [] as { questionNumber: string | number; answer: string }[],
+    jobRelatedQuestions: [] as { question: string; questionNumber: string | number; answer: string }[],
   });
 
   const handleGetResume = async (pdfdata: {
@@ -86,6 +86,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
 
   const handleDynamicChange = (
     index: number,
+    question: string,
     value: string | boolean,
     // label: string
   ) => {
@@ -94,12 +95,14 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
     // If the index already exists, update the answer
     if (updatedAnswers[index]) {
       updatedAnswers[index] = {
+        question,
         questionNumber: index + 1,
         answer: value.toString(), // Store as string to match your schema
       };
     } else {
       // If it's a new index, push a new object
       updatedAnswers.push({
+        question,
         questionNumber: index + 1,
         answer: value.toString(),
       });
@@ -139,6 +142,7 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
       applicant: user?._id,
     };
 
+    // console.log(applydata)
     try {
       const res = await axios.post("/api/jobs/apply", applydata);
       if (res.data.success) {
@@ -317,7 +321,8 @@ const ApplyForm = ({ user, job, setScore }: ApplyFormProps) => {
                   required={true}
                   onChange={(e) =>
                     handleDynamicChange(
-                      index,
+                     index,
+                      question,
                       e.target.value,
                      
                     )

@@ -15,6 +15,7 @@ export interface IApply {
   expectedSalary: number;
   coverLetter: string;
   jobRelatedQuestions?: {
+    question: string;
     questionNumber: string | number;
     answer: string;
   }[];
@@ -23,6 +24,7 @@ export interface IApply {
   isRead?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
+
 }
 
 export const application = new Schema<IApply>({
@@ -37,13 +39,17 @@ export const application = new Schema<IApply>({
   phone: { type: String, required: true },
   jobRelatedQuestions: [
     {
+      question: { type: String, required: true },
       questionNumber: { type: String || Number, required: true },
       answer: { type: String, required: true },
     },
   ],
   coverLetter: { type: String, required: true },
   isRead: { type: Boolean, default: false },
-  interviewDate: { type: Date },
+  interviewDate: { 
+    time: String,
+    date: String,
+   },
   matchScore: {
     type: Number,
     default: 0,

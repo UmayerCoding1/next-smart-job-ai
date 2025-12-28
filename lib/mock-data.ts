@@ -8,6 +8,7 @@ interface JOB {
  category: string
  dedline: string
  title: string
+ createdAt: string
  _id: string
 }
 
@@ -17,6 +18,11 @@ interface Applicant {
   _id: string
 }
 
+interface JobRelatedQuestions {
+  question: string
+  questionNumber: string | number
+  answer: string
+}
 
 
  export interface Application  {
@@ -28,7 +34,7 @@ interface Applicant {
   status: string
   _id: string
   matchScore: number
-  jobRelatedQuestions: { questionNumber: string | number; answer: string }[]
+  jobRelatedQuestions: JobRelatedQuestions[]
   job: JOB
   isRead: boolean
   expectedSalary: number
@@ -36,6 +42,7 @@ interface Applicant {
   countryCode?: string
   appliedAt: Date
   applicant: Applicant
+  interviewDate?: Date
 }
 
 
