@@ -43,7 +43,7 @@ const ApplicationControls = () => {
           <Input
             type="search"
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by name, email, or job title"
+            placeholder="Search by name, email"
             className="pl-9"
           />
         </div>

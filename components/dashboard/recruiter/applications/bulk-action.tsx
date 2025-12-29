@@ -9,33 +9,70 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Calendar,
   CircleCheck,
   CircleX,
 
   Trash2,
 } from "lucide-react";
-import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
+import axios from 'axios';
+
+type BulkActionType = 'read' | 'reject' | 'delete';
 
 const BulkAction = () => {
-      const bulkActionLable: { title: string; Icon: React.ElementType }[] = [
+      const bulkActionLable: { title: string; Icon: React.ElementType,action: BulkActionType }[] = [
     {
       title: "Mark as Reviewed",
       Icon: CircleCheck,
-    },
-    {
-      title: "Sehedule Interview",
-      Icon: Calendar,
+      action:'read'
     },
     {
       title: "Reject all",
       Icon: CircleX,
+      action:'reject'
     },
     {
       title: "Delete all",
       Icon: Trash2,
+      action:'delete'
     },
   ];
+
+
+
+  const helperFunction = async(action: BulkActionType) => {
+  if (action === 'read') return await applicationsMarkAsReviewed();
+  if (action === 'reject') return await applicationsReject();
+  if (action === 'delete') return await applicationsDelete();
+};
+
+
+
+  const applicationsMarkAsReviewed = async () =>{
+    try {
+      const response =await axios.put('/api/recruiter/appications/reviewed');
+      if(response.data.success) toast.success(response.data.message, { duration: 1500 });
+    } catch (error) {
+      console.log(error)
+      toast.error("An error occurred", { duration: 1500 });
+    }
+  };
+
+
+  const applicationsReject =async () =>{
+   try {
+      const response =await axios.put('/api/recruiter/appications/reject');
+      if(response.data.success) toast.success(response.data.message, { duration: 1500 });
+    } catch (error) {
+      console.log(error)
+      toast.error("An error occurred", { duration: 1500 });
+    }
+  };
+  const applicationsDelete = () =>{
+    console.log('delete')
+  };
+
+
     return (
         <div>
             <DropdownMenu>
@@ -52,24 +89,12 @@ const BulkAction = () => {
               <DropdownMenuGroup>
                 {bulkActionLable.map((item, index) => (
                   <DropdownMenuItem
-                    className={`flex items-center gap-2  ${
-                      item.title === "Reject all" &&
-                      "text-red-500 hover:text-red-500"
-                    } ${
-                      item.title === "Delete all" &&
-                      "text-red-500 hover:text-red-500"
-                    }`}
+                    onClick={() => helperFunction(item.action )}
+                    className={`flex items-center gap-2 `}
                     key={index}
                   >
-                    <item.Icon
-                      className={cn(
-                        item.title === "Reject all" ||
-                          item.title === "Delete all"
-                          ? "text-red-500"
-                          : ""
-                      )}
-                    />
-                    <span className="hover:text-red-500">{item.title}</span>
+                    <item.Icon/>
+                    <span >{item.title}</span>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuGroup>

@@ -60,6 +60,9 @@ const Details = ({ appication }: { appication: Application | null }) => {
                 <p className="text-sm font-semibold text-neutral-500 tracking-tight">
                     {getTimeAgo(appication?.appliedAt || "")}
                 </p>
+                <p className="text-sm font-semibold text-neutral-500 tracking-tight">
+                    Expected Salary: <span className="text-black">{appication?.expectedSalary}$</span>
+                </p>
             </div>
 
             <div className="bg-white p-2 rounded-md">

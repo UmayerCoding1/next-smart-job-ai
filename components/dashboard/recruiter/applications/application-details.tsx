@@ -17,6 +17,7 @@ const ApplicationDetails = ({
   setIsOpenApplicationDetais,
   applicationData,
 }: Props) => {
+  console.log(applicationData)
   return (
     <div
       onClick={(e) => {
@@ -31,7 +32,16 @@ const ApplicationDetails = ({
       <Details appication={applicationData} />
 
       <div className="w-[300px] p-4 mt-10">
+        <div className="my-4">
+          <h2 className="text-xl font-semibold tracking-tight ">{applicationData?.job.title}</h2>
+          <p className="text-sm text-neutral-500 tracking-tight font-medium">{applicationData?.job.category}</p>
+          <div>
+             <p className="text-sm text-neutral-500 tracking-tight">Salary Range : <span className="text-lg text-black font-medium"> {applicationData?.job.salaryrange.min}$-{applicationData?.job.salaryrange.max}$ </span> <span>{!applicationData?.job.salaryrange.negotiable && '(Negotiable)'}</span></p>
+          </div>
+        </div>
+
         <Actions application={applicationData} />
+        
       </div>
     </div>
   );

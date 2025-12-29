@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import {  Bookmark, BriefcaseBusiness, Command, LayoutDashboard, Sparkles, SquarePlus } from "lucide-react";
+import {  BriefcaseBusiness, Command, FileText, LayoutDashboard, SquarePlus, UserRoundCog } from "lucide-react";
 import Sidebar from '@/components/shared/dashboard/Sidebar';
 const RecruiterSildbar = () => {
      const navItem = [
@@ -27,18 +27,13 @@ const RecruiterSildbar = () => {
     {
       name: "Applications",
       url: "/dashboard/recruiter/applications",
-      icon: BriefcaseBusiness,
+      icon: FileText,
     },
     {
-      name: "Save Employees",
-      url: "/dashboard/recruiter/saved-employees",
-      icon: Bookmark,
-    },
-    
-    {
-      name: "AI Fetures",
-      url: "/dashboard/jobseeker/ai-features",
-      icon: Sparkles,
+      name: "Interview Management",
+      url: "/dashboard/recruiter/interview-management",
+      component: true,
+      icon: UserRoundCog,
     }
   ];
     return (
@@ -49,3 +44,5 @@ const RecruiterSildbar = () => {
 };
 
 export default RecruiterSildbar;
+
+

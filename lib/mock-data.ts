@@ -9,6 +9,7 @@ interface JOB {
  dedline: string
  title: string
  createdAt: string
+ salaryrange: { min: number; max: number; negotiable: boolean }
  _id: string
 }
 
@@ -43,6 +44,7 @@ interface JobRelatedQuestions {
   appliedAt: Date
   applicant: Applicant
   interviewDate?: Date
+  
 }
 
 

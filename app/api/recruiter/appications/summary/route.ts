@@ -1,41 +1,16 @@
 import { Application } from "@/app/models/Application";
-import { connectToDatabase } from "@/lib/db";
 import { withAuth } from "@/lib/withAuth";
 import { NextRequest, NextResponse } from "next/server";
-import "@/app/models/Job";
 
 export async function GET(req: NextRequest) {
   try {
-    await connectToDatabase();
-
     const verifiedUser = await withAuth(req, { allowedRoles: "recruiter" });
 
     if (!verifiedUser.ok) return verifiedUser.response;
 
-    const query = new URL(req.url).searchParams;
-    const searchQuery = query.get("search") || "";
-  console.log(searchQuery)
     const applications = await Application.find({
       recruiter: verifiedUser.userId,
-      $or: [
-        { name: { $regex: searchQuery, $options: "i" } },
-        { email: { $regex: searchQuery, $options: "i" } },
-      ],
-    }).populate({
-        path: "job",
-        select: "title category dedline salaryrange createdAt",
-      })
-      .populate({
-        path: "applicant",
-        select: "fullname avatar",
-      });
-
-    if (!applications) {
-      return NextResponse.json(
-        { message: "No applications found", success: false },
-        { status: 404 }
-      );
-    }
+    });
 
     const counts = {
       all: applications.length,
@@ -48,20 +23,14 @@ export async function GET(req: NextRequest) {
       reviewed: applications.filter((app) => app.status === "reviewed").length,
     };
 
-    
-
     return NextResponse.json(
-      {
-        message: "Job updated successfully",
-        applications,
-        counts,
-        success: true,
-      },
+      { message: "Success", success: true, counts },
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
+    return NextResponse.json(
+      { message: "Error", success: false },
+      { status: 500 }
+    );
   }
 }
-
-

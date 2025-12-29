@@ -71,7 +71,7 @@ const ApplicationCard = ({ application,setIsOpenApplicationDetais,setApplication
 
               <div className="flex items-center gap-5">
                 <AIMatchScore score={application?.matchScore} />
-                <ApplicationActions />
+                <ApplicationActions isRead={application?.isRead}/>
               </div>
             </div>
 
@@ -103,7 +103,7 @@ const ApplicationCard = ({ application,setIsOpenApplicationDetais,setApplication
             </div>
           </div>
         </div>
-        <span className="w-2 h-2 rounded-full block bg-green-500 absolute top-0 left-0"></span>
+        {!application.isRead && <span className="w-2 h-2 rounded-full block bg-green-500 absolute top-0 left-0"></span>}
       </div>
     </>
   );
@@ -135,20 +135,19 @@ export const AIMatchScore = ({ score }: { score: number }) => {
   );
 };
 
-export const ApplicationActions = () => {
-  const bulkActionLable: { title: string; Icon: React.ElementType }[] = [
-    {
-      title: "Mark as Unread",
-      Icon: Eye,
-    },
+export const ApplicationActions = ({ isRead }: { isRead: boolean }) => {
+  const bulkActionLable: { title: string; Icon: React.ElementType,action: string }[] = [
+    !isRead ? { title: "Mark Read", Icon: Eye,action: "read" } : { title: "Mark Unread", Icon: Eye,action: "unread" },
 
     {
       title: "Reject ",
       Icon: CircleX,
+      action: "reject",
     },
     {
       title: "Accept",
       Icon: CircleCheck,
+      action: "accept",
     },
   ];
   return (

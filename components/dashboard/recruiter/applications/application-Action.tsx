@@ -58,7 +58,7 @@ const Actions = ({application} : Props) => {
            </div>
            {/*  */}
             <div className='mt-4 w-full  flex items-center gap-2 justify-between p-4'>
-                    <Button className='flex-1'>
+                    <Button className='flex-1 bg-blue-500 hover:bg-blue-600' >
                         <Send/>
                         Send Message
                     </Button>

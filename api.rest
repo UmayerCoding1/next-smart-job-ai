@@ -3,3 +3,9 @@ POST http://localhost:3000/api/test
 
 
 GET http://localhost:3000/api/recruiter/appications?serch="umayer"&sjob='job type'&sort='date score'&status='status'
+###
+
+DELETE http://localhost:3000/api/recruiter/appications/delete
+###
+
+PUT  http://localhost:3000/api/recruiter/appications/reviewed
