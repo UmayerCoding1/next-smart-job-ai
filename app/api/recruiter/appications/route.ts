@@ -14,7 +14,13 @@ export async function GET(req: NextRequest) {
 
     const query = new URL(req.url).searchParams;
     const searchQuery = query.get("search") || "";
-  console.log(searchQuery)
+    const page = query.get("page") || 1;
+    const limit = query.get("limit") || 10;
+
+    const totalApplications = await Application.find({
+      recruiter: verifiedUser.userId,
+    }).countDocuments();
+  
     const applications = await Application.find({
       recruiter: verifiedUser.userId,
       $or: [
@@ -28,7 +34,10 @@ export async function GET(req: NextRequest) {
       .populate({
         path: "applicant",
         select: "fullname avatar",
-      });
+      })
+      .sort({ createdAt: -1 })
+      .limit(Number(limit))
+      .skip((Number(page) - 1) * Number(limit));
 
     if (!applications) {
       return NextResponse.json(
@@ -48,6 +57,11 @@ export async function GET(req: NextRequest) {
       reviewed: applications.filter((app) => app.status === "reviewed").length,
     };
 
+    const paginationCount = {
+      totalApplications: totalApplications,
+      totalPages: Math.ceil(totalApplications / Number(limit)),
+      currentPage: Number(page),
+    }
     
 
     return NextResponse.json(
@@ -55,6 +69,7 @@ export async function GET(req: NextRequest) {
         message: "Job updated successfully",
         applications,
         counts,
+        paginationCount,
         success: true,
       },
       { status: 200 }

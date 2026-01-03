@@ -34,6 +34,7 @@ const ApplicationControls = () => {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const {applications} = useSelector((state: RootState) => state.applicationCounterR);
   
+  
 
   return (
     <div>
@@ -49,7 +50,7 @@ const ApplicationControls = () => {
         </div>
 
         {/* job filter by department */}
-        <Select value={selectedJob} onValueChange={setSelectedJob}>
+        {/* <Select value={selectedJob} onValueChange={setSelectedJob}>
           <SelectTrigger className="w-full sm:w-[200px]">
             <SelectValue placeholder="All Jobs" />
           </SelectTrigger>
@@ -61,7 +62,7 @@ const ApplicationControls = () => {
               </SelectItem>
             ))}
           </SelectContent>
-        </Select>
+        </Select> */}
 
         {/* sort by date and score */}
         <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortBy)}>
@@ -155,10 +156,16 @@ const ApplicationControls = () => {
       </div>
 
       <div>
-        <ApplicationListing searchQuery={searchQuery} />
+        <ApplicationListing searchQuery={searchQuery} statusFilter={statusFilter}/>
       </div>
+
+      
+       
+     
     </div>
   );
 };
 
 export default ApplicationControls;
+
+

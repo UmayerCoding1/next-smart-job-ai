@@ -69,7 +69,7 @@ const BulkAction = () => {
     }
   };
   const applicationsDelete = () =>{
-    console.log('delete')
+    toast.info("This feature is not available yet", { duration: 1500 });
   };
 
 

@@ -3,7 +3,7 @@ import FilterApplication from './filter-application';
 
 const Application = () => {
     return (
-        <div className='mt-8 w-full border border-neutral-300 rounded-md py-3 px-4' >
+        <div className='mt-8 w-full border border-neutral-300 rounded-md py-3 px-4 mb-20' >
             <FilterApplication/>
 
             
