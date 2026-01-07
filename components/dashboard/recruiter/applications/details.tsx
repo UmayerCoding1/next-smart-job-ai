@@ -6,6 +6,7 @@ import { Application } from "@/lib/mock-data";
 import { Briefcase, Clock, ExternalLink, FileText } from "lucide-react";
 import Image from "next/image";
 import { AIMatchScore } from "./application-card";
+import CoverLatterPdf from "./cover-latter-pdf";
 
 const Details = ({ appication }: { appication: Application | null }) => {
  const downloadPdf =async (url: string, fileName = "document.pdf") => {
@@ -129,21 +130,7 @@ const Details = ({ appication }: { appication: Application | null }) => {
                     <ExternalLink size={13}/>
                 </div>
             </div>
-            <div className="border border-neutral-300 p-3 rounded-lg  items-center flex w-full">
-                <div className="flex items-center gap-2">
-                    <div className="rounded-md p-3 bg-violet-100 inline-block gap-2">
-                    <FileText size={13} className="text-violet-500"/>
-                </div>
-                <div>
-                        <p className="text-lg font-semibold tracking-tight">Cover Latter.pdf</p>
-                        <p className="text-sm font-medium text-neutral-500">PDF Documents</p>
-                    </div>
-                </div>
-
-                <div className="flex-1 flex items-center justify-end">
-                    <ExternalLink size={13}/>
-                </div>
-            </div>
+           <CoverLatterPdf coverLetter={appication?.coverLetter || ""} jobTitle={appication?.job.title || ""} name={appication?.name || ""} email={appication?.email || ""} phone={appication?.phone || ""} imageUrl={appication?.applicant.avatar || ""}/>
         </div>
       </div>
 

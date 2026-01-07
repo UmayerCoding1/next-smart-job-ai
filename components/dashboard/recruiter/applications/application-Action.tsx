@@ -10,7 +10,6 @@ import { Application } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
 import axios from 'axios';
 import { Bookmark, Calendar as CalendarIcon, Send, X } from 'lucide-react';
-import { set } from 'mongoose';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 
