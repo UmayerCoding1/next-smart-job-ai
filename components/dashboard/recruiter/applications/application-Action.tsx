@@ -8,8 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Application } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
+import axios from 'axios';
 import { Bookmark, Calendar as CalendarIcon, Send, X } from 'lucide-react';
+import { set } from 'mongoose';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 
 
 interface Props{
@@ -21,6 +24,19 @@ const Actions = ({application} : Props) => {
     const [openInterviewModal, setOpenInterviewModal] = useState(false);
     
 
+    const handleApplicationAtatusUpdate =async (value: string) => {
+     try {
+         setStatusValue(value);
+
+         const ressponse = await axios.patch(`/api/recruiter/appications/${application?._id}/status`, {status: value});
+
+         if(ressponse.data.success) toast.success(ressponse.data.message, { duration: 1500 });
+     } catch (error) {
+        console.log(error);
+        toast.error("An error occurred", { duration: 1500 });
+     }
+    }
+
     return (
         <div className=' bg-neutral-100  py-5 px-3 rounded-md'>
            <Heading>Action</Heading>
@@ -28,7 +44,7 @@ const Actions = ({application} : Props) => {
            <div className='flex items-center justify-between'>
              <div className="space-y-2 flex-1 ">
                 <Label className="text-sm font-medium">Update Status</Label>
-                <Select value={statusValue} onValueChange={(value) => setStatusValue(value)} >
+                <Select value={statusValue} onValueChange={(value) => handleApplicationAtatusUpdate(value)} >
                   <SelectTrigger className="bg-background">
                     <SelectValue />
                   </SelectTrigger>
@@ -62,10 +78,7 @@ const Actions = ({application} : Props) => {
                         <Send/>
                         Send Message
                     </Button>
-                    <Button className='flex-1 border-neutral-300' variant={'outline'}>
-                        <Bookmark/>
-                        Save
-                    </Button>
+                    
                 </div>
         </div>
     );
