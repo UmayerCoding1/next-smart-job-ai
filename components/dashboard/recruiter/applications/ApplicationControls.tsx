@@ -156,7 +156,7 @@ const ApplicationControls = () => {
       </div>
 
       <div>
-        <ApplicationListing searchQuery={searchQuery} statusFilter={statusFilter}/>
+        <ApplicationListing searchQuery={searchQuery} statusFilter={statusFilter} sortBy={sortBy}/>
       </div>
 
       

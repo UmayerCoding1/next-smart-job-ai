@@ -1,6 +1,6 @@
 "use client";
 import useJobApplication from "@/hooks/useJobApplication";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ApplicationCard from "./application-card";
 import { Application } from "@/lib/mock-data";
 import Loading from "@/components/shared/loading";
@@ -8,12 +8,34 @@ import ApplicationDetails from "./application-details";
 import { MoveLeft, MoveRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const ApplicationListing = ({ searchQuery,statusFilter }: { searchQuery: string,statusFilter: string, }) => {
+const ApplicationListing = ({ searchQuery,statusFilter,sortBy }: { searchQuery: string,statusFilter: string, sortBy: string}) => {
   const [isOpenApplicationDetais, setIsOpenApplicationDetais] = useState(false);
   const [application, setApplication] = useState<Application | null>(null);
+
     const [page, setPage] = useState(1);
-    const limit = 1;
+    const limit = 10;
   const { JobApplications,paginationCounter, isLoading } = useJobApplication({ searchQuery,page,limit });
+
+const applications = useMemo(() => {
+  let data = [...JobApplications];
+
+  // status filter
+  if (statusFilter !== "all") {
+    data = data.filter(
+      (application: Application) =>
+        application.status === statusFilter
+    );
+  }
+
+  // sort by match score
+  if (sortBy === "score") {
+    data.sort((a, b) => b.matchScore - a.matchScore);
+  }
+
+  return data;
+}, [JobApplications, statusFilter, sortBy]);
+
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center">
@@ -23,11 +45,15 @@ const ApplicationListing = ({ searchQuery,statusFilter }: { searchQuery: string,
   }
 
 
+  // const applications = JobApplications.filter((application : Application) => statusFilter === "all"  ? true : application.status === statusFilter);
+
+ 
+
   return (
     <>
       {JobApplications.length > 0 ? (
         <div className="flex flex-col gap-2">
-          {JobApplications.map((application: Application) => (
+          {applications.map((application: Application) => (
            
             <div key={application._id} className="relative">
               <ApplicationCard application={application}  setIsOpenApplicationDetais={setIsOpenApplicationDetais} setApplication={setApplication}/>
@@ -48,7 +74,9 @@ const ApplicationListing = ({ searchQuery,statusFilter }: { searchQuery: string,
         </div>
       )}
 
-      <Pagination page={page} setPage={setPage} limit={limit || 10} paginationCounter={paginationCounter}/>
+      {applications.length > 0 && (
+        <Pagination page={page} setPage={setPage} limit={limit} paginationCounter={paginationCounter} />
+      )}
     </>
   );
 };
