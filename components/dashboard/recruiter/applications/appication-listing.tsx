@@ -1,6 +1,6 @@
 "use client";
 import useJobApplication from "@/hooks/useJobApplication";
-import React, { useEffect, useMemo, useState } from "react";
+import React, {  useMemo, useState } from "react";
 import ApplicationCard from "./application-card";
 import { Application } from "@/lib/mock-data";
 import Loading from "@/components/shared/loading";
@@ -85,7 +85,7 @@ export default ApplicationListing;
 
 
 
-const Pagination = ({ page, setPage, limit,paginationCounter }: { page: number, setPage: React.Dispatch<React.SetStateAction<number>>, limit: number, paginationCounter: {totalApplications: number,totalPages: number,currentPage: number} }) =>{
+const Pagination = ({ page, setPage,paginationCounter }: { page: number, setPage: React.Dispatch<React.SetStateAction<number>>, limit: number, paginationCounter: {totalApplications: number,totalPages: number,currentPage: number} }) =>{
   return <div className="mt-10 mb-3 w-full flex items-center justify-center">
      <div className="flex items-center gap-2 bg-[#EEF0F1] border-2 border-neutral-200 px-1 py-1 rounded-full ">
          <MoveLeft onClick={() => setPage && setPage(page - 1)} className={cn( "bg-white px-2 py-1 rounded-full cursor-pointer" , page === 1 && "opacity-50 cursor-not-allowed pointer-events-none ") }  />
