@@ -53,7 +53,7 @@ const ApplicationCard = ({ application,setIsOpenApplicationDetais,setApplication
                   <p className="text-xl font-semibold tracking-tight">
                     {application.name}{" "}
                   </p>
-                  <Badge className="bg-blue-500">{application.status}</Badge>
+                 <Status status={application.status}/>
                 </div>
                 <div className="flex items-center gap-2">
                   <p className="flex items-center gap-1 text-sm font-normal text-neutral-500">
@@ -182,3 +182,26 @@ export const AppicationSubmitTime = ({ time }: AppicationSubmitTimeProps) => {
     </p>
   );
 };
+
+
+export const Status = ({status} : {status: string}) => {
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "new":
+        return "bg-blue-500/10 text-blue-500 border-blue-500/20"
+      case "pending":
+        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
+      case "reviewed":
+        return "bg-purple-500/10 text-purple-500 border-purple-500/20"
+      case "interview":
+        return "bg-cyan-500/10 text-cyan-500 border-cyan-500/20"
+      case "accepted":
+        return "bg-green-500/10 text-green-500 border-green-500/20"
+      case "rejected":
+        return "bg-red-500/10 text-red-500 border-red-500/20"
+      default:
+        return "bg-muted text-muted-foreground"
+    }
+  }
+  return  <Badge className={getStatusColor(status)}>{status}</Badge>
+}

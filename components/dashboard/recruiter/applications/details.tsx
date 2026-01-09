@@ -5,7 +5,7 @@ import { getTimeAgo } from "@/lib/getTimeAgo";
 import { Application } from "@/lib/mock-data";
 import { Briefcase, Clock, ExternalLink, FileText } from "lucide-react";
 import Image from "next/image";
-import { AIMatchScore } from "./application-card";
+import { AIMatchScore, Status } from "./application-card";
 import CoverLatterPdf from "./cover-latter-pdf";
 
 const Details = ({ appication }: { appication: Application | null }) => {
@@ -34,9 +34,7 @@ const Details = ({ appication }: { appication: Application | null }) => {
   return (
     <div className="flex-1 max-h-full overflow-scroll overflow-x-hidden w-full p-2">
       <Heading>Appication Details</Heading>
-      <Badge className="bg-blue-500 text-white dark:bg-blue-600">
-        {appication?.status}
-      </Badge>
+     <Status status={appication?.status || ""}/>
 
       <div className="w-full border border-neutral-300  p-4  mt-3 rounded-lg  flex  gap-3">
         <Image

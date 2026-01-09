@@ -21,7 +21,9 @@ interface Props{
 const Actions = ({application} : Props) => {
     const [statusValue, setStatusValue] = useState(application?.status);
     const [openInterviewModal, setOpenInterviewModal] = useState(false);
-    
+      const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+        application?.interviewDate ? new Date(application.interviewDate) : undefined
+    );
 
     const handleApplicationAtatusUpdate =async (value: string) => {
      try {
@@ -64,8 +66,8 @@ const Actions = ({application} : Props) => {
 
                 <div onClick={() => setOpenInterviewModal(true)}  className='border border-neutral-300 bg-white rounded-md  px-4  py-2 flex items-center gap-2 cursor-pointer hover:bg-neutral-200 '>
                    <CalendarIcon size={13}/>
-                    <Label className="text-sm font-medium cursor-pointer">Pick a date</Label>
-                    {openInterviewModal && <InterviewModal application={application} setOpenInterviewModal={setOpenInterviewModal}/>}
+                    <Label className="text-sm font-medium cursor-pointer">{selectedDate ? <span> {dateFormate(selectedDate || new Date())}</span> : 'Pick a date'}</Label>
+                    {openInterviewModal && <InterviewModal application={application} setOpenInterviewModal={setOpenInterviewModal} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>}
                 </div>  
               </div>
 
@@ -90,16 +92,39 @@ interface InterviewModalPeops {
     application: Application | null
     className?: string
     setOpenInterviewModal: React.Dispatch<React.SetStateAction<boolean>>
+    selectedDate: Date | undefined
+    setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>
 }
 
 
 
-const InterviewModal = ({className,application,setOpenInterviewModal} : InterviewModalPeops) => {
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-        application?.interviewDate ? new Date(application.interviewDate) : undefined
-    );
+const InterviewModal = ({className,application,setOpenInterviewModal,selectedDate,setSelectedDate} : InterviewModalPeops) => {
+  
     const [time, setTime] = useState(getCurrentTime());
-    console.log(selectedDate)
+    
+    const saveInterviewDateInLocal = (date: Date | undefined, id: string) => {
+  const previousDates = localStorage.getItem("interviewDate");
+
+  const datesArray: { id: string; date: string | null }[] = previousDates
+    ? JSON.parse(previousDates)
+    : [];
+
+  const existingIndex = datesArray.findIndex(item => item.id === id);
+
+  if (existingIndex !== -1) {
+    // update
+    datesArray[existingIndex].date = date ? date.toISOString() : null;
+  } else {
+    // insert
+    datesArray.push({
+      id,
+      date: date ? date.toISOString() : null
+    });
+  }
+
+  localStorage.setItem("interviewDate", JSON.stringify(datesArray));
+};
+
     
     return (
         <div onClick={(e) => {
@@ -144,7 +169,7 @@ const InterviewModal = ({className,application,setOpenInterviewModal} : Intervie
 
                 <div className='w-full flex items-center justify-end mt-5 gap-2 '>
                     <Button onClick={() => setOpenInterviewModal(false)} size={'lg'} variant={'outline'}>Cancel</Button>
-                    <Button size={'lg'} className='bg-blue-500 hover:bg-blue-600'>Schedule Interview</Button>
+                    <Button onClick={() => saveInterviewDateInLocal(selectedDate, application?._id || '')} size={'lg'} className='bg-blue-500 hover:bg-blue-600'>Save</Button>
                 </div>
             </div>
 
