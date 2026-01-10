@@ -12,11 +12,11 @@ const transporter = nodemailer.createTransport({
 });
 
 
-export const sendOtpWithNodemailer = async (to: string,sub: string,otp: number) => {  
+export const sendEmailWithNodemailer = async (to: string,sub: string,emailContext: string) => {  
    transporter.sendMail({
     to,
     subject: sub,
-    html: `<p>Your OTP: ${otp}`
+    html: `<p>${emailContext}</p>`
    });
 
    console.log('Email send successfully');

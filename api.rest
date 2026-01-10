@@ -9,3 +9,7 @@ DELETE http://localhost:3000/api/recruiter/appications/delete
 ###
 
 PUT  http://localhost:3000/api/recruiter/appications/reviewed
+###
+
+
+PATCH   http://localhost:3000/api/recruiter/appications/3435454/send-message

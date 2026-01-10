@@ -1,6 +1,6 @@
 import { User } from "@/app/models/User";
 import { connectToDatabase } from "@/lib/db";
-import { sendOtpWithNodemailer } from "@/service/nodemailer";
+import { sendEmailWithNodemailer } from "@/service/nodemailer";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -30,10 +30,10 @@ export async function POST(request: NextRequest) {
     user.otp.expiresAt = new Date(Date.now() + 5 * 60 * 1000);
     await user.save();
 
-    const OTPSend = await sendOtpWithNodemailer(
+    const OTPSend = await sendEmailWithNodemailer(
       email,
       "SmartJobAI verify OTP",
-      user.otp.code
+      `Yoyr OTP is ${otp}`
     );
 
     if (!OTPSend.success) {
