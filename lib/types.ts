@@ -1,5 +1,7 @@
 import { ISalary } from "@/app/models/Job";
 import React from "react";
+import { Application } from "./mock-data";
+import { SendMessageForApplicant } from "@/app/models/SendMessage";
 
 export interface ISliderData {
     totalCards: number;
@@ -62,3 +64,21 @@ export interface ISliderData {
       appliedjobs?: string[];
       savedjobs?: string[];
   }
+
+
+
+ export interface InterviewModalPeops {
+    application: Application | null;
+    className?: string;
+    setOpenInterviewModal: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedDate: Date | undefined;
+    setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+    time: string;
+    setTime: React.Dispatch<React.SetStateAction<string>>;
+    mode: 'Offline' | 'Online';
+    setMode: React.Dispatch<React.SetStateAction<'Offline' | 'Online'>>;
+    meetingLink: string;
+    setMeetingLink: React.Dispatch<React.SetStateAction<string>>;
+  }
+
+

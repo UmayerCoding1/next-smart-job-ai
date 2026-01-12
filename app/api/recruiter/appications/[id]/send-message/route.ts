@@ -6,17 +6,23 @@ import { sendEmailWithNodemailer } from "@/service/nodemailer";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
-  req: NextRequest
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const body = await req.json();
-    const { applicant,appicationId,email,job_title,company_name,interview } = body;
+    const appicationId = (await params).id;
 
-    if(!applicant || !appicationId ||!email || !job_title || !company_name ||!interview)
+    const body = await req.json();
+    const { applicant, email, job_title, company_name, interview } = body;
+
+    if (!applicant || !email || !job_title || !company_name || !interview)
       return NextResponse.json(
-        { message: "Bad request body , missing required fields", success: false },
+        {
+          message: "Bad request body , missing required fields",
+          success: false,
+        },
         { status: 400 }
       );
 
@@ -27,23 +33,22 @@ export async function POST(
         { status: 500 }
       );
 
-      const user = await User.findById(applicant);
-      if(!user)
-        return NextResponse.json(
-          { message: "User not found", success: false },
-          { status: 404 }
-        );
+    const user = await User.findById(applicant);
+    if (!user)
+      return NextResponse.json(
+        { message: "User not found", success: false },
+        { status: 404 }
+      );
 
+    await SendMessageForApplicant.create({
+      recruiter: appication.recruiter,
+    applicant: applicant,
+      appicationId: appicationId,
+      email: email,
+    });
 
-       await SendMessageForApplicant.create({
-          recruiter: appication.recruiter,
-          applicant: applicant,
-          appicationId: appicationId    
-      });
-
-
-      const emailTemplate = `
-Hello ${user.name},<br/><br/>
+    const emailTemplate = `
+Hello ${user.fullname},<br/><br/>
 
 Thank you for applying for the position of
 <strong>${job_title}</strong> at <strong>${company_name}</strong> through
@@ -70,21 +75,21 @@ Best regards,<br/>
 <strong>Umayer</strong><br/>
 SmartJod AI Team<br/>
 📧 <a href="mailto:support@smartjod.ai">support@smartjod.ai</a><br/>
-🌐 <a href="https://smartjod.ai">https://smartjod.ai</a>
+🌐 <a href="http://localhost:3000">https://smartjod.ai</a>
 `;
 
+    const sendMessage = await sendEmailWithNodemailer(
+      email,
+      "SmartJobAI Application Message",
+      emailTemplate
+    );
 
-      const sendMessage = await sendEmailWithNodemailer(email,'SmartJobAI Application Message',emailTemplate);
-
-      if (!sendMessage.success) {
+    if (!sendMessage.success) {
       return NextResponse.json(
         { message: "Failed to send OTP", success: false },
         { status: 500 }
       );
     }
-
-
-
 
     return NextResponse.json(
       { message: "Application message sent", success: true },

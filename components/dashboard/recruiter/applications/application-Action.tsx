@@ -1,4 +1,5 @@
 "use client";
+import { RootState } from "@/app/redux/store";
 import Heading from "@/components/heading";
 import Hr from "@/components/hr-tag";
 import { Button } from "@/components/ui/button";
@@ -12,11 +13,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Application } from "@/lib/mock-data";
+import { InterviewModalPeops } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { Bookmark, Calendar as CalendarIcon, Send, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
 interface Props {
@@ -29,7 +33,11 @@ const Actions = ({ application }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     application?.interviewDate ? new Date(application.interviewDate) : undefined
   );
+  const [time, setTime] = useState(getCurrentTime());
+  const [mode, setMode] = useState<'Offline' | 'Online'>("Offline");
+  const [meetingLink, setMeetingLink] = useState("");
   const [existingInterviewDate, setExistingInterviewDate] = useState<Date | null>(null);
+  const user = useSelector((state: RootState) => state.authR.user);
 
   const handleApplicationAtatusUpdate = async (value: string) => {
     try {
@@ -65,11 +73,36 @@ const Actions = ({ application }: Props) => {
   },[ application?._id]);
 
 
-  const handleSendMessage = () => {
+  const handleSendMessage =async () => {
     try {
+    if(selectedDate && !existingInterviewDate) {}
+      
+     const data = {
+  applicant: application?.applicant._id,
+  email: application?.email,
+  job_title: application?.job.title,
+  company_name:
+    typeof user?.company === 'object' && 'name' in user.company
+      ? user.company.name
+      : undefined,
+  interview: {
+    date:  selectedDate ? dateFormate(selectedDate) : existingInterviewDate ?  dateFormate(existingInterviewDate) : null,
+    time,
+    mode,
+    link: meetingLink,
+  },
+};
+
+     
+
+      const ressponse= await axios.post(`/api/recruiter/appications/${application?._id}/send-message`,data);
+
+      if (ressponse.data.success){
       toast.success("Message sent successfully", { duration: 1500 });
+      }
     } catch (error) {
       console.log(error);
+      toast.error("An error occurred", { duration: 1500 });
     }
   }
 
@@ -119,6 +152,12 @@ const Actions = ({ application }: Props) => {
                 setOpenInterviewModal={setOpenInterviewModal}
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
+                time={time}
+                setTime={setTime}
+                mode={mode}
+                setMode={setMode}
+                meetingLink={meetingLink}
+                setMeetingLink={setMeetingLink}
               />
             )}
           </div>
@@ -137,13 +176,7 @@ const Actions = ({ application }: Props) => {
 
 export default Actions;
 
-interface InterviewModalPeops {
-  application: Application | null;
-  className?: string;
-  setOpenInterviewModal: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedDate: Date | undefined;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-}
+
 
 const InterviewModal = ({
   className,
@@ -151,8 +184,14 @@ const InterviewModal = ({
   setOpenInterviewModal,
   selectedDate,
   setSelectedDate,
+  time,
+  setTime,
+  mode,
+  setMode,
+  meetingLink,
+  setMeetingLink
 }: InterviewModalPeops) => {
-  const [time, setTime] = useState(getCurrentTime());
+ 
 
   const saveInterviewDateInLocal = (date: Date | undefined, id: string) => {
     const previousDates = localStorage.getItem("interviewDate");
@@ -177,6 +216,8 @@ const InterviewModal = ({
     localStorage.setItem("interviewDate", JSON.stringify(datesArray));
     setOpenInterviewModal(false);
   };
+
+  console.log(mode,meetingLink);
 
   return (
     <div
@@ -228,15 +269,32 @@ const InterviewModal = ({
             Interview Time
           </h2>
 
-          <div>
+          <div className="flex items-center justify-between border border-neutral-300 rounded-md px-4 py-1">
             <Input
               type="time"
               id="time"
               value={time}
-              onChange={(e) => setTime(e.target.value)}
-              className="w-full"
+              onChange={(e) => setMeetingLink(e.target.value)}
+              className="w-full border-none shadow-none  focus-visible:ring-[0px]"
             />
+            
+           <div className="flex items-center gap-2">
+             <Switch checked={mode === "Online" ? true : false} onCheckedChange={(e) => setMode(e ? "Online" : "Offline")}/>
+             <Label>Online</Label>
+           </div>
           </div>
+ 
+          {mode === 'Online' && (
+            <div className="mt-4">
+              <Label>Meeting Link</Label>
+               <Input
+              type="text"
+              id="time"
+              onChange={(e) => setMeetingLink(e.target.value)}
+              className="w-full "
+            />
+            </div>
+          )}
 
           {selectedDate && (
             <p className="text-center text-md my-5 text-neutral-500">
