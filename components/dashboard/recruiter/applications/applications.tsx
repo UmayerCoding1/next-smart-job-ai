@@ -1,10 +1,20 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Calendar} from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import ApplicationSummary from "./applicatiom-summary";
 import { Container } from "@/components/shared/container";
 import Application from "./application";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const Applications = () => {
   return (
@@ -13,7 +23,7 @@ const Applications = () => {
       <Container className="max-w-[1100px]">
         <ApplicationSummary />
 
-        <Application/>
+        <Application />
       </Container>
     </div>
   );
@@ -22,6 +32,17 @@ const Applications = () => {
 export default Applications;
 
 export const ApplicationHeader = ({ className }: { className?: string }) => {
+  const [format, setFormat] = useState("");
+  const [status, toggleStatus] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleExportData = async () => {
+   try {
+    
+   } catch (error) {
+    
+   }
+  };
   return (
     <div
       className={cn(
@@ -39,11 +60,58 @@ export const ApplicationHeader = ({ className }: { className?: string }) => {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button size="sm" variant={"outline"}>
-          <Calendar />
-          Schedule Interviews
-        </Button>
-        <Button size="sm">Export Data</Button>
+        <Dialog>
+          <form>
+            <DialogTrigger asChild>
+              <Button size="sm">Export Data</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle className="text-lg font-semibold">
+                  Export Applications
+                </DialogTitle>
+                <DialogDescription>
+                  {" "}
+                  Download job application data based on selected filters
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4">
+                <div className="grid gap-3">
+                  <select
+                    value={format}
+                    onChange={(e) => setFormat(e.target.value)}
+                    className="w-full border p-2 rounded"
+                  >
+                    <option value="pdf">PDF</option>
+                    <option value="excel">Excel</option>
+                  </select>
+                </div>
+                <div className="grid gap-3">
+                  <div className="flex gap-2 flex-wrap">
+                    {["new", "reviewed", "interview", "rejected"].map((s) => (
+                      <label className="flex gap-1  items-center" key={s}>
+                        <input
+                          type="checkbox"
+                          checked={status.includes(s)}
+                          onChange={() => toggleStatus(s)}
+                        />{" "}
+                        <p className="font-medium tracking-tight">{s}</p>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button type="submit" onClick={() => handleExportData()}>
+                  Export Data
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </form>
+        </Dialog>
       </div>
     </div>
   );
