@@ -28,7 +28,7 @@ export interface IJob {
     end: string;
   };
   requirements: string[];
-  shift: string[]; // 🟢 এখন array করা হয়েছে
+  shift: string[]; 
   benefits: string[];
   vacancies: number;
   isRemoteAvailable: boolean;

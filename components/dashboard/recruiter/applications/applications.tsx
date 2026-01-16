@@ -15,6 +15,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import axios from "axios";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 const Applications = () => {
   return (
@@ -32,15 +35,28 @@ const Applications = () => {
 export default Applications;
 
 export const ApplicationHeader = ({ className }: { className?: string }) => {
-  const [format, setFormat] = useState("");
+  const [format, setFormat] = useState('pdf');
   const [status, toggleStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleExportData = async () => {
    try {
+    setIsLoading(true);
+    const ressponse = await axios.get(`/api/recruiter/appications/export?format=${format}&applicationStatus=${status}`);
+    console.log(ressponse.data)
     
+    if (ressponse.data.success) {
+      toast.success(ressponse.data.message, { duration: 1500 });
+      setIsLoading(false);
+    }else{
+      toast.error(ressponse.data.message, { duration: 1500 });
+      setIsLoading(false);
+    }
    } catch (error) {
-    
+    console.log(error);
+    toast.error("An error occurred", { duration: 1500 });
+   }finally{
+    setIsLoading(false);
    }
   };
   return (
@@ -106,7 +122,7 @@ export const ApplicationHeader = ({ className }: { className?: string }) => {
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>
                 <Button type="submit" onClick={() => handleExportData()}>
-                  Export Data
+                  {isLoading ? <Loader2 className="animate-spin"/> : "Export"}
                 </Button>
               </DialogFooter>
             </DialogContent>
