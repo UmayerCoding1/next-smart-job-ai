@@ -52,6 +52,8 @@ export async function middleware(req: NextRequest) {
   try {
     const role = decoded.role;
 
+
+
     if (pathname.startsWith("/dashboard")) {
       if (
         (role === "jobseeker" &&

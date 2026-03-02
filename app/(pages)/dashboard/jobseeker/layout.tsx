@@ -17,18 +17,18 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  
+
   return (
     <html lang="en">
       <body >
         <div className="flex max-h-screen overflow-hidden ">
           <header>
-           <JobseekerSidebar/>
+            <JobseekerSidebar />
           </header>
 
           <div className="w-full lg:flex-1 relative">
             <div>
-             <Navbar/>
+              <Navbar />
             </div>
             <div className="w-full bg-gray-100 h-full overflow-auto scrollbar-hide lg:px-[30px] py-1 ">
               {children}

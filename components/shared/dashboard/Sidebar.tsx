@@ -27,14 +27,12 @@ const Sidebar = ({
   console.log(pathname);
   return (
     <div
-      className={`${
-        isOpen ? "w-64" : "w-20"
-      } h-screen transition-all duration-300 ease-in-out hidden lg:block bg-black text-white`}
+      className={`${isOpen ? "w-64" : "w-20"
+        } h-screen transition-all duration-300 ease-in-out hidden lg:block bg-black text-white`}
     >
       <div
-        className={`${
-          isOpen ? "p-4" : "p-3"
-        } flex justify-center border-b border-gray-800`}
+        className={`${isOpen ? "p-4" : "p-3"
+          } flex justify-center border-b border-gray-800`}
       >
         <Link href={"/"}>
           {isOpen ? (
@@ -61,7 +59,9 @@ const Sidebar = ({
         <ul className="space-y-1">
           {navItem?.map((item, index) => {
             const Icon = item.icon;
-            const isActive = item.url === "/dashboard/recruiter" || item.url === "/dashboard/jobseeker" ? pathname === "/dashboard/recruiter" || pathname === "/dashboard/jobseeker" : pathname.startsWith(item.url);
+            const isDashboardRoot = /^\/dashboard\/[^/]+$/.test(item.url);
+            const isActive = isDashboardRoot ? pathname === item.url : pathname.startsWith(item.url);
+
             return (
               <li key={index} className="relative">
                 {isActive && (
@@ -76,18 +76,16 @@ const Sidebar = ({
                   >
                     <Icon
                       size={20}
-                      className={`ml-4 mr-3 ${
-                        isActive
-                          ? "text-white"
-                          : "text-white"
-                      }`}
+                      className={`ml-4 mr-3 ${isActive
+                        ? "text-white"
+                        : "text-white"
+                        }`}
                     />
                     <div
-                      className={`${
-                        isActive
-                          ? " text-blue-500"
-                          : "text-white"
-                      }  hover:text-blue-500 flex-1 py-3 pr-4 rounded-r-2xl text-sm font-medium transition-colors duration-200`}
+                      className={`${isActive
+                        ? " text-blue-500"
+                        : "text-white"
+                        }  hover:text-blue-500 flex-1 py-3 pr-4 rounded-r-2xl text-sm font-medium transition-colors duration-200`}
                     >
                       {item.name}
                     </div>
@@ -101,11 +99,10 @@ const Sidebar = ({
                       >
                         <Icon
                           size={20}
-                          className={`${
-                           isActive
-                              ? "fill-white text-transparent bg-blue-500 p-2 rounded-lg"
-                              : "text-gray-400 hover:text-blue-500 hover:bg-blue-100 hover:rounded-lg p-2"
-                          } transition-colors duration-200`}
+                          className={`${isActive
+                            ? "fill-white text-transparent bg-blue-500 p-2 rounded-lg"
+                            : "text-gray-400 hover:text-blue-500 hover:bg-blue-100 hover:rounded-lg p-2"
+                            } transition-colors duration-200`}
                         />
                       </Link>
                     </TooltipTrigger>
