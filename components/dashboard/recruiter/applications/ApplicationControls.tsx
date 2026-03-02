@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { mockJobs } from "@/lib/mock-data";
+
 import { Clock, Search, Sparkles } from "lucide-react";
 import React, { useState } from "react";
 import ApplicationListing from "./appication-listing";
@@ -29,12 +29,11 @@ type SortBy = "date" | "score";
 
 const ApplicationControls = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedJob, setSelectedJob] = useState<string>("all");
   const [sortBy, setSortBy] = useState<SortBy>("date");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const {applications} = useSelector((state: RootState) => state.applicationCounterR);
-  
-  
+  const { applications } = useSelector((state: RootState) => state.applicationCounterR);
+
+
 
   return (
     <div>
@@ -105,7 +104,7 @@ const ApplicationControls = () => {
                 variant="secondary"
                 className="ml-1 bg-blue-500/10 text-blue-500"
               >
-               {applications.new}
+                {applications.new}
               </Badge>
             </TabsTrigger>
             <TabsTrigger value="pending" className="gap-2">
@@ -114,7 +113,7 @@ const ApplicationControls = () => {
                 variant="secondary"
                 className="ml-1 bg-blue-500/10 text-blue-500"
               >
-               {applications.pending}
+                {applications.pending}
               </Badge>
             </TabsTrigger>
             <TabsTrigger value="reviewed" className="gap-2">
@@ -123,7 +122,7 @@ const ApplicationControls = () => {
                 variant="secondary"
                 className="ml-1 bg-blue-500/10 text-blue-500"
               >
-               {applications.reviewed}
+                {applications.reviewed}
               </Badge>
             </TabsTrigger>
             <TabsTrigger value="interview" className="gap-2">
@@ -132,7 +131,7 @@ const ApplicationControls = () => {
                 variant="secondary"
                 className="ml-1 bg-cyan-500/10 text-cyan-500"
               >
-               {applications.interview}
+                {applications.interview}
               </Badge>
             </TabsTrigger>
             <TabsTrigger value="rejected">Rejected
@@ -140,7 +139,7 @@ const ApplicationControls = () => {
                 variant="secondary"
                 className="ml-1 bg-blue-500/10 text-blue-500"
               >
-               {applications.rejected}
+                {applications.rejected}
               </Badge>
             </TabsTrigger>
             <TabsTrigger value="accepted">Accepted
@@ -148,7 +147,7 @@ const ApplicationControls = () => {
                 variant="secondary"
                 className="ml-1 bg-blue-500/10 text-blue-500"
               >
-               {applications.accepted}
+                {applications.accepted}
               </Badge>
             </TabsTrigger>
           </TabsList>
@@ -156,12 +155,12 @@ const ApplicationControls = () => {
       </div>
 
       <div>
-        <ApplicationListing searchQuery={searchQuery} statusFilter={statusFilter} sortBy={sortBy}/>
+        <ApplicationListing searchQuery={searchQuery} statusFilter={statusFilter} sortBy={sortBy} />
       </div>
 
-      
-       
-     
+
+
+
     </div>
   );
 };

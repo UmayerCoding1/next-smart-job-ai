@@ -18,7 +18,7 @@ import { Application } from "@/lib/mock-data";
 import { InterviewModalPeops } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import axios from "axios";
-import { Bookmark, Calendar as CalendarIcon, Send, X } from "lucide-react";
+import { Calendar as CalendarIcon, Send, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -57,48 +57,48 @@ const Actions = ({ application }: Props) => {
   };
 
 
-  useEffect(()=>{
+  useEffect(() => {
     const locanSaveInterviewDate = localStorage.getItem("interviewDate");
 
-    if(locanSaveInterviewDate){
+    if (locanSaveInterviewDate) {
       const datesArray: { id: string; date: string | null }[] = locanSaveInterviewDate
-      ? JSON.parse(locanSaveInterviewDate)
-      : [];
+        ? JSON.parse(locanSaveInterviewDate)
+        : [];
 
       const existingItem = datesArray.find((item) => item.id === application?._id);
-      if(existingItem){
+      if (existingItem) {
         setExistingInterviewDate(existingItem.date ? new Date(existingItem.date) : null);
       }
     }
-  },[ application?._id]);
+  }, [application?._id]);
 
 
-  const handleSendMessage =async () => {
+  const handleSendMessage = async () => {
     try {
-    if(selectedDate && !existingInterviewDate) {}
-      
-     const data = {
-  applicant: application?.applicant._id,
-  email: application?.email,
-  job_title: application?.job.title,
-  company_name:
-    typeof user?.company === 'object' && 'name' in user.company
-      ? user.company.name
-      : undefined,
-  interview: {
-    date:  selectedDate ? dateFormate(selectedDate) : existingInterviewDate ?  dateFormate(existingInterviewDate) : null,
-    time,
-    mode,
-    link: meetingLink,
-  },
-};
+      if (selectedDate && !existingInterviewDate) { }
 
-     
+      const data = {
+        applicant: application?.applicant._id,
+        email: application?.email,
+        job_title: application?.job.title,
+        company_name:
+          typeof user?.company === 'object' && 'name' in user.company
+            ? user.company.name
+            : undefined,
+        interview: {
+          date: selectedDate ? dateFormate(selectedDate) : existingInterviewDate ? dateFormate(existingInterviewDate) : null,
+          time,
+          mode,
+          link: meetingLink,
+        },
+      };
 
-      const ressponse= await axios.post(`/api/recruiter/appications/${application?._id}/send-message`,data);
 
-      if (ressponse.data.success){
-      toast.success("Message sent successfully", { duration: 1500 });
+
+      const ressponse = await axios.post(`/api/recruiter/appications/${application?._id}/send-message`, data);
+
+      if (ressponse.data.success) {
+        toast.success("Message sent successfully", { duration: 1500 });
       }
     } catch (error) {
       console.log(error);
@@ -140,9 +140,9 @@ const Actions = ({ application }: Props) => {
           >
             <CalendarIcon size={13} />
             <Label className="text-sm font-medium cursor-pointer">
-              { selectedDate ? (
+              {selectedDate ? (
                 <span> {dateFormate(selectedDate || new Date())}</span>
-              ) : existingInterviewDate ?  dateFormate(existingInterviewDate)  : (
+              ) : existingInterviewDate ? dateFormate(existingInterviewDate) : (
                 "Pick a date"
               )}
             </Label>
@@ -185,13 +185,12 @@ const InterviewModal = ({
   selectedDate,
   setSelectedDate,
   time,
-  setTime,
   mode,
   setMode,
   meetingLink,
   setMeetingLink
 }: InterviewModalPeops) => {
- 
+
 
   const saveInterviewDateInLocal = (date: Date | undefined, id: string) => {
     const previousDates = localStorage.getItem("interviewDate");
@@ -217,7 +216,7 @@ const InterviewModal = ({
     setOpenInterviewModal(false);
   };
 
-  console.log(mode,meetingLink);
+  console.log(mode, meetingLink);
 
   return (
     <div
@@ -277,22 +276,22 @@ const InterviewModal = ({
               onChange={(e) => setMeetingLink(e.target.value)}
               className="w-full border-none shadow-none  focus-visible:ring-[0px]"
             />
-            
-           <div className="flex items-center gap-2">
-             <Switch checked={mode === "Online" ? true : false} onCheckedChange={(e) => setMode(e ? "Online" : "Offline")}/>
-             <Label>Online</Label>
-           </div>
+
+            <div className="flex items-center gap-2">
+              <Switch checked={mode === "Online" ? true : false} onCheckedChange={(e) => setMode(e ? "Online" : "Offline")} />
+              <Label>Online</Label>
+            </div>
           </div>
- 
+
           {mode === 'Online' && (
             <div className="mt-4">
               <Label>Meeting Link</Label>
-               <Input
-              type="text"
-              id="time"
-              onChange={(e) => setMeetingLink(e.target.value)}
-              className="w-full "
-            />
+              <Input
+                type="text"
+                id="time"
+                onChange={(e) => setMeetingLink(e.target.value)}
+                className="w-full "
+              />
             </div>
           )}
 

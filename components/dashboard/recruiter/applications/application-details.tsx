@@ -13,7 +13,6 @@ interface Props {
 }
 
 const ApplicationDetails = ({
-  isOpenApplicationDetais,
   setIsOpenApplicationDetais,
   applicationData,
 }: Props) => {
@@ -36,12 +35,12 @@ const ApplicationDetails = ({
           <h2 className="text-xl font-semibold tracking-tight ">{applicationData?.job.title}</h2>
           <p className="text-sm text-neutral-500 tracking-tight font-medium">{applicationData?.job.category}</p>
           <div>
-             <p className="text-sm text-neutral-500 tracking-tight">Salary Range : <span className="text-lg text-black font-medium"> {applicationData?.job.salaryrange.min}$-{applicationData?.job.salaryrange.max}$ </span> <span>{!applicationData?.job.salaryrange.negotiable && '(Negotiable)'}</span></p>
+            <p className="text-sm text-neutral-500 tracking-tight">Salary Range : <span className="text-lg text-black font-medium"> {applicationData?.job.salaryrange.min}$-{applicationData?.job.salaryrange.max}$ </span> <span>{!applicationData?.job.salaryrange.negotiable && '(Negotiable)'}</span></p>
           </div>
         </div>
 
         <Actions application={applicationData} />
-        
+
       </div>
     </div>
   );

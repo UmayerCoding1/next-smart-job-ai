@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 interface CustomSwitchProps {
- onChange:(e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   disabled?: boolean;
   name: string
@@ -13,31 +13,31 @@ interface CustomSwitchProps {
 }
 
 const CustomSwitch: React.FC<CustomSwitchProps> = ({
-onChange,
+  onChange,
   className,
   disabled = false,
   name,
   enabled,
   setEnabled
 }) => {
-    
-
-
-     
 
 
 
-     useEffect(() => {
-        const toggleSwitch =() => {
 
-            console.log(enabled);
-                onChange({
-      target: { name, value: enabled.toString() }, // store as comma string
-    } as React.ChangeEvent<HTMLInputElement>);
-        }
 
-        toggleSwitch();
-     },[enabled]);
+
+
+  useEffect(() => {
+    const toggleSwitch = () => {
+
+      console.log(enabled);
+      onChange({
+        target: { name, value: enabled.toString() }, // store as comma string
+      } as React.ChangeEvent<HTMLInputElement>);
+    }
+
+    toggleSwitch();
+  }, [enabled, name, onChange]);
   return (
     <button
       type="button"

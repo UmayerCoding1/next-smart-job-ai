@@ -2,8 +2,7 @@ import { Application, IApply } from "@/app/models/Application";
 import { Job } from "@/app/models/Job";
 import { User } from "@/app/models/User";
 import { connectToDatabase } from "@/lib/db";
-import { resumeToText } from "@/service/getPdfData";
-import { savePdfToFile } from "@/service/savePDfToFile";
+import { getMatchScore } from "@/utils/getMatcScore";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -20,7 +19,7 @@ export async function POST(request: NextRequest) {
       job,
       coverLetter,
     }: IApply = body;
-console.log(body)
+    console.log(body)
 
     if (
       !name ||
@@ -75,9 +74,9 @@ console.log(body)
       );
     }
 
-    
 
-   
+
+
 
     const newApply = await Application.create({
       job,
@@ -95,7 +94,7 @@ console.log(body)
     });
 
 
-console.log(newApply);
+    console.log(newApply);
     if (applyedJob.appliedjobs.includes(newApply.applicant)) {
       return NextResponse.json(
         { message: "You have already applied for this job33", success: false },
@@ -147,20 +146,4 @@ console.log(newApply);
   }
 }
 
-export async function getMatchScore(resumeLink: string, jobId: string) {
-  try {
-    if (!resumeLink) return 0;
-    const pdf = await savePdfToFile(resumeLink);
-    if (!pdf) {
-      return 0;
-    }
 
-    const pdfData = await resumeToText(pdf, jobId);
-
-    if (!pdfData) return 0;
-
-    return pdfData;
-  } catch (error) {
-    console.log(error);
-  }
-}

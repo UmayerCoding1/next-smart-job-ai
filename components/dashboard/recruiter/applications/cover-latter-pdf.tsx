@@ -14,7 +14,7 @@ import React from 'react';
 
 import { PDFDownloadLink } from "@react-pdf/renderer";
 
-const CoverLatterPdf = ({imageUrl,name,email,phone,jobTitle,coverLetter}: {imageUrl:string,name:string,email:string,phone:string,jobTitle:string,coverLetter:string}) => {
+const CoverLatterPdf = ({ imageUrl, name, email, phone, jobTitle, coverLetter }: { imageUrl: string, name: string, email: string, phone: string, jobTitle: string, coverLetter: string }) => {
 
   const data = {
     name,

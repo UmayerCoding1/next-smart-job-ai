@@ -1,7 +1,10 @@
+import AllJobs from '@/components/dashboard/admin/all-jobs'
 import React from 'react'
 
-export default function AllJobs() {
+export default function page() {
     return (
-        <div>AllJobs</div>
+        <>
+            <AllJobs />
+        </>
     )
 }
