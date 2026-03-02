@@ -1,7 +1,8 @@
-import React from 'react'
-
+import { Overview } from '@/components/dashboard/admin/overview'
 export default function AdminHome() {
     return (
-        <div>AdminHome</div>
+        <>
+            <Overview />
+        </>
     )
 }
