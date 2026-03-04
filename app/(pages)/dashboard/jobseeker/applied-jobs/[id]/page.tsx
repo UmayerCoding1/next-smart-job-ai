@@ -8,7 +8,6 @@ export const generateMetadata = async ({
   searchParams: Promise<{ title: string }>;
 }) => {
   const jobTitle = (await searchParams).title;
-  console.log(jobTitle);
   const title = await new Promise((resolve) => {
     setTimeout(() => {
       resolve(`${jobTitle} | Applied Job Details `);

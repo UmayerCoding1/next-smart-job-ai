@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     const query = new URL(req.url).searchParams;
     const format = query.get("format");
     const applicationStatus = query.get("applicationStatus");
-console.log(format,applicationStatus)
+
     if (!format || !applicationStatus)
       return NextResponse.json({
         message: "Format and applicationStatus is required  ",
@@ -23,9 +23,9 @@ console.log(format,applicationStatus)
       recruiter: verifiedUser.userId,
       status: applicationStatus,
     }).populate({
-        path: "job",
-        select: "title category dedline salaryrange status",
-      }).select('status coverLetter expectedSalary matchScore name email phone resumeLink matchScore ');
+      path: "job",
+      select: "title category dedline salaryrange status",
+    }).select('status coverLetter expectedSalary matchScore name email phone resumeLink matchScore ');
 
     if (!applications)
       return NextResponse.json({
@@ -34,15 +34,15 @@ console.log(format,applicationStatus)
         success: false,
       });
 
-    
-      if(applications.length == 0) return NextResponse.json({
-        message: "Applications not found",
-        status: 404,
-      });
+
+    if (applications.length == 0) return NextResponse.json({
+      message: "Applications not found",
+      status: 404,
+    });
 
     return NextResponse.json({
       message: "Successfully export applications data",
-    applications,
+      applications,
       status: 200,
       success: true,
     });

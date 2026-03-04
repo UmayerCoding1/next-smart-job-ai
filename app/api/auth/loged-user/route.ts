@@ -31,7 +31,6 @@ export async function GET() {
       })
       .populate({ path: "company", select: "name logo website email location" })
       .select("-password -otp");
-    console.log("user", user.resume);
 
     if (!user) {
       return NextResponse.json(
@@ -40,10 +39,10 @@ export async function GET() {
       );
     }
 
-   setCookies('auth', user._id.toString(),{
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-   });
+    setCookies('auth', user._id.toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
 
     return NextResponse.json({ user, success: true }, { status: 200 });
   } catch (error) {

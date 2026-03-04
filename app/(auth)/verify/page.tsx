@@ -31,14 +31,14 @@ const VerifyPage = () => {
 
     const handleUserVerify = async () => {
       try {
-      
-          const res = await axios.post("/api/auth/send-otp", {
-            email: signUpEmail,
-          });
-          console.log(res.data);
-          if (res.data.success) {
-            setOtpResendTimer(120);
-          }
+
+        const res = await axios.post("/api/auth/send-otp", {
+          email: signUpEmail,
+        });
+
+        if (res.data.success) {
+          setOtpResendTimer(120);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -73,7 +73,7 @@ const VerifyPage = () => {
         otp: Number(otp),
         email: signUpEmail,
       });
-      console.log(res.data);
+
       if (res.data.success) {
         localStorage.removeItem("unverifyed_user_traits");
         router.push("/login");
@@ -91,7 +91,7 @@ const VerifyPage = () => {
       const res = await axios.post("/api/auth/resend-otp", {
         email: signUpEmail,
       });
-      console.log(res.data);
+
       if (res.data.success) {
         setOtpResendTimer(120);
       }

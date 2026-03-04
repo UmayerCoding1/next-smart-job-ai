@@ -43,9 +43,7 @@ const getJob = async (jobId: string) => {
 const page = async ({ params }: Props) => {
   const { id } = await params;
   const job = await getJob(id);
-  console.log(await params);
 
-  console.log("job  id", id);
 
   if (!job) return <JobDetailsLoading />;
   return (

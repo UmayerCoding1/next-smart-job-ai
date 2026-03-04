@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
-    
+
     const isRecruiter = await withAuth(request, { allowedRoles: "recruiter" });
     if (!isRecruiter.ok) return isRecruiter.response;
 
@@ -26,8 +26,8 @@ export async function POST(request: NextRequest) {
       industry,
       recruiter
     }: ICompany = await request.json();
-    
- console.log(industry);
+
+
 
     if (
       !name ||
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       !logo ||
       !coverImage ||
       !location ||
-      !industry || 
+      !industry ||
       !recruiter
     ) {
       return NextResponse.json(
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
       }
 
 
-    const newCompany =   await Company.create({
+      const newCompany = await Company.create({
         name,
         email,
         description,
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
       });
 
       requiredExist.company = newCompany._id;
-      await requiredExist.save({validateBeforeSave: false});
+      await requiredExist.save({ validateBeforeSave: false });
       return NextResponse.json(
         { message: "Company created successfully", success: true },
         { status: 200 }

@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     const auth = await withAuth(request, { allowedRoles: "recruiter" });
     if (!auth.ok) return auth.response;
-console.log(body);
+
     if (
       !title ||
       !description ||
@@ -57,9 +57,6 @@ console.log(body);
         { status: 400 }
       );
     }
-
-
-    console.log(body);
 
 
     const existingCompany = await Company.findById(company);
@@ -119,11 +116,10 @@ export async function GET(request: NextRequest) {
     const jobType = searchParams.get("jobType");
     const location = searchParams.get("location");
 
-    
+
     const filterString = searchParams.getAll("filter");
-    console.log("filterString", filterString);
     const filter: FilterQuery<IJob> = {
-      status:'active'
+      status: 'active'
     };
     if (
       filterString &&
@@ -180,7 +176,7 @@ export async function GET(request: NextRequest) {
     const jobs = await Job.find(filter).populate("company");
 
 
-     
+
 
     return NextResponse.json({ jobs, success: true }, { status: 200 });
   } catch (error) {

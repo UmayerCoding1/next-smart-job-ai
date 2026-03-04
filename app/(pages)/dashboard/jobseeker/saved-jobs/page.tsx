@@ -14,8 +14,8 @@ export const metadata = {
 
 const page = async () => {
   // const cookies = getCookieInClient('token');
-  const token =await getCookieInServer('token');
-  console.log(token);
+  const token = await getCookieInServer('token');
+
 
 
   return (

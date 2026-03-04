@@ -19,7 +19,6 @@ export async function POST(request: NextRequest) {
       job,
       coverLetter,
     }: IApply = body;
-    console.log(body)
 
     if (
       !name ||
@@ -94,7 +93,6 @@ export async function POST(request: NextRequest) {
     });
 
 
-    console.log(newApply);
     if (applyedJob.appliedjobs.includes(newApply.applicant)) {
       return NextResponse.json(
         { message: "You have already applied for this job33", success: false },
@@ -123,7 +121,7 @@ export async function POST(request: NextRequest) {
         newApply.job.toString()
       );
 
-      console.log("score type", typeof matchScore);
+
       // important: allow 0 score
       if (matchScore !== undefined && matchScore !== null) {
         // const updatedApply = await Application.findById(newApply._id);

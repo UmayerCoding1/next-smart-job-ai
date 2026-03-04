@@ -6,7 +6,7 @@ import Profile from "@/components/ui/profile/Profile";
 export async function generateMetadata(props: {
   params: Promise<{ username: string }>;
 }) {
-  // console.log((await props.params));
+
   const { username } = await props.params;
 
   return {

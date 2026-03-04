@@ -11,16 +11,15 @@ export async function GET(
   try {
     await connectToDatabase();
     const { id } = await context.params;
-   console.log("Models loaded:", mongoose.modelNames());
-     if (!Types.ObjectId.isValid(id)) {
+    if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid job ID" }, { status: 400 });
     }
 
 
-    
- const job = await Job.findById(id)
+
+    const job = await Job.findById(id)
       .select("-appliedjobs")
-      .populate("company"); 
+      .populate("company");
 
 
 
@@ -31,7 +30,7 @@ export async function GET(
       );
     }
 
-   
+
     return NextResponse.json({ job, success: true }, { status: 200 });
   } catch (error) {
     console.error("Error fetching job:", error);
@@ -44,15 +43,15 @@ export async function GET(
 
 
 export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
- try {
-   await connectToDatabase();
-  const {id} = await context.params;
-  console.log(id);
+  try {
+    await connectToDatabase();
+    const { id } = await context.params;
 
-  return NextResponse.json({ message: "Job updated successfully", success: true }, { status: 200 });
- } catch (error) {
-  console.log(error)
-  return NextResponse.json({ message: "Error", success: false,error }, { status: 500 });
- }
- 
+
+    return NextResponse.json({ message: "Job updated successfully", success: true }, { status: 200 });
+  } catch (error) {
+    console.log(error)
+    return NextResponse.json({ message: "Error", success: false, error }, { status: 500 });
+  }
+
 }

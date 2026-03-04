@@ -5,7 +5,7 @@ import { IResume } from "./Resume";
 export const ROLE = {
   JOBSEEKER: "jobseeker",
   RECRUITER: "recruiter",
-  ADMIN: "admin",
+  ADMIN: "Admin",
 } as const;
 
 export const VERIFIED = {
