@@ -3,7 +3,7 @@ import React from 'react';
 import { BellRing, Bookmark, BriefcaseBusiness, Inbox, LayoutDashboard, Sparkles } from "lucide-react";
 import Sidebar from '@/components/shared/dashboard/Sidebar';
 const JobseekerSidebar = () => {
-     const navItem = [
+  const navItem = [
     {
       name: "Overview",
       url: "/dashboard/jobseeker",
@@ -19,27 +19,27 @@ const JobseekerSidebar = () => {
       url: "/dashboard/jobseeker/saved-jobs",
       icon: Bookmark,
     },
-    {
-      name: "Job Alerts",
-      url: "/dashboard/jobseeker/job-alerts",
-      icon: BellRing,
-    },
-    {
-      name: "AI Fetures",
-      url: "/dashboard/jobseeker/ai-features",
-      icon: Sparkles,
-    },
+    // {
+    //   name: "Job Alerts",
+    //   url: "/dashboard/jobseeker/job-alerts",
+    //   icon: BellRing,
+    // },
+    // {
+    //   name: "AI Fetures",
+    //   url: "/dashboard/jobseeker/ai-features",
+    //   icon: Sparkles,
+    // },
     {
       name: "Inbox",
       url: "/dashboard/jobseeker/inbox",
       icon: Inbox,
     },
   ];
-    return (
-        <>
-          <Sidebar navItem={navItem}/>  
-        </>
-    );
+  return (
+    <>
+      <Sidebar navItem={navItem} />
+    </>
+  );
 };
 
 export default JobseekerSidebar;

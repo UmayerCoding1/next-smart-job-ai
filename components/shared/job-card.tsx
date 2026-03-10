@@ -4,26 +4,26 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IDBDraftJobData } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { DollarSign, Edit,  Eye, MapPin } from "lucide-react";
+import { DollarSign, Edit, Eye, MapPin } from "lucide-react";
 import { Button } from "../ui/button";
 
 
 import JobStatusChanger from "../dashboard/recruiter/my-jobs/Job-Status-Changer";
-import { useRouter } from "next/navigation";
+
 import Link from "next/link";
 
 type JobCardProps = {
   job: IJob | IDBDraftJobData;
   setShowApplications?: React.Dispatch<React.SetStateAction<boolean>>;
-setSelectedJobApplications?: React.Dispatch<
+  setSelectedJobApplications?: React.Dispatch<
     React.SetStateAction<{ id: string; title: string, totalAppications: number }>
   >;
 };
 
-const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCardProps) => {
+const JobCard = ({ job, setShowApplications, setSelectedJobApplications }: JobCardProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
-  const router = useRouter();
-  
+
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -87,15 +87,14 @@ const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCar
           <PTag>
             <MapPin size={13} /> {job.location}
           </PTag>
-          
+
           <PTag>
             <DollarSign size={13} />
 
-           <p> {job.salaryrange?.min === job.salaryrange?.max
+            <p> {job.salaryrange?.min === job.salaryrange?.max
               ? job.salaryrange?.min ?? "N/A"
-              : `${job.salaryrange?.min ?? "N/A"} - ${
-                  job.salaryrange?.max ?? "N/A"
-                }`}</p>
+              : `${job.salaryrange?.min ?? "N/A"} - ${job.salaryrange?.max ?? "N/A"
+              }`}</p>
           </PTag>
 
           <PTag onClick={() => {
@@ -105,27 +104,27 @@ const JobCard = ({ job, setShowApplications ,setSelectedJobApplications}: JobCar
               title: job.title,
               totalAppications: job?.appliedjobs?.length ?? 0
             });
-          }} className="text-neutral-800 font-medium cursor-pointer hover:underline hover:text-blue-600"><Eye size={13}/>
-             {job?.appliedjobs?.length ?? 0} appilications
+          }} className="text-neutral-800 font-medium cursor-pointer hover:underline hover:text-blue-600"><Eye size={13} />
+            {job?.appliedjobs?.length ?? 0} appilications
           </PTag>
         </div>
 
 
-         <div className="mt-6 flex gap-2">
+        <div className="mt-6 flex gap-2">
           <Button variant="outline" size="sm" className="flex-1 bg-transparent">
             <Edit className="mr-2 h-4 w-4" />
             Edit
           </Button>
-          <Button  variant="outline" size="sm" className="flex-1 bg-transparent">
+          <Button variant="outline" size="sm" className="flex-1 bg-transparent">
             <Link href={`job-details/${job._id}?title=${job.title}`} className="flex items-center gap-1.5"><Eye className="mr-2 h-4 w-4" />
-            View</Link>
+              View</Link>
           </Button>
 
-          <JobStatusChanger status={job.status} job={job}/>
+          <JobStatusChanger status={job.status} job={job} />
         </div>
       </div>
 
-      
+
     </div>
   );
 };

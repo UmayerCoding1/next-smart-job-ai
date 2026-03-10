@@ -1,7 +1,7 @@
 import { ISalary } from "@/app/models/Job";
 import React from "react";
 import { Application } from "./mock-data";
-import { SendMessageForApplicant } from "@/app/models/SendMessage";
+
 import mongoose from "mongoose";
 import { IResume } from "@/app/models/Resume";
 import { IAppliedJob, IEducation } from "@/app/models/User";

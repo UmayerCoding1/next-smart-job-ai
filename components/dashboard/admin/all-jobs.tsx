@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Briefcase,
@@ -28,6 +28,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import axios from "axios";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type JobStatus = "open" | "closed" | "pending" | "flagged";
@@ -206,6 +207,20 @@ const StatusPill = ({ status }: { status: JobStatus }) => {
 const AllJobs = () => {
     const [activeTab, setActiveTab] = useState<string>("All Jobs");
     const [search, setSearch] = useState<string>("");
+    const [jobs, setJobs] = useState();
+
+    useEffect(() => {
+        const getAllJobs = async () => {
+            const res = await axios.get(`/api/admin/job`);
+            if (!res.data.success) {
+                return [];
+            }
+            console.log(res.data)
+            return []
+        };
+
+        getAllJobs()
+    }, [])
 
     const filtered = mockJobs.filter((job) => {
         const matchTab =
