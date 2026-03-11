@@ -10,10 +10,41 @@ export async function GET(req: NextRequest) {
         // const auth = await withAuth(req, { allowedRoles: "admin" });
         // if (!auth.ok) return auth.response;
 
-        const jobs = await Job.find().select('title company category createdAt dedline location salaryrange status appliedjobs jobtype').populate({
-            path: 'company',
-            select: 'name email logo'
-        });
+        const statusOrder = ["active", "paused", "draft", "closed"];
+
+        const jobs = await Job.aggregate([
+            {
+                $addFields: {
+                    statusPriority: {
+                        $indexOfArray: [statusOrder, "$status"]
+                    }
+                }
+            },
+            { $sort: { statusPriority: 1, createdAt: -1 } }, // 1 → smallest index first
+            {
+                $lookup: {
+                    from: "companies",
+                    localField: "company",
+                    foreignField: "_id",
+                    as: "company"
+                }
+            },
+            { $unwind: "$company" },
+            {
+                $project: {
+                    title: 1,
+                    company: { name: 1, email: 1, logo: 1 },
+                    category: 1,
+                    createdAt: 1,
+                    dedline: 1,
+                    location: 1,
+                    salaryrange: 1,
+                    status: 1,
+                    appliedjobs: 1,
+                    jobtype: 1
+                }
+            }
+        ]);
         if (!jobs) {
             NextResponse.json({
                 success: false,

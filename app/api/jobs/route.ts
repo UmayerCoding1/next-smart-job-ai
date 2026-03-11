@@ -90,6 +90,7 @@ export async function POST(request: NextRequest) {
       ...(body.isRemoteAvailable && {
         isRemoteAvailable: body.isRemoteAvailable,
       }),
+      status: "paused",
     });
 
     return NextResponse.json(

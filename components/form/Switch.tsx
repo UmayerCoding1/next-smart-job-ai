@@ -30,14 +30,14 @@ const CustomSwitch: React.FC<CustomSwitchProps> = ({
   useEffect(() => {
     const toggleSwitch = () => {
 
-      console.log(enabled);
+
       onChange({
         target: { name, value: enabled.toString() }, // store as comma string
       } as React.ChangeEvent<HTMLInputElement>);
     }
 
     toggleSwitch();
-  }, [enabled, name, onChange]);
+  }, []);
   return (
     <button
       type="button"

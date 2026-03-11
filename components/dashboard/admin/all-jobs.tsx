@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { JobTableColum } from "./job-table-colum";
 import { JobFiltter } from "./jobs-filter";
 import { JobPagination } from "./job-pagination";
+import axios from "axios";
+import { toast } from "sonner";
 
 
 export type JobStatus = "active" | "closed" | "paused" | "draft";
@@ -88,6 +90,9 @@ const AllJobs = ({ jobs }: { jobs: TableJobType[] }) => {
 
 
 
+
+
+
     return (
         <div className="lg:px-[30px] pb-10 space-y-5">
 
@@ -100,7 +105,7 @@ const AllJobs = ({ jobs }: { jobs: TableJobType[] }) => {
                 </div>
                 <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:opacity-90 active:scale-95 transition-all">
                     <ShieldCheck size={15} className="mr-1.5" />
-                    Approve Pending
+                    Approve Paused
                 </Button>
             </div>
 
