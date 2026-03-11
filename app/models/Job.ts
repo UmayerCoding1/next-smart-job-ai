@@ -28,7 +28,7 @@ export interface IJob {
     end: string;
   };
   requirements: string[];
-  shift: string[]; 
+  shift: string[];
   benefits: string[];
   vacancies: number;
   isRemoteAvailable: boolean;
@@ -74,7 +74,7 @@ export const JobSchema = new Schema<IJob>(
     experience: {
       type: [String],
       required: true,
-     
+
     },
 
     // 🟢 fixed
@@ -82,7 +82,7 @@ export const JobSchema = new Schema<IJob>(
       {
         type: String,
         require: true,
-        enum: ["internship", "entry", "mid", "senior", "lead"], 
+        enum: ["internship", "entry", "mid", "senior", "lead"],
       }
     ],
 
@@ -109,7 +109,7 @@ export const JobSchema = new Schema<IJob>(
       {
         type: String,
         enum: ["day", "night", "flexible"],
-      default: ["day"],
+        default: ["day"],
       }
     ],
 
@@ -126,8 +126,8 @@ export const JobSchema = new Schema<IJob>(
 
     status: {
       type: String,
-      default: "active",
-      enum: ["active", "closed", "paused", "draft"], 
+      default: "paused",
+      enum: ["active", "closed", "paused", "draft"],
     },
   },
   { timestamps: true }

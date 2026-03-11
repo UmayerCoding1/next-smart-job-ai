@@ -10,7 +10,10 @@ export async function GET(req: NextRequest) {
         // const auth = await withAuth(req, { allowedRoles: "admin" });
         // if (!auth.ok) return auth.response;
 
-        const jobs = await Job.find();
+        const jobs = await Job.find().select('title company category createdAt dedline location salaryrange status appliedjobs jobtype').populate({
+            path: 'company',
+            select: 'name email logo'
+        });
         if (!jobs) {
             NextResponse.json({
                 success: false,
