@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'motion/react';
 import { Archive, Building2, CheckCircle2, Edit2, Eye, Flag, MoreHorizontal, Pause, ShieldCheck, Trash2, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -18,23 +18,18 @@ import axios from 'axios';
 interface Props {
   job: TableJobType;
   i: number;
+  handleApprove: (id: string, status: JobStatus, setCurrentStatus: React.Dispatch<React.SetStateAction<JobStatus>>) => void
 }
 
-export const JobTableColum = ({ job, i }: Props) => {
+export const JobTableColum = ({ job, i, handleApprove }: Props) => {
   const [currentStatus, setCurrentStatus] = useState(job.status);
 
-  const handleApprove = async (id: string, status: JobStatus) => {
-    try {
-      if (!id) return toast.info('No job id found', { duration: 1000 });
-      const res = await axios.patch(`/api/jobs/${id}/status`, { status: status });
-      if (res.status === 200) {
-        toast.success("Job status updated successfully");
-        setCurrentStatus(status);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => {
+    setCurrentStatus(job.status);
+  }, [job.status]);
+
+
+
   return (
     <>
       <motion.tr
@@ -128,46 +123,50 @@ export const JobTableColum = ({ job, i }: Props) => {
                 <Eye size={13} className="text-blue-500" />
                 View Details
               </DropdownMenuItem>
-              {job.status === "paused" && (
+              {currentStatus === "paused" && (
                 <>
-                  <DropdownMenuItem onClick={() => handleApprove(job._id, "active")} className="gap-2 cursor-pointer text-green-600">
+                  <DropdownMenuItem onClick={() => handleApprove(job._id, "active", setCurrentStatus)} className="gap-2 cursor-pointer text-green-600">
                     <CheckCircle2 size={13} />
                     Activate Job
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleApprove(job._id, "draft")} className="gap-2 cursor-pointer text-green-600">
+                  <DropdownMenuItem onClick={() => handleApprove(job._id, "draft", setCurrentStatus)} className="gap-2 cursor-pointer text-green-600">
                     <Archive size={13} />
                     Draft
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleApprove(job._id, "closed", setCurrentStatus)} className="gap-2 cursor-pointer text-red-400">
+                    <XCircle size={13} />
+                    Close Job
                   </DropdownMenuItem>
                 </>
 
               )}
-              {job.status === "active" && (
+              {currentStatus === "active" && (
                 <>
-                  <DropdownMenuItem onClick={() => handleApprove(job._id, "paused")} className="gap-2 cursor-pointer text-yellow-600">
+                  <DropdownMenuItem onClick={() => handleApprove(job._id, "paused", setCurrentStatus)} className="gap-2 cursor-pointer text-yellow-600">
                     <Pause size={13} />
                     Pause Job
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleApprove(job._id, "closed")} className="gap-2 cursor-pointer text-red-400">
+                  <DropdownMenuItem onClick={() => handleApprove(job._id, "closed", setCurrentStatus)} className="gap-2 cursor-pointer text-red-400">
                     <XCircle size={13} />
                     Close Job
                   </DropdownMenuItem>
                 </>
               )}
-              {job.status === "draft" && (
+              {currentStatus === "draft" && (
                 <>
-                  <DropdownMenuItem onClick={() => handleApprove(job._id, "active")} className="gap-2 cursor-pointer text-green-600">
+                  <DropdownMenuItem onClick={() => handleApprove(job._id, "active", setCurrentStatus)} className="gap-2 cursor-pointer text-green-600">
                     <CheckCircle2 size={13} />
                     Activate Job
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleApprove(job._id, "closed")} className="gap-2 cursor-pointer text-red-400">
+                  <DropdownMenuItem onClick={() => handleApprove(job._id, "closed", setCurrentStatus)} className="gap-2 cursor-pointer text-red-400">
                     <XCircle size={13} />
                     Close Job
                   </DropdownMenuItem>
                 </>
               )}
-              {job.status === "closed" && (
+              {currentStatus === "closed" && (
                 <>
-                  <DropdownMenuItem onClick={() => handleApprove(job._id, "active")} className="gap-2 cursor-pointer text-green-600">
+                  <DropdownMenuItem onClick={() => handleApprove(job._id, "active", setCurrentStatus)} className="gap-2 cursor-pointer text-green-600">
                     <CheckCircle2 size={13} />
                     Activate Job
                   </DropdownMenuItem>

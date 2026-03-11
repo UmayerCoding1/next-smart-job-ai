@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import {
     Briefcase,
@@ -20,6 +20,7 @@ import { JobFiltter } from "./jobs-filter";
 import { JobPagination } from "./job-pagination";
 import axios from "axios";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 export type JobStatus = "active" | "closed" | "paused" | "draft";
@@ -60,11 +61,15 @@ const tabs = [
 
 
 const AllJobs = ({ jobs }: { jobs: TableJobType[] }) => {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState<string>("All Jobs");
     const [search, setSearch] = useState<string>("");
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-
-
+    useEffect(() => {
+        const pausedJobsId = jobs?.filter((j) => j.status === "paused").map((j) => j._id);
+        setSelectedIds(pausedJobsId);
+    }, []);
 
     const filtered = jobs?.filter((job) => {
         const matchTab =
@@ -91,6 +96,43 @@ const AllJobs = ({ jobs }: { jobs: TableJobType[] }) => {
 
 
 
+    const handleApprove = async (id: string, status: JobStatus, setCurrentStatus: React.Dispatch<React.SetStateAction<JobStatus>>) => {
+        try {
+            if (!id) return toast.info('No job id found', { duration: 1000 });
+            const res = await axios.patch(`/api/jobs/status`, { status, id, ids: [] });
+            if (res.status === 200) {
+                toast.success("Job status updated successfully");
+                setCurrentStatus(status);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to update job status");
+        }
+    };
+
+
+    const handleBulkApprove = async (status: JobStatus) => {
+        try {
+
+            const filteredIds = selectedIds.filter((id) => {
+                const job = jobs.find((j) => j._id === id);
+                return job?.status === "paused";
+            });
+            console.log(filteredIds, status);
+            if (filteredIds.length === 0) return toast.info('No paused job id found', { duration: 1000 });
+            const res = await axios.patch(`/api/jobs/status`, { status, ids: filteredIds });
+            console.log(filteredIds, status);
+            if (res.status === 200) {
+                toast.success("Job status updated successfully");
+                setSelectedIds([]);
+                router.refresh();
+
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to update job status");
+        }
+    };
 
 
     return (
@@ -103,7 +145,7 @@ const AllJobs = ({ jobs }: { jobs: TableJobType[] }) => {
                         Manage, approve, and moderate all job listings on the platform
                     </p>
                 </div>
-                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:opacity-90 active:scale-95 transition-all">
+                <Button onClick={() => handleBulkApprove("active")} className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:opacity-90 active:scale-95 transition-all">
                     <ShieldCheck size={15} className="mr-1.5" />
                     Approve Paused
                 </Button>
@@ -164,7 +206,7 @@ const AllJobs = ({ jobs }: { jobs: TableJobType[] }) => {
                                     </tr>
                                 ) : (
                                     filtered?.map((job, i) => (
-                                        <JobTableColum key={i} job={job} i={i} />
+                                        <JobTableColum key={job._id} job={job} i={i} handleApprove={handleApprove} />
                                     ))
                                 )}
                             </AnimatePresence>
