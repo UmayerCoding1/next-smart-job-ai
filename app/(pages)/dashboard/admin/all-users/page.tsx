@@ -6,6 +6,12 @@ interface Props {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
+
+export const metadata = {
+    title: "All Users | Smart Job AI",
+    description: "All Users",
+}
+
 const page = async ({ searchParams }: Props) => {
     const params = await searchParams;
     const currentPage = parseInt((params.page as string) || "1");

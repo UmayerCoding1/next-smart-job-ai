@@ -11,6 +11,11 @@ const getAllJobs = async () => {
     return res.data.jobs
 }
 
+export const metadata = {
+    title: "All Jobs | Smart Job AI",
+    description: "All Jobs",
+}
+
 export default async function page() {
 
     const jobs = await getAllJobs();

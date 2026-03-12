@@ -60,3 +60,23 @@ export async function GET(req: NextRequest) {
         throw error
     }
 }
+
+
+export async function DELETE(req: NextRequest) {
+    try {
+        await connectToDatabase();
+        const auth = await withAuth(req, { allowedRoles: "admin" });
+        if (!auth.ok) return auth.response;
+
+        const { id } = await req.json();
+        if (!id) return NextResponse.json({ success: false, message: 'No job id found' }, { status: 400 });
+
+        const job = await Job.findByIdAndDelete(id);
+        if (!job) return NextResponse.json({ success: false, message: 'Job not found' }, { status: 404 });
+
+        return NextResponse.json({ success: true, message: 'Job deleted successfully' }, { status: 200 });
+    } catch (error) {
+        console.log(error);
+        throw error
+    }
+}

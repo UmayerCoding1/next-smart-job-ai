@@ -135,6 +135,21 @@ const AllJobs = ({ jobs }: { jobs: TableJobType[] }) => {
     };
 
 
+    const handleDeleteJobs = async (id: string) => {
+        try {
+            if (!id) return toast.info('No job id found', { duration: 1000 });
+            const res = await axios.delete(`/api/admin/job/${id}`);
+            console.log(res.data)
+            if (res.data.success) {
+                toast.success("Job deleted successfully");
+                router.refresh();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to delete job");
+        }
+    }
+
     return (
         <div className="lg:px-[30px] pb-10 space-y-5">
 
@@ -206,7 +221,7 @@ const AllJobs = ({ jobs }: { jobs: TableJobType[] }) => {
                                     </tr>
                                 ) : (
                                     filtered?.map((job, i) => (
-                                        <JobTableColum key={job._id} job={job} i={i} handleApprove={handleApprove} />
+                                        <JobTableColum key={job._id} job={job} i={i} handleApprove={handleApprove} handleDeleteJobs={handleDeleteJobs} />
                                     ))
                                 )}
                             </AnimatePresence>

@@ -19,9 +19,10 @@ interface Props {
   job: TableJobType;
   i: number;
   handleApprove: (id: string, status: JobStatus, setCurrentStatus: React.Dispatch<React.SetStateAction<JobStatus>>) => void
+  handleDeleteJobs: (id: string) => void
 }
 
-export const JobTableColum = ({ job, i, handleApprove }: Props) => {
+export const JobTableColum = ({ job, i, handleApprove, handleDeleteJobs }: Props) => {
   const [currentStatus, setCurrentStatus] = useState(job.status);
 
   useEffect(() => {
@@ -174,7 +175,7 @@ export const JobTableColum = ({ job, i, handleApprove }: Props) => {
               )}
 
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="gap-2 cursor-pointer text-red-500">
+              <DropdownMenuItem onClick={() => handleDeleteJobs(job._id)} className="gap-2 cursor-pointer text-red-500">
                 <Trash2 size={13} />
                 Delete Job
               </DropdownMenuItem>
