@@ -50,12 +50,12 @@ export async function GET(
       // Optional search filter on job title
       ...(search
         ? [
-            {
-              $match: {
-                "job.title": { $regex: search, $options: "i" },
-              },
+          {
+            $match: {
+              "job.title": { $regex: search, $options: "i" },
             },
-          ]
+          },
+        ]
         : []),
 
       // Lookup company details using job.company (ObjectId)
@@ -102,12 +102,12 @@ export async function GET(
       { $unwind: "$job" },
       ...(search
         ? [
-            {
-              $match: {
-                "job.title": { $regex: search, $options: "i" },
-              },
+          {
+            $match: {
+              "job.title": { $regex: search, $options: "i" },
             },
-          ]
+          },
+        ]
         : []),
       { $count: "total" },
     ]);
@@ -138,7 +138,7 @@ export async function GET(
       { status: 200 }
     );
   } catch (error) {
-    console.log("Error getting save job:", error);
+
     return new Response("Internal Server Error", { status: 500 });
   }
 }
@@ -149,7 +149,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    console.log("id", id);
+
 
     const token = (await cookies()).get("token")?.value as unknown as string;
     const verifyId = verifyToken(token);
@@ -167,7 +167,7 @@ export async function DELETE(
         { status: 404 }
       );
 
-      console.log("user", user._id);
+
     const existingSaveJob = await SaveJob.findByIdAndDelete(id);
     if (!existingSaveJob) {
       return NextResponse.json(
@@ -181,7 +181,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-    console.log("Error deleting job:", error);
+
     return new Response("Internal Server Error", { status: 500 });
   }
 }

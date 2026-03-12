@@ -21,7 +21,6 @@ import {
     Smartphone,
     Globe,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,8 +30,17 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { IUser, ROLE, Status } from "@/lib/types";
 import { getTimeAgo } from "@/lib/getTimeAgo";
+import { cn } from "@/lib/utils";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface PaginationData {
@@ -54,28 +62,43 @@ const statusConfig: Record<
 > = {
     [Status.ACTIVE]: {
         label: "Active",
-        className: "bg-green-100 text-green-700",
-        dot: "bg-green-500",
+        className: "bg-emerald-50 text-emerald-700 border-emerald-100",
+        dot: "bg-emerald-500",
         icon: UserCheck,
     },
     [Status.INACTIVE]: {
         label: "Inactive",
-        className: "bg-yellow-100 text-yellow-700",
-        dot: "bg-yellow-500",
+        className: "bg-amber-50 text-amber-700 border-amber-100",
+        dot: "bg-amber-500",
         icon: ShieldAlert,
     },
     [Status.BLACKLISTED]: {
         label: "Blacklisted",
-        className: "bg-red-100 text-red-600",
-        dot: "bg-red-500",
+        className: "bg-rose-50 text-rose-700 border-rose-100",
+        dot: "bg-rose-500",
         icon: Ban,
     },
 };
 
-const roleConfig: Record<string, { label: string; icon: any; color: string }> = {
-    [ROLE.ADMIN]: { label: "Admin", icon: ShieldCheck, color: "text-purple-600 bg-purple-100" },
-    [ROLE.RECRUITER]: { label: "Recruiter", icon: Briefcase, color: "text-blue-600 bg-blue-100" },
-    [ROLE.JOBSEEKER]: { label: "Jobseeker", icon: UserCircle, color: "text-indigo-600 bg-indigo-100" },
+const roleConfig: Record<string, { label: string; icon: any; color: string; badge: string }> = {
+    [ROLE.ADMIN]: {
+        label: "Admin",
+        icon: ShieldCheck,
+        color: "text-purple-700",
+        badge: "bg-purple-50 border-purple-100 text-purple-700"
+    },
+    [ROLE.RECRUITER]: {
+        label: "Recruiter",
+        icon: Briefcase,
+        color: "text-blue-700",
+        badge: "bg-blue-50 border-blue-100 text-blue-700"
+    },
+    [ROLE.JOBSEEKER]: {
+        label: "Jobseeker",
+        icon: UserCircle,
+        color: "text-indigo-700",
+        badge: "bg-indigo-50 border-indigo-100 text-indigo-700"
+    },
 };
 
 const StatusPill = ({ status }: { status: string }) => {
@@ -83,7 +106,10 @@ const StatusPill = ({ status }: { status: string }) => {
     const Icon = cfg.icon;
     return (
         <span
-            className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium ${cfg.className}`}
+            className={cn(
+                "inline-flex items-center gap-1.5 text-[11px] px-2.5 rounded-full font-semibold border shadow-sm transition-all",
+                cfg.className
+            )}
         >
             <Icon size={12} />
             {cfg.label}
@@ -128,32 +154,30 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
 
     const handleDeleteUser = async (userId: string) => {
         if (confirm("Are you sure you want to delete this user?")) {
-            // Ideally call API here
             setUsers(users.filter(u => String(u._id) !== userId));
         }
     };
 
     const handleChangeStatus = async (userId: string, newStatus: string) => {
-        // Ideally call API here
         setUsers(users.map(u => String(u._id) === userId ? { ...u, status: newStatus } : u));
     };
 
     return (
-        <div className="lg:px-[30px] pb-10 space-y-6">
+        <div className="lg:px-8 pb-12 space-y-8 animate-in fade-in duration-500">
             {/* ── Header ── */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-3xl font-extrabold text-neutral-900 tracking-tight">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-100 pb-6">
+                <div className="space-y-1">
+                    <h1 className="text-4xl font-black text-neutral-900 tracking-tight">
                         User Management
                     </h1>
-                    <p className="text-muted-foreground text-sm mt-1">
-                        Review, moderate, and manage all users on the smart-job platform.
+                    <p className="text-neutral-500 text-base max-w-2xl">
+                        Monitor and manage the smart-job community. Control access, roles, and status for all users.
                     </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                     <Button
-                        variant="outline"
-                        className="hidden sm:flex items-center gap-2"
+                        variant="ghost"
+                        className="hidden sm:flex items-center gap-2 text-neutral-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all font-semibold"
                         onClick={async () => {
                             try {
                                 const response = await fetch('/api/admin/users/export');
@@ -189,33 +213,33 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
                             }
                         }}
                     >
-                        <Globe size={16} />
-                        Export CSV
+                        <Globe size={18} />
+                        Export
                     </Button>
-                    <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200">
-                        <Shield size={16} className="mr-2" />
-                        Admin Settings
+                    <Button className="bg-neutral-950 hover:bg-neutral-800 text-white shadow-xl shadow-neutral-200 transition-all font-bold px-6">
+                        <Shield size={18} className="mr-2" />
+                        Settings
                     </Button>
                 </div>
             </div>
 
             {/* ── Filters ── */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                <div className="md:col-span-2 relative">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-2 bg-neutral-50/50 rounded-2xl border border-neutral-100">
+                <div className="md:col-span-2 relative group">
                     <Search
                         size={18}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-indigo-500 transition-colors"
                     />
                     <Input
                         placeholder="Search by name, email, or username..."
-                        className="pl-10 h-11 border-gray-200 focus:ring-indigo-500"
+                        className="pl-12 h-12 bg-white border-none shadow-sm focus:ring-2 focus:ring-indigo-500/20 rounded-xl"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
                 <div>
                     <select
-                        className="w-full h-11 px-3 py-2 bg-white border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none"
+                        className="w-full h-12 px-4 bg-white border-none shadow-sm rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 appearance-none cursor-pointer"
                         value={roleFilter}
                         onChange={(e) => setRoleFilter(e.target.value)}
                     >
@@ -227,7 +251,7 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
                 </div>
                 <div>
                     <select
-                        className="w-full h-11 px-3 py-2 bg-white border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none"
+                        className="w-full h-12 px-4 bg-white border-none shadow-sm rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 appearance-none cursor-pointer"
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                     >
@@ -240,182 +264,185 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
             </div>
 
             {/* ── Table ── */}
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                        <thead>
-                            <tr className="bg-gray-50/50 border-b border-gray-100">
-                                <th className="text-left px-6 py-4 font-semibold text-gray-600">User</th>
-                                <th className="text-left px-6 py-4 font-semibold text-gray-600">Role</th>
-                                <th className="text-left px-6 py-4 font-semibold text-gray-600">Status</th>
-                                <th className="text-left px-6 py-4 font-semibold text-gray-600">Joined</th>
-                                <th className="px-6 py-4" />
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <AnimatePresence mode="popLayout">
-                                {filteredUsers.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
-                                            <div className="flex flex-col items-center gap-2">
-                                                <Users size={40} className="opacity-20" />
-                                                <p className="font-medium">No users found matching your criteria</p>
+            <div className="bg-white rounded-3xl border border-neutral-100 shadow-2xl shadow-neutral-200/50 overflow-hidden">
+                <Table>
+                    <TableHeader className="bg-neutral-50/50">
+                        <TableRow className="hover:bg-transparent">
+                            <TableHead className="px-8 py-5 text-xs font-bold uppercase tracking-wider text-neutral-500">User Identification</TableHead>
+                            <TableHead className="px-8 py-5 text-xs font-bold uppercase tracking-wider text-neutral-500">Platform Role</TableHead>
+                            <TableHead className="px-8 py-5 text-xs font-bold uppercase tracking-wider text-neutral-500">Status</TableHead>
+                            <TableHead className="px-8 py-5 text-xs font-bold uppercase tracking-wider text-neutral-500">Joined Date</TableHead>
+                            <TableHead className="px-8 py-5" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <AnimatePresence mode="popLayout">
+                            {filteredUsers.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={5} className="py-24 text-center">
+                                        <div className="flex flex-col items-center gap-4 max-w-xs mx-auto">
+                                            <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
+                                                <Users size={32} className="text-neutral-300" />
                                             </div>
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    filteredUsers.map((user, i) => {
-                                        const role = roleConfig[user.role] || roleConfig[ROLE.JOBSEEKER];
+                                            <div>
+                                                <p className="font-bold text-neutral-900">No results found</p>
+                                                <p className="text-sm text-neutral-500 mt-1">Try adjusting your filters or search terms to find what you're looking for.</p>
+                                            </div>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                filteredUsers.map((user, i) => {
+                                    const role = roleConfig[user.role] || roleConfig[ROLE.JOBSEEKER];
+                                    const RoleIcon = role.icon;
 
-                                        const RoleIcon = role.icon;
-                                        return (
-                                            <motion.tr
-                                                key={String(user._id)}
-                                                layout
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, scale: 0.95 }}
-                                                transition={{ duration: 0.2, delay: i * 0.03 }}
-                                                className="border-b border-gray-50 last:border-0 hover:bg-gray-50/80 transition-colors"
-                                            >
-                                                {/* User Info */}
-                                                <td className="px-6 py-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="relative">
-                                                            {user.avatar ? (
-                                                                <img
-                                                                    src={user.avatar}
-                                                                    alt={user.fullname}
-                                                                    className="w-10 h-10 rounded-full object-cover border border-gray-200"
-                                                                />
-                                                            ) : (
-                                                                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500 font-bold border border-indigo-100">
-                                                                    {user.fullname.charAt(0)}
-                                                                </div>
-                                                            )}
-                                                            {user.status === Status.ACTIVE && (
-                                                                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
-                                                            )}
-                                                        </div>
-                                                        <div>
-                                                            <p className="font-bold text-gray-900 leading-tight">
-                                                                {user.fullname}
-                                                            </p>
-                                                            <div className="flex items-center gap-1.5 text-xs text-gray-500 mt-0.5">
-                                                                <Mail size={12} />
-                                                                {user.email}
+                                    return (
+                                        <motion.tr
+                                            key={String(user._id)}
+                                            layout
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, scale: 0.95 }}
+                                            transition={{ duration: 0.3, delay: i * 0.03 }}
+                                            className="group border-b border-neutral-50 last:border-0 hover:bg-neutral-100 transition-all"
+                                        >
+                                            <TableCell className="px-6">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="relative flex-shrink-0">
+                                                        {user.avatar ? (
+                                                            <img
+                                                                src={user.avatar}
+                                                                alt={user.fullname}
+                                                                className="w-8 h-8 rounded-2xl object-cover ring-2 ring-white shadow-md"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-8 h-8 text-sm rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold  shadow-lg ring-2 ring-white">
+                                                                {user.fullname.charAt(0)}
                                                             </div>
-                                                            <p className="text-[10px] text-gray-400 mt-0.5 font-mono">
-                                                                @{user.username}
-                                                            </p>
+                                                        )}
+                                                        {user.status === Status.ACTIVE && (
+                                                            <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full shadow-sm animate-pulse" />
+                                                        )}
+                                                    </div>
+                                                    <div className="flex flex-col ">
+                                                        <span className="font-bold text-neutral-900 text-[13px] truncate">
+                                                            {user.fullname}
+                                                        </span>
+                                                        <div className="flex items-center gap-1.5 text-xs text-neutral-500 font-medium">
+                                                            <span className="truncate">{user.email}</span>
+                                                            <span className="text-neutral-300">•</span>
+                                                            <span className="text-neutral-400 font-mono text-[10px]">@{user.username}</span>
                                                         </div>
                                                     </div>
-                                                </td>
+                                                </div>
+                                            </TableCell>
 
-                                                {/* Role */}
-                                                <td className="px-6 py-4">
-                                                    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold ${role.color}`}>
-                                                        <RoleIcon size={12} />
-                                                        {role.label}
-                                                    </div>
-                                                </td>
+                                            <TableCell className="px-8 py-5">
+                                                <div className={cn(
+                                                    "inline-flex items-center gap-2 px-3 rounded-xl text-xs font-bold border transition-all",
+                                                    role.badge
+                                                )}>
+                                                    <RoleIcon size={14} />
+                                                    {role.label}
+                                                </div>
+                                            </TableCell>
 
-                                                {/* Status */}
-                                                <td className="px-6 py-4">
-                                                    <StatusPill status={user.status} />
-                                                </td>
+                                            <TableCell className="px-8  ">
+                                                <StatusPill status={user.status} />
+                                            </TableCell>
 
-                                                {/* Joined */}
-                                                <td className="px-6 py-4">
-                                                    <div className="flex flex-col">
-                                                        <span className="text-gray-700 font-medium">
-                                                            {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
-                                                        </span>
-                                                        <span className="text-xs text-gray-400">
-                                                            {user.createdAt ? getTimeAgo(user.createdAt) : ''}
-                                                        </span>
-                                                    </div>
-                                                </td>
+                                            <TableCell className="px-8 py-5">
+                                                <div className="flex flex-col">
+                                                    <span className="text-neutral-700 font-bold text-sm">
+                                                        {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}
+                                                    </span>
+                                                    <span className="text-[11px] text-neutral-400 font-medium tracking-wide uppercase mt-0.5">
+                                                        {user.createdAt ? getTimeAgo(user.createdAt) : ''}
+                                                    </span>
+                                                </div>
+                                            </TableCell>
 
-                                                {/* Actions */}
-                                                <td className="px-6 py-4 text-right">
-                                                    <DropdownMenu>
-                                                        <DropdownMenuTrigger asChild>
-                                                            <button className="p-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-gray-600 transition-colors">
-                                                                <MoreHorizontal size={18} />
-                                                            </button>
-                                                        </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="end" className="w-52 p-1.5">
-                                                            <DropdownMenuItem className="gap-2.5 py-2 cursor-pointer">
-                                                                <Eye size={15} className="text-blue-500" />
-                                                                View Full Profile
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuSeparator />
+                                            <TableCell className="px-8 py-5 text-right">
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-neutral-400 hover:text-neutral-900 hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-neutral-100">
+                                                            <MoreHorizontal size={20} />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end" className="w-56  rounded-2xl shadow-2xl border-neutral-100">
+                                                        <DropdownMenuItem className="gap-3 py-3 rounded-xl cursor-pointer hover:bg-neutral-50 transition-colors font-semibold">
+                                                            <Eye size={18} className="text-blue-600" />
+                                                            View Profile
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuSeparator className="my-1.5 " />
 
-                                                            {user.status !== Status.ACTIVE && (
-                                                                <DropdownMenuItem
-                                                                    className="gap-2.5 py-2 cursor-pointer text-green-600"
-                                                                    onClick={() => handleChangeStatus(String(user._id), Status.ACTIVE)}
-                                                                >
-                                                                    <UserCheck size={15} />
-                                                                    Unblock User
-                                                                </DropdownMenuItem>
-                                                            )}
-
-                                                            {user.status !== Status.BLACKLISTED && (
-                                                                <DropdownMenuItem
-                                                                    className="gap-2.5 py-2 cursor-pointer text-orange-600"
-                                                                    onClick={() => handleChangeStatus(String(user._id), Status.BLACKLISTED)}
-                                                                >
-                                                                    <Ban size={15} />
-                                                                    Block User
-                                                                </DropdownMenuItem>
-                                                            )}
-
+                                                        {user.status !== Status.ACTIVE && (
                                                             <DropdownMenuItem
-                                                                className="gap-2.5 py-2 cursor-pointer text-red-600"
-                                                                onClick={() => handleDeleteUser(String(user._id))}
+                                                                className="gap-3 py-3 rounded-xl cursor-pointer text-emerald-600 hover:bg-emerald-50 transition-colors font-semibold"
+                                                                onClick={() => handleChangeStatus(String(user._id), Status.ACTIVE)}
                                                             >
-                                                                <Trash2 size={15} />
-                                                                Delete Permanently
+                                                                <UserCheck size={18} />
+                                                                Unblock User
                                                             </DropdownMenuItem>
-                                                        </DropdownMenuContent>
-                                                    </DropdownMenu>
-                                                </td>
-                                            </motion.tr>
-                                        );
-                                    })
-                                )}
-                            </AnimatePresence>
-                        </tbody>
-                    </table>
-                </div>
+                                                        )}
+
+                                                        {user.status !== Status.BLACKLISTED && (
+                                                            <DropdownMenuItem
+                                                                className="gap-3 py-3 rounded-xl cursor-pointer text-amber-600 hover:bg-amber-50 transition-colors font-semibold"
+                                                                onClick={() => handleChangeStatus(String(user._id), Status.BLACKLISTED)}
+                                                            >
+                                                                <Ban size={18} />
+                                                                Block User
+                                                            </DropdownMenuItem>
+                                                        )}
+
+                                                        <DropdownMenuItem
+                                                            className="gap-3 py-3 rounded-xl cursor-pointer text-rose-600 hover:bg-rose-50 transition-colors font-semibold"
+                                                            onClick={() => handleDeleteUser(String(user._id))}
+                                                        >
+                                                            <Trash2 size={18} />
+                                                            Delete Account
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        </motion.tr>
+                                    );
+                                })
+                            )}
+                        </AnimatePresence>
+                    </TableBody>
+                </Table>
 
                 {/* ── Footer ── */}
-                <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between font-medium">
-                    <p className="text-xs text-gray-500">
-                        Showing <span className="text-gray-900 font-bold">{Math.min((pagination.currentPage - 1) * pagination.limit + 1, pagination.totalUsers)}</span> to <span className="text-gray-900 font-bold">{Math.min(pagination.currentPage * pagination.limit, pagination.totalUsers)}</span> of <span className="text-gray-900 font-bold">{pagination.totalUsers}</span> users
+                <div className="px-8 py-6 bg-neutral-50/50 border-t border-neutral-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <p className="text-sm text-neutral-500 font-medium">
+                        Showing <span className="text-neutral-900 font-bold">{Math.min((pagination.currentPage - 1) * pagination.limit + 1, pagination.totalUsers)}</span>-
+                        <span className="text-neutral-900 font-bold">{Math.min(pagination.currentPage * pagination.limit, pagination.totalUsers)}</span> of
+                        <span className="text-neutral-900 font-bold ml-1">{pagination.totalUsers}</span> users
                     </p>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                         <Button
                             variant="outline"
                             size="sm"
-                            className="h-8 text-[11px] px-3 font-semibold hover:bg-white active:scale-95 transition-all"
+                            className="h-10 px-4 font-bold rounded-xl bg-white border-neutral-200 hover:bg-neutral-100 disabled:opacity-50 transition-all shadow-sm"
                             onClick={() => handlePageChange(pagination.currentPage - 1)}
                             disabled={pagination.currentPage === 1}
                         >
                             Previous
                         </Button>
-                        <div className="flex items-center gap-1">
-                            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((pageNum) => (
+                        <div className="flex items-center gap-1.5 hidden md:flex">
+                            {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => i + 1).map((pageNum) => (
                                 <Button
                                     key={pageNum}
                                     variant="outline"
                                     size="sm"
-                                    className={`h-8 w-8 text-[11px] p-0 font-bold transition-all ${pagination.currentPage === pageNum
-                                        ? "bg-indigo-50 text-indigo-600 border-indigo-200 shadow-sm"
-                                        : "hover:bg-white text-gray-500 hover:text-gray-900"
-                                        }`}
+                                    className={cn(
+                                        "h-10 w-10 font-black rounded-xl transition-all shadow-sm",
+                                        pagination.currentPage === pageNum
+                                            ? "bg-neutral-900 text-white border-neutral-900 shadow-neutral-300"
+                                            : "bg-white text-neutral-500 hover:bg-neutral-100 border-neutral-200"
+                                    )}
                                     onClick={() => handlePageChange(pageNum)}
                                 >
                                     {pageNum}
@@ -425,7 +452,7 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
                         <Button
                             variant="outline"
                             size="sm"
-                            className="h-8 text-[11px] px-3 font-semibold hover:bg-white active:scale-95 transition-all"
+                            className="h-10 px-4 font-bold rounded-xl bg-white border-neutral-200 hover:bg-neutral-100 disabled:opacity-50 transition-all shadow-sm"
                             onClick={() => handlePageChange(pagination.currentPage + 1)}
                             disabled={pagination.currentPage === pagination.totalPages}
                         >

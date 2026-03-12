@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
       jobId: body.jobId,
     });
 
-      
+
 
     return NextResponse.json(
       {
@@ -56,8 +56,8 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 }
     );
-  } catch  {
-    // console.log("Job save error", error);
+  } catch {
+
     return NextResponse.json(
       { message: "Job save error", success: false },
       { status: 500 }

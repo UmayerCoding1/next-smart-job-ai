@@ -1,42 +1,39 @@
 import { AllUsers } from '@/components/dashboard/admin/all-users'
 import React from 'react'
 import { cookies } from 'next/headers'
+import { Button } from '@/components/ui/button';
+import { Globe, Shield } from 'lucide-react';
+import { getUsers } from '@/lib/get-user';
 
 interface Props {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 
-export const metadata = {
+const metadata = {
     title: "All Users | Smart Job AI",
     description: "All Users",
 }
 
-const page = async ({ searchParams }: Props) => {
+export default async function Page({ searchParams }: Props) {
     const params = await searchParams;
     const currentPage = parseInt((params.page as string) || "1");
-    const limit = 5;
+    const limit = 30;
 
-    // Fetch users via the API route
-    const nextCookies = await cookies();
-    const cookieString = nextCookies.toString();
+    const { users, pagination } = await getUsers(currentPage, limit);
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/admin/users?page=${currentPage}&limit=${limit}`, {
-        headers: {
-            Cookie: cookieString
-        },
-        cache: 'no-store'
-    });
-
-    const data = await response.json();
-    const users = data.success ? data.users : [];
-    const pagination = data.pagination || { totalUsers: 0, totalPages: 0, currentPage: 1, limit: 5 };
+    if (users) {
+        console.log(true)
+    } else {
+        console.log(false)
+    }
 
     return (
         <div>
+
             <AllUsers initialUsers={users} pagination={pagination} />
         </div>
     )
 }
 
-export default page
+
