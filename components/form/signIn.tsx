@@ -11,12 +11,12 @@ import PrimaryButton from "@/components/button/PrimaryButton";
 import Sociallogin from "@/components/action/Sociallogin";
 import { motion } from "motion/react";
 import Link from "next/link";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/app/features/user/userSlice";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { iDBUserData } from "@/lib/types";
+import { ApiErrorResponse, iDBUserData } from "@/lib/types";
 import { Button } from "../ui/button";
 
 const signUpSchema = z.object({
@@ -60,12 +60,12 @@ const SignIN = ({ popup, setPopup, idbUserData }: { popup: boolean; setPopup: Re
         setIsLoading(false);
         router.push("/");
       }
-    } catch (error: any) {
-      console.log(error.response.data);
-      if (error.response.data.message === "Your account is blacklisted") {
+    } catch (error) {
+      const err = error as AxiosError<ApiErrorResponse>;
+      if (err.response?.data.message === "Your account is blacklisted") {
         setBlacklistPopup(true);
       }
-      toast.error(error.response.data.message, { duration: 1500 });
+      toast.error(err.response?.data.message, { duration: 1500 });
     } finally {
       setIsLoading(false);
     }

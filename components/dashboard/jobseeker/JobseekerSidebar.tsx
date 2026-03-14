@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { BellRing, Bookmark, BriefcaseBusiness, Inbox, LayoutDashboard, Sparkles } from "lucide-react";
+import { Bookmark, BriefcaseBusiness, Inbox, LayoutDashboard } from "lucide-react";
 import Sidebar from '@/components/shared/dashboard/Sidebar';
 const JobseekerSidebar = () => {
   const navItem = [

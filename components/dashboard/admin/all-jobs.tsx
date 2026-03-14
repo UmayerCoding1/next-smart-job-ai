@@ -69,7 +69,7 @@ const AllJobs = ({ jobs }: { jobs: TableJobType[] }) => {
     useEffect(() => {
         const pausedJobsId = jobs?.filter((j) => j.status === "paused").map((j) => j._id);
         setSelectedIds(pausedJobsId);
-    }, []);
+    }, [jobs]);
 
     const filtered = jobs?.filter((job) => {
         const matchTab =

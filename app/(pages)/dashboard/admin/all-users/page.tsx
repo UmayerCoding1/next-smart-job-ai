@@ -1,8 +1,5 @@
 import { AllUsers } from '@/components/dashboard/admin/all-users'
 import React from 'react'
-import { cookies } from 'next/headers'
-import { Button } from '@/components/ui/button';
-import { Globe, Shield } from 'lucide-react';
 import { getUsers } from '@/lib/get-user';
 
 interface Props {
@@ -10,7 +7,7 @@ interface Props {
 }
 
 
-const metadata = {
+export const metadata = {
     title: "All Users | Smart Job AI",
     description: "All Users",
 }

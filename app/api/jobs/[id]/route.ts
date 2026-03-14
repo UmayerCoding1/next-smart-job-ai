@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Job } from "@/app/models/Job";
-import mongoose, { Types } from "mongoose";
+import { Types } from "mongoose";
 import '@/app/models/Company'
 
 export async function GET(
@@ -45,7 +45,7 @@ export async function GET(
 export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     await connectToDatabase();
-    const { id } = await context.params;
+    // const { id } = await context.params;
 
 
     return NextResponse.json({ message: "Job updated successfully", success: true }, { status: 200 });

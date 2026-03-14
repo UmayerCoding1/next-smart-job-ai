@@ -138,7 +138,7 @@ export async function GET(
       { status: 200 }
     );
   } catch (error) {
-
+    throw error
     return new Response("Internal Server Error", { status: 500 });
   }
 }
@@ -181,7 +181,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-
+    throw error
     return new Response("Internal Server Error", { status: 500 });
   }
 }

@@ -1,5 +1,4 @@
 import { Job } from "@/app/models/Job";
-import Jobs from "@/components/ui/job/Jobs";
 import { connectToDatabase } from "@/lib/db";
 import { withAuth } from "@/lib/withAuth";
 import { NextRequest, NextResponse } from "next/server";

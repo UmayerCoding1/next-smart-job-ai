@@ -1,13 +1,13 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { motion } from 'motion/react';
-import { Archive, Building2, CheckCircle2, Edit2, Eye, Flag, MoreHorizontal, Pause, ShieldCheck, Trash2, XCircle } from 'lucide-react';
+import { Archive, Building2, CheckCircle2, Eye, MoreHorizontal, Pause, Trash2, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { JobStatus, TableJobType } from './all-jobs';
 import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
-import axios from 'axios';
+import Image from 'next/image';
+
 
 
 
@@ -46,7 +46,13 @@ export const JobTableColum = ({ job, i, handleApprove, handleDeleteJobs }: Props
         <td className="px-4 py-3">
           <div className="flex items-start gap-3">
             <div className={cn("w-9 h-9 rounded-lg  flex items-center justify-center shrink-0 mt-0.5", !job.company?.logo && "bg-gradient-to-br from-blue-100 to-indigo-100")}>
-              {job.company?.logo ? <img src={job.company?.logo} alt="" className="w-full h-full object-cover rounded-full " /> : <Building2 size={16} className="text-indigo-500" />}
+              {job.company?.logo ? <Image
+                src={job.company?.logo || "/placeholder.png"}
+                alt="Company Logo"
+                width={40}
+                height={40}
+                className="object-cover rounded-full"
+              /> : <Building2 size={16} className="text-indigo-500" />}
             </div>
             <div>
               <p className="font-semibold text-gray-800 leading-tight">

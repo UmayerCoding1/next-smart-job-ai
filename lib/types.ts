@@ -149,3 +149,8 @@ export interface IUser {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+
+export interface ApiErrorResponse {
+  message: string;
+}

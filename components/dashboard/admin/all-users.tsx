@@ -8,7 +8,6 @@ import {
     Eye,
     Trash2,
     MoreHorizontal,
-    Mail,
     UserCircle,
     Shield,
     ShieldAlert,
@@ -16,9 +15,6 @@ import {
     Ban,
     UserCheck,
     Briefcase,
-    Calendar,
-    MapPin,
-    Smartphone,
     Globe,
     UserX,
 } from "lucide-react";
@@ -44,6 +40,7 @@ import { getTimeAgo } from "@/lib/getTimeAgo";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { toast } from "sonner";
+import Image from "next/image";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface PaginationData {
@@ -61,7 +58,7 @@ interface AllUsersProps {
 // ─── Status Config ────────────────────────────────────────────────────────────
 const statusConfig: Record<
     string,
-    { label: string; className: string; dot: string; icon: any }
+    { label: string; className: string; dot: string; icon: React.ComponentType<{ size?: number }> }
 > = {
     [Status.ACTIVE]: {
         label: "Active",
@@ -83,7 +80,7 @@ const statusConfig: Record<
     },
 };
 
-const roleConfig: Record<string, { label: string; icon: any; color: string; badge: string }> = {
+const roleConfig: Record<string, { label: string; icon: React.ComponentType<{ size?: number }>; color: string; badge: string }> = {
     [ROLE.ADMIN]: {
         label: "Admin",
         icon: ShieldCheck,
@@ -220,13 +217,13 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
                                     const headers = ["Full Name", "Email", "Username", "Role", "Status", "Joined"];
                                     const csvContent = [
                                         headers.join(","),
-                                        ...usersToExport.map((u: any) => [
+                                        ...usersToExport.map((u: IUser) => [
                                             `"${u.fullname}"`,
                                             `"${u.email}"`,
                                             `"${u.username}"`,
                                             `"${u.role}"`,
                                             `"${u.status}"`,
-                                            `"${new Date(u.createdAt).toLocaleDateString()}"`
+                                            `"${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : ""}"`
                                         ].join(","))
                                     ].join("\n");
 
@@ -319,7 +316,7 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
                                             </div>
                                             <div>
                                                 <p className="font-bold text-neutral-900">No results found</p>
-                                                <p className="text-sm text-neutral-500 mt-1">Try adjusting your filters or search terms to find what you're looking for.</p>
+                                                <p className="text-sm text-neutral-500 mt-1">Try adjusting your filters or search terms to find what you&apos;re looking for.</p>
                                             </div>
                                         </div>
                                     </TableCell>
@@ -344,10 +341,12 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
                                                 <div className="flex items-center gap-2">
                                                     <div className="relative flex-shrink-0">
                                                         {user.avatar ? (
-                                                            <img
+                                                            <Image
                                                                 src={user.avatar}
                                                                 alt={user.fullname}
-                                                                className="w-8 h-8 rounded-2xl object-cover ring-2 ring-white shadow-md"
+                                                                width={32}
+                                                                height={32}
+                                                                className="rounded-2xl object-cover ring-2 ring-white shadow-md"
                                                             />
                                                         ) : (
                                                             <div className="w-8 h-8 text-sm rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold  shadow-lg ring-2 ring-white">
