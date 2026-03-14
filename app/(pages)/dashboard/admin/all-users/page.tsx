@@ -23,7 +23,7 @@ export default async function Page({ searchParams }: Props) {
     return (
         <div>
 
-            <AllUsers initialUsers={users?.users || []} pagination={users?.pagination || {}} />
+            <AllUsers initialUsers={users?.users} pagination={users?.pagination || {}} />
         </div>
     )
 }

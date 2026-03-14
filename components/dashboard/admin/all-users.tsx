@@ -131,6 +131,7 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers = [], paginatio
     const [deleteUserId, setDeleteUserId] = useState<string>("");
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
+    console.log(initialUsers)
     // Sync state with initialUsers when props change (for pagination)
     useEffect(() => {
         setUsers(initialUsers);
