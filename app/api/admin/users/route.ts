@@ -6,9 +6,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
     try {
         await connectToDatabase();
-        // Verify admin role
         const auth = await withAuth(request, { allowedRoles: "admin" });
-        // if (!auth.ok) return auth.response;
+        if (!auth.ok) return auth.response;
 
         const { searchParams } = new URL(request.url);
         const page = parseInt(searchParams.get("page") || "1");
@@ -43,3 +42,6 @@ export async function GET(request: NextRequest) {
         );
     }
 }
+
+
+

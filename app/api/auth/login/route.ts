@@ -1,4 +1,4 @@
-import { IUser, User } from "@/app/models/User";
+import { IUser, Status, User } from "@/app/models/User";
 import { connectToDatabase } from "@/lib/db";
 import { veridedPassword, verifyEmail } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
@@ -33,6 +33,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+
+
+
     const isPasswordValid = await veridedPassword(password, user.password);
     if (!isPasswordValid) {
       return NextResponse.json(
@@ -51,7 +54,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const token = jwt.sign({ id: user._id,role:user.role }, process.env.JWT_SECRET!, {
+    if (user.status === Status.BLACKLISTED) {
+      return NextResponse.json(
+        { message: "Your account is blacklisted", success: false },
+        { status: 400 }
+      );
+    }
+
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET!, {
       expiresIn: "7d",
     });
 
@@ -65,19 +75,19 @@ export async function POST(request: NextRequest) {
     (await cookies()).set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      
-      maxAge: 2 * 24 * 60 * 60 * 1000, 
+
+      maxAge: 2 * 24 * 60 * 60 * 1000,
     });
 
-      
 
 
-    if(!user._id) return;
-    
-       setCookies('auth', user._id.toString(),{
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-       });
+
+    if (!user._id) return;
+
+    setCookies('auth', user._id.toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
 
     return NextResponse.json(
       { message: "Login successful", success: true, user },

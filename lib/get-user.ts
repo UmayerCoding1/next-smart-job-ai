@@ -8,7 +8,7 @@ export const getUsers = async (page: number, limit: number) => {
         headers: {
             Cookie: cookieString
         },
-        cache: 'force-cache'
+
     });
 
     const data = await response.json();

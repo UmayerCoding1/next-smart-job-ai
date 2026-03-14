@@ -20,6 +20,7 @@ import {
     MapPin,
     Smartphone,
     Globe,
+    UserX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,6 +42,8 @@ import {
 import { IUser, ROLE, Status } from "@/lib/types";
 import { getTimeAgo } from "@/lib/getTimeAgo";
 import { cn } from "@/lib/utils";
+import axios from "axios";
+import { toast } from "sonner";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface PaginationData {
@@ -127,6 +130,9 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
     const [search, setSearch] = useState<string>("");
     const [roleFilter, setRoleFilter] = useState<string>("all");
     const [statusFilter, setStatusFilter] = useState<string>("all");
+    const [deleteUserPopup, setDeleteUserPopup] = useState<boolean>(false);
+    const [deleteUserId, setDeleteUserId] = useState<string>("");
+    const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
     // Sync state with initialUsers when props change (for pagination)
     useEffect(() => {
@@ -153,14 +159,41 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
     };
 
     const handleDeleteUser = async (userId: string) => {
-        if (confirm("Are you sure you want to delete this user?")) {
-            setUsers(users.filter(u => String(u._id) !== userId));
+        try {
+            setIsDeleting(true);
+            const res = await axios.delete('/api/admin/users/' + userId);
+            console.log(res.data)
+            if (true) {
+                setDeleteUserPopup(false);
+                setDeleteUserId("");
+                setIsDeleting(false);
+                setUsers(users.filter(u => String(u._id) !== userId));
+                toast.success("User deleted successfully");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to delete user");
         }
     };
 
     const handleChangeStatus = async (userId: string, newStatus: string) => {
-        setUsers(users.map(u => String(u._id) === userId ? { ...u, status: newStatus } : u));
+        try {
+
+
+            const res = await axios.patch('/api/admin/users/status/' + userId, { status: newStatus });
+            console.log(res.data)
+            if (res.data.success) {
+                setUsers(users.map(u => String(u._id) === userId ? { ...u, status: newStatus } : u));
+                toast.success("User status updated successfully");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to update user status");
+        }
+
     };
+
+
 
     return (
         <div className="lg:px-8 pb-12 space-y-8 animate-in fade-in duration-500">
@@ -296,6 +329,7 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
                                     const role = roleConfig[user.role] || roleConfig[ROLE.JOBSEEKER];
                                     const RoleIcon = role.icon;
 
+
                                     return (
                                         <motion.tr
                                             key={String(user._id)}
@@ -376,29 +410,60 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
                                                         </DropdownMenuItem>
                                                         <DropdownMenuSeparator className="my-1.5 " />
 
-                                                        {user.status !== Status.ACTIVE && (
-                                                            <DropdownMenuItem
-                                                                className="gap-3 py-3 rounded-xl cursor-pointer text-emerald-600 hover:bg-emerald-50 transition-colors font-semibold"
-                                                                onClick={() => handleChangeStatus(String(user._id), Status.ACTIVE)}
-                                                            >
-                                                                <UserCheck size={18} />
-                                                                Unblock User
-                                                            </DropdownMenuItem>
-                                                        )}
+                                                        {user.status === Status.ACTIVE && (
+                                                            <>
+                                                                <DropdownMenuItem
+                                                                    className="gap-3 py-3 rounded-xl cursor-pointer text-amber-600 hover:bg-amber-50 transition-colors font-semibold"
+                                                                    onClick={() => handleChangeStatus(String(user._id), Status.BLACKLISTED)}
+                                                                >
+                                                                    <Ban size={18} />
+                                                                    Block User
+                                                                </DropdownMenuItem>
 
-                                                        {user.status !== Status.BLACKLISTED && (
-                                                            <DropdownMenuItem
-                                                                className="gap-3 py-3 rounded-xl cursor-pointer text-amber-600 hover:bg-amber-50 transition-colors font-semibold"
-                                                                onClick={() => handleChangeStatus(String(user._id), Status.BLACKLISTED)}
-                                                            >
-                                                                <Ban size={18} />
-                                                                Block User
-                                                            </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    className="gap-3 py-3 rounded-xl cursor-pointer text-amber-600 hover:bg-amber-50 transition-colors font-semibold"
+                                                                    onClick={() => handleChangeStatus(String(user._id), Status.INACTIVE)}
+                                                                >
+                                                                    <UserX size={18} />
+                                                                    Inactive User
+                                                                </DropdownMenuItem>
+                                                            </>
+                                                        )}
+                                                        {user.status === Status.BLACKLISTED && (
+                                                            <>
+
+                                                                <DropdownMenuItem
+                                                                    className="gap-3 py-3 rounded-xl cursor-pointer text-emerald-600 hover:bg-emerald-50 transition-colors font-semibold"
+                                                                    onClick={() => handleChangeStatus(String(user._id), Status.ACTIVE)}
+                                                                >
+                                                                    <UserCheck size={18} />
+                                                                    Unblock User
+                                                                </DropdownMenuItem>
+                                                            </>
+                                                        )}
+                                                        {user.status === Status.INACTIVE && (
+                                                            <>
+
+                                                                <DropdownMenuItem
+                                                                    className="gap-3 py-3 rounded-xl cursor-pointer text-emerald-600 hover:bg-emerald-50 transition-colors font-semibold"
+                                                                    onClick={() => handleChangeStatus(String(user._id), Status.ACTIVE)}
+                                                                >
+                                                                    <UserCheck size={18} />
+                                                                    Active User
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    className="gap-3 py-3 rounded-xl cursor-pointer text-amber-600 hover:bg-amber-50 transition-colors font-semibold"
+                                                                    onClick={() => handleChangeStatus(String(user._id), Status.BLACKLISTED)}
+                                                                >
+                                                                    <Ban size={18} />
+                                                                    Block User
+                                                                </DropdownMenuItem>
+                                                            </>
                                                         )}
 
                                                         <DropdownMenuItem
                                                             className="gap-3 py-3 rounded-xl cursor-pointer text-rose-600 hover:bg-rose-50 transition-colors font-semibold"
-                                                            onClick={() => handleDeleteUser(String(user._id))}
+                                                            onClick={() => { setDeleteUserId(String(user._id)); setDeleteUserPopup(true) }}
                                                         >
                                                             <Trash2 size={18} />
                                                             Delete Account
@@ -461,6 +526,20 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
                     </div>
                 </div>
             </div>
+
+
+            {deleteUserPopup && <div className="fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 flex items-center justify-center ">
+                <div className="w-[330px] bg-white p-6 rounded-2xl">
+                    <div>
+                        <h2 className="text-2xl font-bold">Are you sure you want to delete this user?</h2>
+                        <p className="text-sm text-gray-600">This action cannot be undone.</p>
+                    </div>
+                    <div className="flex items-center justify-end gap-2 mt-5">
+                        <Button variant="outline" onClick={() => { setDeleteUserPopup(false) }}>Cancel</Button>
+                        <Button onClick={() => handleDeleteUser(deleteUserId)} disabled={isDeleting}> {isDeleting ? "Deleting..." : "Yes, delete"}</Button>
+                    </div>
+                </div>
+            </div>}
         </div>
     );
 };

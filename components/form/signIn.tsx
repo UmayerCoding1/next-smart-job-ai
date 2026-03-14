@@ -6,7 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeClosed, Loader2 } from "lucide-react";
+import { Ban, Eye, EyeClosed, Loader2 } from "lucide-react";
 import PrimaryButton from "@/components/button/PrimaryButton";
 import Sociallogin from "@/components/action/Sociallogin";
 import { motion } from "motion/react";
@@ -30,11 +30,11 @@ const MotionButton = motion(PrimaryButton);
 
 type SignUpForm = z.infer<typeof signUpSchema>;
 
-const SignIN = ({ popup, setPopup,idbUserData }: { popup: boolean; setPopup: React.Dispatch<React.SetStateAction<boolean>>;idbUserData:iDBUserData[]}) => {
+const SignIN = ({ popup, setPopup, idbUserData }: { popup: boolean; setPopup: React.Dispatch<React.SetStateAction<boolean>>; idbUserData: iDBUserData[] }) => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [blacklistPopup, setBlacklistPopup] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -51,7 +51,7 @@ const SignIN = ({ popup, setPopup,idbUserData }: { popup: boolean; setPopup: Rea
     setIsLoading(true);
     try {
       const res = await axios.post("/api/auth/login", data);
-      console.log(res.data);
+
 
       if (res.data.success) {
         localStorage.removeItem("unverifyed_user_traits");
@@ -60,9 +60,12 @@ const SignIN = ({ popup, setPopup,idbUserData }: { popup: boolean; setPopup: Rea
         setIsLoading(false);
         router.push("/");
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("Login failed! Please try again", { duration: 1500 });
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data.message === "Your account is blacklisted") {
+        setBlacklistPopup(true);
+      }
+      toast.error(error.response.data.message, { duration: 1500 });
     } finally {
       setIsLoading(false);
     }
@@ -180,6 +183,17 @@ const SignIN = ({ popup, setPopup,idbUserData }: { popup: boolean; setPopup: Rea
                 Close
               </Button>
             </div>
+          </div>
+        </div>
+      )}
+
+
+      {blacklistPopup && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-[330px] flex items-center justify-center gap-2 flex-col">
+            <Ban className="text-red-500" size={50} />
+            <p className="text-red-500 text-2xl font-medium">Your account is blacklisted</p>
+            <button className="bg-red-500 text-white px-5 py-2 rounded-lg cursor-pointer" onClick={() => setBlacklistPopup(false)}>Close </button>
           </div>
         </div>
       )}

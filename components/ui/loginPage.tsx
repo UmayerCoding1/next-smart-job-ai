@@ -5,15 +5,15 @@ import { getAllUserIDB } from '@/utils/indexedDB';
 import { iDBUserData } from '@/lib/types';
 
 const LoginPage = () => {
-    const [popup, setPopup] = useState(false);
+  const [popup, setPopup] = useState(false);
   const [idbUser, setIdbUser] = useState<iDBUserData[]>([]);
 
   useEffect(() => {
     const handleIdbUser = async () => {
-      
+
       const user = await getAllUserIDB();
-      if(user.length > 0) {
-       
+      if (user.length > 0) {
+
         setIdbUser(user);
       }
     };
@@ -25,11 +25,11 @@ const LoginPage = () => {
       document.body.style.overflow = "auto";
     }
   }, [popup]);
-    return (
-        <div>
-            <SignIN popup={popup} setPopup={setPopup} idbUserData={idbUser}/>
-        </div>
-    );
+  return (
+    <div>
+      <SignIN popup={popup} setPopup={setPopup} idbUserData={idbUser} />
+    </div>
+  );
 };
 
 export default LoginPage;

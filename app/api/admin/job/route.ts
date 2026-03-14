@@ -7,8 +7,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
     try {
         await connectToDatabase();
-        // const auth = await withAuth(req, { allowedRoles: "admin" });
-        // if (!auth.ok) return auth.response;
+        const auth = await withAuth(req, { allowedRoles: "admin" });
+        if (!auth.ok) return auth.response;
 
         const statusOrder = ["active", "paused", "draft", "closed"];
 

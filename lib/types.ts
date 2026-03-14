@@ -94,9 +94,9 @@ export enum ROLE {
 }
 
 export enum Status {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
-  BLACKLISTED = "BLACKLISTED",
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  BLACKLISTED = "blacklisted",
 }
 
 export interface IUser {
