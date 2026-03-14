@@ -2,9 +2,15 @@ import { Job } from "@/app/models/Job";
 import { connectToDatabase } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { Types } from "mongoose";
+import { withAuth } from "@/lib/withAuth";
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
+
+    const auth = await withAuth(request, { allowedRoles: "recruiter" });
+
+    if (!auth.ok) return auth.response;
+
     let currentStatus;
     const searchParams = new URL(request.url).searchParams;
     const recruiterId = searchParams.get("recruiterId");

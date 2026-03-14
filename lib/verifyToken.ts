@@ -5,14 +5,14 @@ export const verifyToken = (token: string): JwtPayload & { id: string } | null =
   try {
     if (!token) {
       return null;
-      
+
     }
-    
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload & {
       id: string;
     };
 
-  //  console.log('decoded',decoded);
+    // console.log('decoded', decoded);
     return decoded;
   } catch (error) {
     console.error("Token verify error", error);

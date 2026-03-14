@@ -23,7 +23,7 @@ function decodeJWT(token: string): JwtPayload | null {
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token")?.value;
-
+  console.log(token)
   const protectedRoutes = ["/dashboard", "/profile"];
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
@@ -68,7 +68,7 @@ export async function middleware(req: NextRequest) {
       }
     }
 
-    return NextResponse.next(); // ✅ Everything OK
+    return NextResponse.next(); // ✅ 
   } catch (error) {
     console.error("Middleware Error:", error);
     return NextResponse.redirect(new URL("/login", req.url));

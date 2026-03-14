@@ -17,7 +17,7 @@ export default async function Page({ searchParams }: Props) {
     const currentPage = parseInt((params.page as string) || "1");
     const limit = 30;
 
-    const { users, pagination } = await getUsers(currentPage, limit);
+    const users = await getUsers(currentPage, limit);
 
     if (users) {
         console.log(true)
@@ -28,7 +28,7 @@ export default async function Page({ searchParams }: Props) {
     return (
         <div>
 
-            <AllUsers initialUsers={users} pagination={pagination} />
+            <AllUsers initialUsers={users?.users} pagination={users?.pagination} />
         </div>
     )
 }

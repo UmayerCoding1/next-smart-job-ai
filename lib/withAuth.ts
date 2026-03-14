@@ -14,10 +14,10 @@ export const withAuth = async (
   request: NextRequest,
   options: Options
 ): Promise<
-  { ok: true; userId: mongoose.Types.ObjectId | string} | { ok: false; response: NextResponse }
+  { ok: true; userId: mongoose.Types.ObjectId | string } | { ok: false; response: NextResponse }
 > => {
   const token = (await cookies()).get("token")?.value as unknown as string;
-   
+
   if (!token) {
     return {
       ok: false,
@@ -27,22 +27,22 @@ export const withAuth = async (
       ),
     };
   }
-    const veriFyToken = await verifyToken(token);
+  const veriFyToken = await verifyToken(token);
 
-    if (!veriFyToken) {
-      return {
-        ok: false,
-        response: NextResponse.json(
-          { message: "Not authorized" },
-          { status: 401 }
-        ),
-      };
-    }
+  if (!veriFyToken) {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { message: "Not authorized" },
+        { status: 401 }
+      ),
+    };
+  }
 
   const user = await User.findById(veriFyToken.id);
 
 
-   
+
   if (options.allowedRoles !== user.role) {
     return {
       ok: false,
@@ -53,5 +53,5 @@ export const withAuth = async (
     };
   }
 
-  return { ok: true,  userId: veriFyToken.id };
+  return { ok: true, userId: veriFyToken.id };
 };

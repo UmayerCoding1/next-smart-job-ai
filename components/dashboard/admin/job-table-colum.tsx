@@ -228,7 +228,7 @@ const StatusPill = ({ status }: { status: JobStatus }) => {
   };
 
   const cfg = statusConfig[status];
-  console.log('cfg', status);
+
   if (!cfg) return null
   return (
     <span

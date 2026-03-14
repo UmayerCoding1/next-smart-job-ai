@@ -1,5 +1,6 @@
 import { Job } from "@/app/models/Job";
 import { connectToDatabase } from "@/lib/db";
+import { withAuth } from "@/lib/withAuth";
 import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,6 +9,9 @@ export async function PATCH(request: NextRequest) {
     await connectToDatabase();
     // const { id } = await context.params;
     const { status, id, ids } = await request.json();
+    const auth = await withAuth(request, { allowedRoles: "admin" });
+    if (!auth.ok) return auth.response;
+
 
     const allowedStatus = ["active", "paused", "draft", "closed"];
     if (!status || !allowedStatus.includes(status)) {
