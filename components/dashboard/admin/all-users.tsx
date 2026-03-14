@@ -51,7 +51,7 @@ interface PaginationData {
 }
 
 interface AllUsersProps {
-    initialUsers: IUser[];
+    initialUsers: IUser[] | [];
     pagination: PaginationData;
 }
 
@@ -118,7 +118,7 @@ const StatusPill = ({ status }: { status: string }) => {
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
-export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) => {
+export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers = [], pagination }) => {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -136,7 +136,7 @@ export const AllUsers: React.FC<AllUsersProps> = ({ initialUsers, pagination }) 
         setUsers(initialUsers);
     }, [initialUsers]);
 
-    const filteredUsers = users.filter((user) => {
+    const filteredUsers = users?.filter((user) => {
         const matchesSearch =
             user.fullname.toLowerCase().includes(search.toLowerCase()) ||
             user.email.toLowerCase().includes(search.toLowerCase()) ||

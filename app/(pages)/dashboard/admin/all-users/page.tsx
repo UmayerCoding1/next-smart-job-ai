@@ -19,16 +19,11 @@ export default async function Page({ searchParams }: Props) {
 
     const users = await getUsers(currentPage, limit);
 
-    if (users) {
-        console.log(true)
-    } else {
-        console.log(false)
-    }
 
     return (
         <div>
 
-            <AllUsers initialUsers={users?.users} pagination={users?.pagination} />
+            <AllUsers initialUsers={users?.users || []} pagination={users?.pagination || {}} />
         </div>
     )
 }
