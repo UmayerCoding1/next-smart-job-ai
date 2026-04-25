@@ -1,6 +1,6 @@
 // import { Company } from "@/app/models/Company";
 import { Company } from "@/app/models/Company";
-import { IJob, Job } from "@/app/models/Job";
+import { IJob, Job, JobStatus } from "@/app/models/Job";
 import { connectToDatabase } from "@/lib/db";
 import { withAuth } from "@/lib/withAuth";
 import { NextRequest, NextResponse } from "next/server";
@@ -111,73 +111,91 @@ export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
     const searchParams = new URL(request.url).searchParams;
-    const existingJobId = searchParams.get("existingJodId");
     const catehory = searchParams.get("category");
     const jobtitle = searchParams.get("title");
-    const jobType = searchParams.get("jobType");
+    const singleJobType = searchParams.get("jobType");
     const location = searchParams.get("location");
-
-
     const filterString = searchParams.getAll("filter");
+
+
+    const rawFilter = filterString[0];
+    const parsedFilter = rawFilter ? JSON.parse(rawFilter) : null;
+    let normalizedJobType: string[] = [];
+
+    if (normalizedJobType?.length > 0) {
+      normalizedJobType = [singleJobType || ""];
+    } else if (parsedFilter?.JobType?.length) {
+      normalizedJobType = parsedFilter.JobType;
+    }
+
+    const experienceLevel = parsedFilter?.ExperienceLavel;
+    const datePosted = parsedFilter?.DatePosted;
+
+
     const filter: FilterQuery<IJob> = {
-      status: 'active'
+      status: JobStatus.ACTIVE,
+      // this is a prectice project so i am not using this line 
+      // but it is a good way to filter jobs by deadline
+      // $expr: {
+      //   $gte: [
+      //     { $toDate: "$dedline" },
+      //     new Date()
+      //   ]
+      // }
+
     };
-    if (
-      filterString &&
-      filterString.length > 0 &&
-      filterString[0].trim() !== ""
-    ) {
-      const filterQuery = JSON.parse(filterString[0]) as FilterQuery<IJob>;
 
-      if (filterQuery.JobType && filterQuery.JobType.length > 0) {
-        filter.jobtype = {
-          $in: filterQuery.JobType,
-        };
-      }
-      if (
-        filterQuery.ExperienceLavel &&
-        filterQuery.ExperienceLavel.length > 0
-      ) {
-        filter.experience = {
-          $in: filterQuery.ExperienceLavel,
-        };
-      }
-    }
-
-    if (existingJobId && !mongoose.Types.ObjectId.isValid(existingJobId)) {
-      return NextResponse.json(
-        { message: "Invalid job ID", success: false },
-        { status: 400 }
-      );
-    }
-
-    if (existingJobId) filter._id = existingJobId;
     if (jobtitle) {
       filter.title = {
-        $regex: new RegExp(jobtitle, "i"),
+        $regex: jobtitle,
+        $options: "i",
       };
     }
-    if (jobType) {
-      filter.jobtype = {
-        $elemMatch: { $regex: new RegExp(jobType, "i") },
-      };
+    if (normalizedJobType?.length > 0) {
+      filter.jobtype = { $in: normalizedJobType };
     }
     if (location) {
-      filter.location = {
-        $regex: new RegExp(location, "i"),
-      };
+      filter.location = location;
+    }
+    if (catehory) {
+      filter.category = catehory;
     }
 
-    if (catehory) {
-      filter.category = {
-        $regex: new RegExp(catehory, "i"),
-      };
+    if (experienceLevel?.length > 0) {
+      filter.experienceLevel = { $in: experienceLevel };
+    }
+
+    if (datePosted) {
+      const now = new Date();
+
+      let startDate: Date | null = null;
+
+      if (datePosted === "last 24 hours") {
+        startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      }
+
+      if (datePosted === "last 7 days") {
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      }
+      if (datePosted === 'last 30 days') {
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      }
+      if (datePosted === 'last 60 days') {
+        startDate = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
+      }
+      if (datePosted === 'last 90 days') {
+        startDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+      }
+
+
+      if (startDate) {
+        filter.createdAt = {
+          $gte: startDate,
+        };
+      }
     }
 
     const jobs = await Job.find(filter).populate("company");
-
-
-
 
     return NextResponse.json({ jobs, success: true }, { status: 200 });
   } catch (error) {

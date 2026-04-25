@@ -7,13 +7,14 @@ const Company = ({ isHeader = true }: { isHeader?: boolean }) => {
   return (
     <div className="">
       {isHeader && (
-        <div className="text-center mt-10 mb-6">
-          <h2 className="text-3xl font-bold text-gray-800">
+        <div className="text-center mt-20 mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-800">
             Top Companies Hiring Now
           </h2>
-          <p className="mt-2 text-gray-500 max-w-xl mx-auto">
+          <div className="w-20 h-1.5 bg-[#82C526] mx-auto mt-4 rounded-full"></div>
+          <p className="mt-6 text-neutral-600 max-w-xl mx-auto font-medium">
             Discover the most trusted employers actively looking for top talent
-            on SmartJod AI. Start your career with the best in the industry.
+            on SmartJob AI. Start your career with the best in the industry.
           </p>
         </div>
       )}

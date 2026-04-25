@@ -15,7 +15,7 @@ const HeaderBg = "/assets/jods-header.jpg";
 const BrowseJobs = () => {
   const [listView, setListView] = useState<string>("grid");
   const [page, setPage] = useState<number>(1);
- const [filterQuery, setFilterQuery] = useState<string | null>(null);
+  const [filterQuery, setFilterQuery] = useState<string | null>(null);
   const searchUrl = useSearchParams();
   const category = searchUrl.get("category") || "";
   const title = searchUrl.get("title") || "";
@@ -24,7 +24,7 @@ const BrowseJobs = () => {
   const { jobs, isLoading } = useJobs(category, '', title, jobType, location, filterQuery);
   const router = useRouter();
 
-console.log(filterQuery)
+  console.log(filterQuery)
   console.log(category);
   const clearSearch = () => {
     router.push("/browse-jobs");
@@ -59,7 +59,7 @@ console.log(filterQuery)
 
       <div className="flex flex-col md:flex-row gap-4 lg:p-16">
         <div className="w-[22%] hidden lg:block bg-white p-5 rounded-md">
-          <Filter setFilterQuery={setFilterQuery}/>
+          <Filter setFilterQuery={setFilterQuery} />
         </div>
 
         {/* <div>
@@ -75,9 +75,8 @@ console.log(filterQuery)
                     setPage(page - 1);
                   }
                 }}
-                className={`${
-                  page === 1 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`${page === 1 ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
               >
                 <ChevronLeft size={13} />
               </GostButton>
@@ -85,9 +84,8 @@ console.log(filterQuery)
                 {Array.from({ length: 5 }).map((_, index) => (
                   <span
                     key={index}
-                    className={`text-sm font-medium ${
-                      page === index + 1 ? "text-blue-500" : "text-gray-400"
-                    }`}
+                    className={`text-sm font-medium ${page === index + 1 ? "text-blue-500" : "text-gray-400"
+                      }`}
                   >
                     {index + 1}
                   </span>
@@ -100,9 +98,8 @@ console.log(filterQuery)
                     setPage(page + 1);
                   }
                 }}
-                className={`${
-                  page === 5 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`${page === 5 ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
               >
                 <ChevronRight size={13} />
               </GostButton>
@@ -115,15 +112,13 @@ console.log(filterQuery)
               <p className="text-lg font-medium">View :</p>
               <Grid2X2
                 onClick={() => setListView("grid")}
-                className={`${
-                  listView === "grid" ? "text-blue-500" : "text-gray-400"
-                } border rounded-sm  p-1`}
+                className={`${listView === "grid" ? "text-blue-500" : "text-gray-400"
+                  } border rounded-sm  p-1`}
               />
               <Menu
                 onClick={() => setListView("list")}
-                className={`${
-                  listView === "list" ? "text-blue-500" : "text-gray-400"
-                } border  rounded-sm p-1`}
+                className={`${listView === "list" ? "text-blue-500" : "text-gray-400"
+                  } border  rounded-sm p-1`}
               />
             </div>
           </div>
@@ -135,9 +130,8 @@ console.log(filterQuery)
               </div>
             ) : (
               <div
-                className={`grid grid-cols-1 ${
-                  listView === "list" ? "lg:grid-cols-1" : "lg:grid-cols-4"
-                } gap-4 p-4 max-h-screen overflow-auto scrollbar-hide`}
+                className={`grid grid-cols-1 ${listView === "list" ? "lg:grid-cols-1" : "lg:grid-cols-4"
+                  } gap-4 p-4 max-h-screen overflow-auto scrollbar-hide`}
               >
                 {jobs.map((job: IJob) => (
                   <Joblist key={job._id?.toString()} job={job} />

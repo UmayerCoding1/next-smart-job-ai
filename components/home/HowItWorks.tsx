@@ -9,22 +9,22 @@ import {motion} from 'motion/react';
 export const MotionDiv = motion.div;
 const steps = [
   {
-    icon: <Search className="h-8 w-8 text-white" />,
+    icon: <Search className="h-8 w-8 text-black" />,
     title: "1. Discover Jobs",
     desc: "Explore a wide range of AI-matched job listings tailored to your skills and interests.",
-    color: "bg-blue-500",
+    color: "bg-[#93FE9C]",
   },
   {
     icon: <Briefcase className="h-8 w-8 text-white" />,
     title: "2. Apply with Ease",
     desc: "Use our AI-powered resume tools and one-click apply features to stand out.",
-    color: "bg-purple-500",
+    color: "bg-[#82C526]",
   },
   {
     icon: <CheckCircle2 className="h-8 w-8 text-white" />,
     title: "3. Get Hired Faster",
     desc: "Track your application, chat with companies, and land your dream job in less time.",
-    color: "bg-green-500",
+    color: "bg-[#5c940d]",
   },
 ];
 

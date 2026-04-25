@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { Star, Trophy, Users, Rocket, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import PrimaryButton from "../button/PrimaryButton";
@@ -25,14 +25,16 @@ const KeyHighlights = () => {
             />
           </div>
 
-          <div className="p-4 shadow-md w-full h-60  md:w-[350px] lg:w-[350px] border border-gray-200 rounded-lg bg-blue-50 flex flex-col justify-between">
-            <h2 className="text-6xl font-bold">82%</h2>
+          <div className="p-6 shadow-xl w-full h-64 md:w-[350px] lg:w-[350px] border border-white/50 rounded-2xl bg-white/80 backdrop-blur-md flex flex-col justify-between relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Trophy className="w-20 h-20 text-green-600" />
+            </div>
+            <h2 className="text-6xl font-bold text-[#5c940d]">82%</h2>
 
             <div>
-              <h2 className="text-2xl font-semibold">Successful Contracts</h2>
-              <p className="text-sm font-medium">
-                Maecenas dapibus libero elit, ac egestas purus egestas a. Duis
-                venenatis element
+              <h2 className="text-2xl font-bold text-neutral-800">Successful Contracts</h2>
+              <p className="text-sm font-medium text-neutral-600 mt-2">
+                Our platform maintains a high success rate in matching digital talent with their ideal remote teams.
               </p>
             </div>
           </div>
@@ -41,52 +43,59 @@ const KeyHighlights = () => {
 
       <DropAnimation
         delay={0.7}
-        className="w-full md:w-1/2 lg:w-1/2 relative group overflow-hidden"
+        className="w-full md:w-1/2 lg:w-1/2 relative group overflow-hidden rounded-3xl shadow-2xl"
       >
         <Image
           src={GrilStudent}
-          alt=""
+          alt="Top Rated"
           width={800}
           height={800}
-          className=" w-full h-full group-hover:scale-105 transition-all duration-200"
+          className="w-full h-[600px] object-cover group-hover:scale-105 transition-all duration-700"
         />
 
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b form-[#000] to-[#000]  text-white flex flex-col  justify-end p-10">
-          <div className="flex space-x-1">
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent text-white flex flex-col justify-end p-10">
+          <div className="flex space-x-1 mb-4">
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"
+                className="w-6 h-6 bg-[#93FE9C] rounded-full flex items-center justify-center"
               >
-                <Star className="text-white w-4 h-4" />
+                <Star className="text-black w-3.5 h-3.5 fill-black" />
               </div>
             ))}
+            <span className="ml-2 text-sm font-bold tracking-widest uppercase">Premium Quality</span>
           </div>
 
-          <h1 className="text-3xl font-bold mt-4">Top-rated Companies</h1>
-          <p className="text-sm font-medium  my-2">
-            Top-rated Companies Maecenas dapibus libero elit, ac egestas purus
-            egestas a. Duis venenatis elementum odio GET FREE CONSULTATION
+          <h1 className="text-4xl font-bold mt-2">Top-rated Companies</h1>
+          <p className="text-base font-medium my-4 opacity-90 max-w-md">
+            Join the elite circle of digital teams. We partner with industry leaders to provide you with the best career opportunities.
           </p>
 
-          <PrimaryButton className="mt-4">GET FREE CONSULTATION</PrimaryButton>
+          <div className="flex items-center gap-4">
+            <PrimaryButton className="bg-[#93FE9C] text-black border-none hover:bg-[#82C526] flex items-center gap-2">
+              GET FREE CONSULTATION <ArrowUpRight className="w-4 h-4" />
+            </PrimaryButton>
+          </div>
         </div>
       </DropAnimation>
 
       <FadeRight className="w-full md:w-[350px] lg:w-[350px]  transition-all duration-200  overflow-hidden flex flex-col justify-between gap-4 rounded-lg">
         
-          <div className="p-4 shadow-md w-full lg:h-80  md:w-[350px] lg:w-[350px] border border-gray-200 rounded-lg bg-blue-500 text-white flex  gap-3 flex-col justify-between">
+          <div className="p-6 shadow-xl w-full lg:h-80 md:w-[350px] lg:w-[350px] border border-white/50 rounded-2xl bg-[#82C526] text-black flex gap-3 flex-col justify-between relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Rocket className="w-20 h-20 text-white" />
+            </div>
             <div>
               <h2 className="text-6xl font-bold">1-30</h2>
-              <p>days time to hire</p>
+              <p className="font-bold uppercase tracking-wider text-sm opacity-80">Days time to hire</p>
             </div>
 
-            <div className="lg:w-80 h">
-              <h2 className="text-3xl font-semibold">
-                Streamlines the Hiring Process by ATS
+            <div className="z-10">
+              <h2 className="text-2xl font-bold leading-tight">
+                Streamline Your Hiring with our AI-Powered ATS
               </h2>
 
-              <Button className="mt-4 bg-white text-blue-500">
+              <Button className="mt-6 bg-white text-[#5c940d] font-bold rounded-full hover:bg-neutral-100 px-6">
                 POST VACANCY
               </Button>
             </div>

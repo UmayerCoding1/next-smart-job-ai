@@ -122,21 +122,21 @@ const Testimonials = () => {
           <div className="flex justify-between items-center mb-4 absolute w-full top-1/2 left-1 z-10">
             <button
               onClick={handlePrev}
-              className={`p-2 rounded-full bg-blue-500 text-sm font-semibold ${
+              className={`p-3 rounded-xl bg-white shadow-lg text-[#5c940d] hover:bg-[#82C526] hover:text-white transition-all duration-300 border border-neutral-100 ${
                 startIndex === 0
-                  ? "opacity-50 bg-gray-200 cursor-not-allowed"
-                  : ""
+                  ? "opacity-30 cursor-not-allowed"
+                  : "cursor-pointer"
               }`}
               disabled={startIndex === 0}
             >
-              <ChevronLeft />
+              <ChevronLeft className="w-5 h-5" />
             </button>
 
             <button
               onClick={handleNext}
-              className="p-2 cursor-pointer rounded-full bg-blue-500 text-white text-sm font-semibold"
+              className="p-3 cursor-pointer rounded-xl bg-[#82C526] shadow-lg text-white hover:bg-[#5c940d] transition-all duration-300 border border-white/50"
             >
-              <ChevronRight />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
           <motion.div
@@ -183,14 +183,14 @@ const Testimonials = () => {
 
       <div className="hidden lg:flex items-center justify-center pt-2">
          {Array.from({ length: totalSlide }).map((_, index) => (
-           <div
-             key={index}
-             className={`w-2 h-2 rounded-full mx-1 ${
-               index === startIndex / itemsPerPage
-                 ? "bg-blue-500"
-                 : "bg-gray-300"
-             }`}
-           ></div>
+            <div
+              key={index}
+              className={`w-2.5 h-2.5 rounded-full mx-1.5 transition-all duration-300 ${
+                index === startIndex / itemsPerPage
+                  ? "bg-[#82C526] w-6"
+                  : "bg-neutral-200"
+              }`}
+            ></div>
          ))}
       </div>
     </div>

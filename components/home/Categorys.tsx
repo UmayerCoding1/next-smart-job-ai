@@ -23,19 +23,24 @@ const Categories = [
 
 const CategoriesGrid = () => {
   return (
-    <div className="bg-gray-100  rounded-md shadow-md p-2 md:p-2 lg:p-6 mt-20">
-      <h2 className="text-xl font-semibold mb-4 ">Browse Jobs By</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-white p-5 border-t-2 border-blue-500">
+    <div className="bg-white/50 backdrop-blur-sm rounded-[2rem] shadow-xl p-8 md:p-10 lg:p-12 mt-24 border border-white/50">
+      <h2 className="text-2xl font-bold mb-8 text-neutral-800 flex items-center gap-3">
+        <span className="w-2 h-8 bg-[#82C526] rounded-full inline-block"></span>
+        Browse Jobs By Category
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Categories.map((category) => (
-         <>
-          <Link href={`/browse-jobs?category=${category.name}`}>
-          <div key={category._id} className="flex items-center font-medium gap-1 text-sm hover:underline cursor-pointer">
-            <span className="text-black"><ChevronRightIcon size={13}/></span>
-            <span className="hover:text-blue-600">{category.name}</span>
-            <span className="text-green-600 font-semibold">({category.totaljobs})</span>
-          </div>
+          <Link key={category._id} href={`/browse-jobs?category=${category.name}`}>
+            <div className="flex items-center justify-between font-bold group p-4 rounded-xl hover:bg-[#82C526]/10 transition-all duration-300 border border-transparent hover:border-[#82C526]/30">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center group-hover:bg-white transition-colors">
+                  <ChevronRightIcon size={14} className="text-neutral-400 group-hover:text-[#82C526]" />
+                </div>
+                <span className="text-neutral-700 group-hover:text-black transition-colors">{category.name}</span>
+              </div>
+              <span className="text-[#82C526] font-black text-xs bg-green-50 px-2 py-1 rounded-md">{category.totaljobs}</span>
+            </div>
           </Link>
-         </>
         ))}
       </div>
     </div>

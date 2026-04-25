@@ -7,8 +7,8 @@ import { FilterQuery } from "mongoose";
 
 
 
-const useJobs = (category?:  string, existingJodId?: string,title?: string ,jobType?: string,location?: string ,filterQuery?: string | null  ) => {
-  
+const useJobs = (category?: string, existingJodId?: string, title?: string, jobType?: string, location?: string, filterQuery?: string | null) => {
+
   const {
     data: jobs = [],
     isLoading,
@@ -16,9 +16,10 @@ const useJobs = (category?:  string, existingJodId?: string,title?: string ,jobT
   } = useQuery({
     queryKey: ["jobs", category, existingJodId, title, location, jobType, filterQuery],
     queryFn: async () => {
+      console.log('filterQuery', filterQuery)
       try {
         const res = await axios.get(`/api/jobs?category=${category}&existingJodId=${existingJodId}&title=${title}&location=${location}&jobType=${jobType}&filter=${filterQuery}`);
-
+        console.log(res.data)
         return res.data.jobs;
       } catch (error) {
         console.log(error);

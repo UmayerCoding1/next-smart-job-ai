@@ -7,6 +7,37 @@ export interface ISalary {
   max?: number;
 }
 
+export enum JobTypes {
+  FULLTILE = "full-time",
+  PARTTIME = "part-time",
+  REMOTE = "remote",
+  HYBRID = "hybrid",
+  FREELANCE = "freelance",
+  INTERNSHIP = "internship",
+  CONTRACT = "contract",
+}
+
+export enum ExperienceLevel {
+  INTERNSHIP = "internship",
+  ENTRY = "entry",
+  MID = "mid",
+  SENIOR = "senior",
+  LEAD = "lead",
+}
+
+export enum JobShift {
+  DAY = "day",
+  NIGHT = "night",
+  FLEXIBLE = "flexible",
+}
+
+export enum JobStatus {
+  ACTIVE = "active",
+  CLOSED = "closed",
+  PAUSED = "paused",
+  DRAFT = "draft",
+}
+
 export interface IJob {
   _id?: mongoose.Types.ObjectId;
   title: string;
@@ -20,7 +51,7 @@ export interface IJob {
   education?: string[];
   experience?: string[];
   experienceLevel: string[];
-  dedline: string;
+  dedline: Date;
   category: string;
   holidayPolicy?: string;
   workTime: {
@@ -57,15 +88,7 @@ export const JobSchema = new Schema<IJob>(
     jobtype: {
       type: [String],
       required: true,
-      enum: [
-        "full-time",
-        "part-time",
-        "remote",
-        "hybrid",
-        "freelance",
-        "internship",
-        "contract",
-      ],
+      enum: Object.values(JobTypes),
     },
 
     skills: { type: [String], default: [], required: true },
@@ -82,11 +105,11 @@ export const JobSchema = new Schema<IJob>(
       {
         type: String,
         require: true,
-        enum: ["internship", "entry", "mid", "senior", "lead"],
+        enum: Object.values(ExperienceLevel),
       }
     ],
 
-    dedline: { type: String, required: true },
+    dedline: { type: Date, required: true },
     category: { type: String, required: true },
 
     holidayPolicy: {
@@ -108,8 +131,8 @@ export const JobSchema = new Schema<IJob>(
     shift: [
       {
         type: String,
-        enum: ["day", "night", "flexible"],
-        default: ["day"],
+        enum: Object.values(JobShift),
+        default: [JobShift.DAY],
       }
     ],
 
@@ -126,8 +149,8 @@ export const JobSchema = new Schema<IJob>(
 
     status: {
       type: String,
-      default: "paused",
-      enum: ["active", "closed", "paused", "draft"],
+      default: JobStatus.PAUSED,
+      enum: Object.values(JobStatus),
     },
   },
   { timestamps: true }
