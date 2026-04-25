@@ -7,8 +7,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-playfair: var(--font-playfair);
+  --font-sourcesans: var(--font-sourcesans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -117,10 +117,12 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
+
 .animate-scroll {
   animation: scroll 20s linear infinite;
 }
@@ -131,11 +133,9 @@
 
 .scroll-container::after {
   content: "";
-  background-image: linear-gradient(
-    to left,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 1)
-  );
+  background-image: linear-gradient(to left,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 1));
   width: 100px;
   height: 400px;
   position: absolute;
@@ -144,13 +144,12 @@
   top: 0;
   left: 0;
 }
+
 .scroll-container::before {
   content: "";
-  background-image: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 1)
-  );
+  background-image: linear-gradient(to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 1));
   width: 100px;
   height: 400px;
   position: absolute;
@@ -165,15 +164,24 @@
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-100%);
   }
 }
 
 @keyframes bgMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .animate-bg-move {
@@ -191,6 +199,7 @@
 }
 
 @layer base {
+
   .recharts-rectangle:focus,
   .recharts-rectangle:active {
     outline: none !important;
@@ -207,6 +216,6 @@
 }
 
 
-.react-datepicker__input{
+.react-datepicker__input {
   width: 100% !important;
 }

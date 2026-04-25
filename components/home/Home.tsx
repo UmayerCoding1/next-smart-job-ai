@@ -15,7 +15,7 @@ import Jobs from "../ui/job/Jobs";
 
 const Home = () => {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 relative">
       <Hero />
 
       <div className="lg:max-w-7xl lg:mx-auto p-2 lg:p-0">
