@@ -68,7 +68,7 @@ const Hero = () => {
 
 
   return (
-    <div className="w-full min-h-screen   z-10 flex lg:items-center justify-between relative  ">
+    <div className="w-full h-auto   z-10 flex lg:items-center justify-between relative  ">
       <div className=" w-full h-[600px]  lg:flex items-center  bg-linear-to-r from-[#fff] via-[#fff] to-[#f8fff0]  px-2 md:px-5 lg:px-20 py-4">
         <section className="flex flex-col gap-2">
           <div className="flex items-center gap-4">

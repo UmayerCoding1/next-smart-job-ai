@@ -18,6 +18,7 @@ const Home = () => {
     <div className="flex flex-col gap-10 relative">
       <Hero />
 
+      <Company />
       <div className="lg:max-w-7xl lg:mx-auto p-2 lg:p-0">
         <Jobs />
         <About />
@@ -25,7 +26,6 @@ const Home = () => {
         <KeyHighlights />
         <Categorys />
         <Testimonials />
-        <Company />
         <FQA />
         <HowItWorks />
       </div>
