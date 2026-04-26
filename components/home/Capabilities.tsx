@@ -2,15 +2,39 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
-import { Brain, FileText, Search, Zap } from "lucide-react";
+import { Brain, FileText, Search, Send, Zap } from "lucide-react";
 import FadeRight from "../animations/FadeRight";
 import FadeLeft from "../animations/FadeLeft";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { motion } from 'motion/react';
 
+interface Message {
+  index: number;
+  role: 'jobseeker' | 'reqruiter';
+}
+
+const baseMessages: Message[] = [
+  { index: 1, role: "jobseeker" },
+  { index: 2, role: "reqruiter" },
+  { index: 3, role: "jobseeker" },
+];
 const Capabilities = () => {
   const items = Array.from({ length: 100 }, (_, i) => i);
+  const [messages, setMessages] = useState<Message[]>(baseMessages);
+  const [chat, setChat] = useState('');
+
+  // 🔁 loop controller
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMessages([]); // reset সব width 0 এ যাবে
+      setTimeout(() => {
+        setMessages(baseMessages); // আবার animation শুরু
+      }, 100);
+    }, 3000); // total cycle
+
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className="mt-20 overflow-hidden min-h-screen">
       <section className="flex flex-col items-center justify-center gap-2">
@@ -105,10 +129,67 @@ bg-[size:10px_10px] mask-b-from-1.5"/>
                     </p>
                   </div>
                 </Box>
-
                 <Box>
-                  <div className="flex-1  h-[400px]">top-2</div>
+                  <div className="flex-1  relative p-2 flex items-center justify-center">
+
+                    {/* content */}
+                    <div className="z-20 w-[80%] h-[200px]  bg-white rounded-2xl overflow-hidden shadow-2xl">
+                      <div className="bg-black w-full h-12 flex items-center p-2 font-semibold text-white">
+                        <p className="text-[11px]">Inbox & Message</p>
+                      </div>
+
+                      <div className="px-4 my-3 flex flex-col justify-between h-[148px]">
+                        <div>
+                          {messages.map((item) => (
+                            <div key={item?.index} className="  mb-2">
+                              <div className={cn(
+                                "flex items-center gap-2",
+                                item.role === 'reqruiter' && "flex-row-reverse"
+                              )}>
+                                <motion.div className="w-8 h-8 bg-neutral-300 rounded-full"
+                                  initial={{ opacity: 0, y: -10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{
+                                    duration: 0.3,
+                                    delay: item.index * 0.6,
+                                  }} />
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{ width: 140 }}
+                                  transition={{
+                                    duration: 0.6,
+                                    delay: item.index * 0.6,
+                                  }}
+                                  className={`w-[140px] h-5 rounded-lg bg-linear-to-r ${item.role === 'reqruiter' ? 'from-neutral-200 to-neutral-100' : 'from-neutral-100 to-neutral-200'}`}></motion.div>
+                              </div>
+
+                            </div>
+
+                          ))}
+                        </div>
+
+                        <div className="w-full h-10 border border-neutral-300 rounded-lg overflow-hidden bg-neutral-100  pl-2 relative">
+                          <input type="text" value={chat} onChange={(e) => setChat(e.target.value)} className='w-full h-full outline-none text-sm text-neutral-600 placeholder:text-sm' placeholder='Type your message...' />
+                          <div onClick={() => { setChat("") }} className="absolute right-2 top-2 w-6 h-6 bg-neutral-200 rounded-full flex items-center justify-center cursor-pointer hover:bg-neutral-300 transition-all duration-300">
+                            <Send size={12} className="text-black/70 mt-0.5" />
+                          </div>
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                  <div className="h-1/3 px-10">
+                    <p className="bg-neutral-100 inline-block px-5 py-1 rounded-full text-sm font-medium shadow-md">Jobseeker + Recruiter</p>
+                    <p className="mt-4 text-lg  text-neutral-600 ">
+                      <span className="font-semibold text-black">Inbox & messaging : </span>
+                      Direct communication between jobseekers and recruiters — stay connected through every stage.
+                    </p>
+                  </div>
                 </Box>
+
+
               </div>
               {/* bottom */}
 
