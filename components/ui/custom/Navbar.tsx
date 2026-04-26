@@ -4,6 +4,12 @@ import Link from 'next/link'
 import React from 'react'
 import { Button } from '../button';
 import { usePathname, useRouter } from 'next/navigation';
+import { RootState } from '@/app/redux/store';
+import { useSelector } from 'react-redux';
+import GostButton from '@/components/button/GostButton';
+import { Bell, LayoutDashboard, Menu, Search } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from '../sheet';
+import NavlinkList from './NavlinkList';
 
 export const LargeLogo = "/assets/logo.png";
 export const SmallLogo = "/assets/Ai.png";
@@ -11,6 +17,7 @@ export const SmallLogo = "/assets/Ai.png";
 export const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const user = useSelector((state: RootState) => state.authR.user);
   const navlist = [
     { name: "Home", href: "/" },
     { name: "Find Jobs", href: "/browse-jobs" },
@@ -58,11 +65,51 @@ export const Navbar = () => {
           </div>
         </div>
 
-        <div className='flex items-center gap-2'>
-          <Button onClick={() => router.push('/login')} variant={'ghost'} className='hover:bg-transparent cursor-pointer hover:text-black'>Login</Button>
-          <Button onClick={() => router.push('/register')} className='bg-white text-black shadow-md hover:bg-white/70 cursor-pointer'>Register</Button>
-        </div>
+        {user ? <section className="flex items-center gap-2">
+          <GostButton >
+            <Search size={30} />
+          </GostButton>
+
+          <div className="relative ">
+            <GostButton>
+              <Bell size={30} />
+            </GostButton>
+
+            <span className="absolute -top-2 right-0 w-5 h-5 flex items-center font-medium justify-center bg-blue-300 text-sm rounded-full  ">
+              5
+            </span>
+          </div>
+
+          <div>
+            <Link href={`/dashboard/${user?.role}`}>
+              <Button className="cursor-pointer">
+                <LayoutDashboard size={30} />
+                Dashboard
+              </Button>
+            </Link>
+          </div>
+
+          <div className="flex items-center bg-gray-100  rounded-2xl cursor-pointer">
+            <Sheet>
+              <SheetTrigger asChild>
+                <button className="cursor-pointer">
+                  <Menu size={30} />
+                </button>
+              </SheetTrigger>
+
+              <SheetContent>
+                <NavlinkList />
+              </SheetContent>
+            </Sheet>
+          </div>
+        </section>
+          :
+          <div className='flex items-center gap-2'>
+            <Button onClick={() => router.push('/login')} variant={'ghost'} className='hover:bg-transparent cursor-pointer hover:text-black'>Login</Button>
+            <Button onClick={() => router.push('/register')} className='bg-white text-black shadow-md hover:bg-white/70 cursor-pointer'>Register</Button>
+          </div>
+        }
       </nav>
-    </header>
+    </header >
   )
 }

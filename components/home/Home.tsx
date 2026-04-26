@@ -19,10 +19,10 @@ const Home = () => {
       <Hero />
 
       <Company />
-      <div className="lg:max-w-7xl lg:mx-auto p-2 lg:p-0">
+      <div className="lg:max-w-[1100px] lg:mx-auto p-2 lg:p-0">
+        <Capabilities />
         <Jobs />
         <About />
-        <Capabilities />
         <KeyHighlights />
         <Categorys />
         <Testimonials />

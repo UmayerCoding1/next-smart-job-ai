@@ -1,67 +1,137 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
-import { Brain, FileText, Zap } from "lucide-react";
+import { Brain, FileText, Search, Zap } from "lucide-react";
 import FadeRight from "../animations/FadeRight";
 import FadeLeft from "../animations/FadeLeft";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { motion } from 'motion/react';
 
 const Capabilities = () => {
+  const items = Array.from({ length: 100 }, (_, i) => i);
   return (
-    <div className="mt-20 overflow-hidden">
+    <div className="mt-20 overflow-hidden min-h-screen">
       <section className="flex flex-col items-center justify-center gap-2">
-        <h1 className="text-3xl font-semibold">Powered by Advanced AI</h1>
-        <p className="text-sm text-gray-600">
-          Three core features that revolutionize how you find and hire talent
+        <h1 className="text-3xl font-bold">Powerful Solutions for Every User</h1>
+        <p className="text-sm text-gray-600 max-w-2xl text-center">
+          From job searching to hiring and platform management — everything you need, <br /> powered by smart technology.
         </p>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8 my-16 px-4">
-        <FadeRight>
-          <div className="bg-white/80 backdrop-blur-xl border border-white/50 flex flex-col items-center gap-6 py-10 px-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(130,197,38,0.1)] transition-all duration-500 group h-full">
-            <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center group-hover:bg-[#82C526] transition-colors duration-500">
-              <Brain className="w-8 h-8 text-[#5c940d] group-hover:text-white transition-colors duration-500" />
-            </div>
+      <section className="w-full  mt-10">
+        <div className="w-full flex gap-4 ">
+          {/* left */}
+          <div className="flex-1 ">
+            <div className="flex gap-4 flex-col">
+              {/* top */}
+              <div className="flex gap-4">
+                <Box>
+                  <div className="flex-1  relative p-2 flex items-center justify-center">
+                    {/* glow-1 */}
+                    <div className="w-full h-80  absolute top-0 right-0 z-10 bg-linear-to-bl bg-green-500 mask-b-from-1.5 mask-l-from-1"></div>
+                    <div className="w-[99%] h-[230px] absolute top-0 right-0 rounded-bl-[230px] rounded-tl-[10px] bg-linear-to-br from-yellow-400 via-yellow-100 to-transparent  blur-3xl" />
 
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-neutral-800 mb-3">AI Resume Analyzer</h2>
-              <p className="text-sm leading-relaxed text-neutral-600">
-                Upload your resume and our AI instantly extracts skills, experience, and qualifications. Get detailed insights and skill gap analysis.
-              </p>
+                    <div className="w-full h-full z-20 absolute inset-0
+bg-[radial-gradient(#d1d5db_1px,transparent_1px)]
+bg-[size:10px_10px] mask-b-from-1.5"/>
+
+                    {/* content */}
+                    <div className="z-20 w-[80%] h-[200px]  bg-white rounded-2xl overflow-hidden shadow-2xl">
+                      <div className="bg-black w-full h-12 flex items-center p-2 font-semibold text-white">
+                        <p className="text-[11px]">AI job matching</p>
+                      </div>
+
+                      <div className="h-full  ">
+                        <div className="flex items-center justify-start w-full h-9 border-b pl-2"><p className="font-semibold text-neutral-500 text-sm">Jobs</p> </div>
+
+                        <div className="max-h-[135px] overflow-hidden relative mt-1">
+                          <motion.div
+                            animate={{ y: ["0%", "-50%"] }}
+                            transition={{
+                              duration: 10,
+                              ease: "linear",
+                              repeat: Infinity,
+                            }}
+                            className="max-h-full p-2">
+                            {items.map((_, i) => (
+                              <div
+                                key={i}
+                                className="flex items-center gap-2 my-2">
+                                <Image
+                                  src={'/assets/avatar2.webp'}
+                                  width={100}
+                                  height={100}
+                                  alt="avatar"
+                                  className="w-6 h-6 rounded-full object-cover"
+                                />
+                                <div className="flex items-center gap-3">
+                                  <span className="block h-2 w-20 bg-neutral-200 rounded-md"></span>
+                                  <span className="block h-2 w-20 bg-neutral-200 rounded-md"></span>
+                                  <span className="block h-2 w-20 bg-neutral-200 rounded-md"></span>
+
+                                </div>
+                              </div>
+                            ))}
+                          </motion.div>
+
+                          <div className="w-full h-full bg-black/20 absolute inset-0 flex items-center justify-end">
+                            <motion.div
+                              initial={{ x: 0, y: 0 }}
+                              animate={{
+                                x: [-200, 0, -200, -200],
+                                y: [50, 0, -50, 50],
+                              }}
+                              transition={{
+                                duration: 4,
+                                ease: "linear",
+                                repeat: Infinity,
+                              }}
+                            >
+                              <Search size={30} className="text-green-500" />
+                            </motion.div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div className="h-1/3 px-10">
+                    <p className="bg-neutral-100 inline-block px-5 py-1 rounded-full text-sm font-medium shadow-md">Jobseeker</p>
+                    <p className="mt-4 text-lg  text-neutral-600 ">
+                      <span className="font-semibold text-black">AI job match : </span>
+                      Intelligent job recommendations based on your profile and preferences — updated automatically.
+                    </p>
+                  </div>
+                </Box>
+
+                <Box>
+                  <div className="flex-1  h-[400px]">top-2</div>
+                </Box>
+              </div>
+              {/* bottom */}
+
+              <div className="w-full bg-orange-50 h-[200px]">bottom</div>
             </div>
           </div>
-        </FadeRight>
+          {/* right */}
+          <div className="w-[350px] bg-green-50">right</div>
+        </div >
+      </section >
 
-        <div className="bg-white/80 backdrop-blur-xl border border-white/50 flex flex-col items-center gap-6 py-10 px-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(130,197,38,0.1)] transition-all duration-500 group h-full scale-105 z-10">
-          <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center group-hover:bg-[#82C526] transition-colors duration-500">
-            <Zap className="w-8 h-8 text-[#5c940d] group-hover:text-white transition-colors duration-500" />
-          </div>
-
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-neutral-800 mb-3">Smart Job Matching</h2>
-            <p className="text-sm leading-relaxed text-neutral-600">
-              Get personalized job recommendations with compatibility scores. Our AI matches your skills with job requirements for perfect opportunities.
-            </p>
-          </div>
-        </div>
-
-        <FadeLeft>
-          <div className="bg-white/80 backdrop-blur-xl border border-white/50 flex flex-col items-center gap-6 py-10 px-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(130,197,38,0.1)] transition-all duration-500 group h-full">
-            <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center group-hover:bg-[#82C526] transition-colors duration-500">
-              <FileText className="w-8 h-8 text-[#5c940d] group-hover:text-white transition-colors duration-500" />
-            </div>
-
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-neutral-800 mb-3">Easy Applications</h2>
-              <p className="text-sm leading-relaxed text-neutral-600">
-                One-click applications with AI-generated cover letters. Apply to multiple jobs instantly with personalized application materials.
-              </p>
-            </div>
-          </div>
-        </FadeLeft>
-      </section>
-    </div>
+    </div >
   );
 };
 
 export default Capabilities;
+
+
+
+const Box = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+  return (
+    <div className={cn("flex-1 h-[400px] flex flex-col rounded-2xl overflow-hidden bg-linear-to-t from-transparent  to-neutral-200", className)}>
+      {children}
+    </div>
+  )
+}
