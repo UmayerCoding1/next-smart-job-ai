@@ -19,19 +19,73 @@ const baseMessages: Message[] = [
   { index: 2, role: "reqruiter" },
   { index: 3, role: "jobseeker" },
 ];
+
+const jobsData = [
+  {
+    id: 1,
+    title: 'Front-end Engineer',
+    applications: 12,
+    status: 'active',
+    context: <div className="w-3 h-3 bg-green-600 rounded-full" />,
+    color: 'green'
+  },
+  {
+    id: 2,
+    title: 'Senior Python Developer',
+    applications: 28,
+    status: 'pending',
+    context: <div className="w-3 h-3 bg-yellow-600 rounded-full" />,
+    color: 'yellow'
+  },
+  {
+    id: 3,
+    title: 'UI/UX Designer',
+    applications: 8,
+    status: 'closed',
+    context: <div className="w-3 h-3 bg-red-600 rounded-full" />,
+    color: 'red'
+  }
+]
+
+const appicationsData = [
+  {
+    id: 1,
+    name: 'David Johnson',
+    position: 'Senior Python Developer',
+    status: 'Active',
+    context: <div className="w-3 h-3 bg-green-600 rounded-full" />,
+    color: 'green'
+  },
+  {
+    id: 2,
+    name: 'Sarah Wilson',
+    position: 'Senior Python Developer',
+    status: 'Shortlisted',
+    context: <div className="w-3 h-3 bg-yellow-600 rounded-full" />,
+    color: 'yellow'
+  },
+  {
+    id: 3,
+    name: 'Emily Rodriguez',
+    position: 'Senior Python Developer',
+    status: 'Not Interested',
+    context: <div className="w-3 h-3 bg-red-600 rounded-full" />,
+    color: 'red'
+  }
+]
 const Capabilities = () => {
   const items = Array.from({ length: 100 }, (_, i) => i);
   const [messages, setMessages] = useState<Message[]>(baseMessages);
   const [chat, setChat] = useState('');
+  const [manageParts, setManageParts] = useState<'jobs' | 'application'>('jobs');
 
-  // 🔁 loop controller
   useEffect(() => {
     const interval = setInterval(() => {
-      setMessages([]); // reset সব width 0 এ যাবে
+      setMessages([]);
       setTimeout(() => {
-        setMessages(baseMessages); // আবার animation শুরু
+        setMessages(baseMessages);
       }, 100);
-    }, 3000); // total cycle
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -193,7 +247,81 @@ bg-[size:10px_10px] mask-b-from-1.5"/>
               </div>
               {/* bottom */}
 
-              <div className="w-full bg-orange-50 h-[200px]">bottom</div>
+              <div className="w-full bg-neutral-100 h-[250px] flex overflow-hidden rounded-2xl relative">
+                <div className='flex-1 h-full flex flex-col justify-start px-6 mt-12'>
+                  <p className="bg-neutral-100 w-fit px-5 py-1 rounded-full text-sm font-medium shadow-md">Recruiter</p>
+                  <p className="mt-4 text-4xl  font-semibold">{manageParts === "jobs" ? "Job management — post & track" : "Application management"}</p>
+                  <p className="mt-2 text-lg  text-neutral-600 ">
+                    {manageParts === "jobs" ? "Post new listings, manage active jobs, and monitor applicant counts — all in one place." : "Review and track all candidate applications received for each job posting — filter by status and move candidates through your pipeline."}
+                  </p>
+                </div>
+                <div className="flex-1 h-full flex items-center justify-center relative">
+                  <div className='w-full h-full bg-radial from-green-200 from-40% to-green-100 to-70% blur-3xl absolute top-0 right-0  z-10' />
+                  <div className="z-20 w-full h-full">
+                    <div className="w-full h-14 bg-black rounded-lg flex items-center p-[3px] gap-2 ">
+                      <div className={cn(" h-full  px-4 py-2 flex items-center justify-center  font-semibold rounded-2xl text-white cursor-pointer", manageParts === 'jobs' && "bg-white text-black")} onClick={() => setManageParts('jobs')}>My Jobs</div>
+                      <div className={cn("h-full px-4 py-2 flex items-center justify-center  font-semibold rounded-2xl text-white cursor-pointer", manageParts === 'application' && "bg-white text-black")} onClick={() => setManageParts('application')}>Application management</div>
+                    </div>
+
+                    <div className="w-full p-4 ">
+                      {manageParts === 'jobs' ? <div key={manageParts} className="w-full h-full  rounded-lg flex flex-col gap-4">
+                        {jobsData.map((job) => {
+                          return (
+                            <motion.div
+                              initial={{ opacity: 0, y: 20 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
+                              transition={{
+                                duration: 0.6,
+                                delay: job.id * 0.2,
+                              }}
+                              key={job.id} className="bg-white/70 px-2 py-1 backdrop:blur-2xl flex items-center justify-center w-full rounded-lg">
+                              <div className="flex items-center gap-2  pb-2 mb-2 w-full h-full">
+                                {job.context}
+                                <div className="flex items-center justify-between flex-1">
+                                  <div>
+                                    <h2 className="text-lg font-semibold">{job.title}</h2>
+                                    <p className="text-sm text-gray-600">{job.applications} Applications</p>
+                                  </div>
+                                  <p className={`text-[10px] font-medium bg-${job.color}-500 text-white px-4 py-1 rounded-full`}>{job.status}</p>
+                                </div>
+                              </div>
+                            </motion.div>
+                          )
+                        })}
+                      </div> : <div key={manageParts} className="w-full h-full  rounded-lg flex flex-col gap-4">
+                        {appicationsData.map((job) => {
+                          return (
+                            <motion.div
+                              initial={{ opacity: 0, y: 20 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
+                              transition={{
+                                duration: 0.6,
+                                delay: job.id * 0.2,
+                              }}
+                              key={job.id} className="bg-white/70 px-2 py-1 backdrop:blur-2xl flex items-center justify-center w-full rounded-lg">
+                              <div className="flex items-center gap-2  pb-2 mb-2 w-full h-full">
+                                {job.context}
+                                <div className="flex items-center justify-between flex-1">
+                                  <div>
+                                    <h2 className="text-lg font-semibold">{job.name}</h2>
+                                    <p className="text-sm text-gray-600">{job.position} Applications</p>
+                                  </div>
+                                  <p className={`text-[10px] font-medium bg-${job.color}-500 text-white px-4 py-1 rounded-full`}>{job.status}</p>
+                                </div>
+                              </div>
+                            </motion.div>
+                          )
+                        })}
+                      </div>}
+                    </div>
+
+                  </div>
+                </div>
+
+
+              </div>
             </div>
           </div>
           {/* right */}
