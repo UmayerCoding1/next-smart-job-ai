@@ -133,8 +133,8 @@ const BrowseJobs = () => {
                 className={`grid grid-cols-1 ${listView === "list" ? "lg:grid-cols-1" : "lg:grid-cols-4"
                   } gap-4 p-4 max-h-screen overflow-auto scrollbar-hide`}
               >
-                {jobs.map((job: IJob) => (
-                  <Joblist key={job._id?.toString()} job={job} />
+                {jobs.map((job: IJob, inx: number) => (
+                  <Joblist key={inx} job={job} delay={inx} />
                 ))}
               </div>
             )}
