@@ -47,7 +47,7 @@ const Jobs = () => {
             ) : (
               <>
                 {Array.from({ length: 8 }).map((_, inx) => (
-                  <div className="w-full h-80 bg-neutral-200/70 rounded-xl overflow-hidden relative">
+                  <div key={inx} className="w-full h-80 bg-neutral-200/70 rounded-xl overflow-hidden relative">
                     <div className="flex gap-3 w-full h-full">
                       <motion.div className="w-8 h-[200%] bg-neutral-200/70 opacity-30 "
                         initial={{ opacity: 0.6, x: 0, y: 0 }}
