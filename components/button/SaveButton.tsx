@@ -29,12 +29,12 @@ const SaveButton = ({
     localStorage.setItem("savedJobsId", JSON.stringify(jobsId));
   };
 
-  
+
   const handleSvaeJob = async (jobId: string) => {
     console.log(jobId);
     const savedJobs = getSaveJobs();
     try {
-        setIsLoading(true);
+      setIsLoading(true);
       const response = await axios.post(`/api/save-job`, { jobId });
       if (response.data.success) {
         if (!savedJobs.includes(jobId)) {
@@ -55,7 +55,7 @@ const SaveButton = ({
           : "An error occurred";
       toast.error(errorMessage, { duration: 1500 });
     }
-    finally{
+    finally {
       setIsLoading(false);
     }
   };
@@ -74,7 +74,7 @@ const SaveButton = ({
   const handleUnSaveJob = async (jobId: string) => {
     if (!jobId) return;
     try {
-        setIsLoading(true); 
+      setIsLoading(true);
       const response = await axios.delete(`/api/save-job/${jobId}`);
       if (response.data.success) {
         setIsSaveJobed(false);
@@ -100,30 +100,28 @@ const SaveButton = ({
       {isSaveJobed ? (
         <Button
           variant={"ghost"}
-          className={`${className ? className : " w-full lg:w-40 "} ${
-            defaultStyle &&
+          className={`${className ? className : " w-full lg:w-40 "} ${defaultStyle &&
             "border active:scale-105 h-12 bg-gray-100 shadow hover:bg-gray-200 cursor-pointer"
-          }`}
+            }`}
           onClick={() => handleUnSaveJob(jobId)}
         >
-         {isLoading ? <Loader2 className="animate-spin"/> : <>
-          <Bookmark size={30} className="fill-blue-500 text-transparent " />
-          {!isOnlyIcon && <span>Un Save</span>}
-         </>}
+          {isLoading ? <Loader2 className="animate-spin" /> : <>
+            <Bookmark size={30} className="fill-green-500 text-transparent " />
+            {!isOnlyIcon && <span>Un Save</span>}
+          </>}
         </Button>
       ) : (
         <Button
           variant={"ghost"}
-          className={`${className ? className : " w-full lg:w-40 "} ${
-            defaultStyle &&
+          className={`${className ? className : " w-full lg:w-40 "} ${defaultStyle &&
             "border active:scale-105 h-12 bg-gray-100 shadow hover:bg-gray-200 cursor-pointer"
-          }`}
+            }`}
           onClick={() => handleSvaeJob(jobId)}
         >
-         {isLoading ? <Loader2 className="animate-spin"/> : <>
-           <Bookmark  />
-          {!isOnlyIcon && <span>Save</span>}
-         </>}
+          {isLoading ? <Loader2 className="animate-spin" /> : <>
+            <Bookmark />
+            {!isOnlyIcon && <span>Save</span>}
+          </>}
         </Button>
       )}
     </>

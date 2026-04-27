@@ -99,12 +99,12 @@ const Capabilities = () => {
       </section>
 
       <section className="w-full  mt-10">
-        <div className="w-full flex gap-4 ">
+        <div className="w-full flex flex-col lg:flex-row gap-4 ">
           {/* left */}
           <div className="flex-1 ">
-            <div className="flex gap-4 flex-col">
+            <div className="flex gap-10 md:gap-4 flex-col">
               {/* top */}
-              <div className="flex gap-4">
+              <div className="flex flex-col lg:flex-row gap-10 md:gap-4">
                 <Box>
                   <div className="flex-1  relative p-2 flex items-center justify-center">
                     {/* glow-1 */}
@@ -116,7 +116,7 @@ bg-[radial-gradient(#d1d5db_1px,transparent_1px)]
 bg-[size:10px_10px] mask-b-from-1.5"/>
 
                     {/* content */}
-                    <div className="z-20 w-[80%] h-[200px]  bg-white rounded-2xl overflow-hidden shadow-2xl">
+                    <div className="z-20 w-[80%] h-[220px] md:h-[200px] bg-white rounded-2xl overflow-hidden shadow-2xl">
                       <div className="bg-black w-full h-12 flex items-center p-2 font-semibold text-white">
                         <p className="text-[11px]">AI job matching</p>
                       </div>
@@ -187,7 +187,7 @@ bg-[size:10px_10px] mask-b-from-1.5"/>
                   <div className="flex-1  relative p-2 flex items-center justify-center">
 
                     {/* content */}
-                    <div className="z-20 w-[80%] h-[200px]  bg-white rounded-2xl overflow-hidden shadow-2xl">
+                    <div className="z-20 w-[80%] h-[220px] md:h-[200px]  bg-white rounded-2xl overflow-hidden shadow-2xl">
                       <div className="bg-black w-full h-12 flex items-center p-2 font-semibold text-white">
                         <p className="text-[11px]">Inbox & Message</p>
                       </div>
@@ -247,10 +247,10 @@ bg-[size:10px_10px] mask-b-from-1.5"/>
               </div>
               {/* bottom */}
 
-              <div className="w-full bg-neutral-100 h-[250px] flex overflow-hidden rounded-2xl relative">
+              <div className="w-full bg-neutral-100 h-auto  md:h-[250px] flex flex-col md:flex-row gap-4 md:gap-0 overflow-hidden rounded-2xl relative">
                 <div className='flex-1 h-full flex flex-col justify-start px-6 mt-12'>
                   <p className="bg-neutral-100 w-fit px-5 py-1 rounded-full text-sm font-medium shadow-md">Recruiter</p>
-                  <p className="mt-4 text-4xl  font-semibold">{manageParts === "jobs" ? "Job management — post & track" : "Application management"}</p>
+                  <p className="mt-4 text-3xl md:text-4xl  font-semibold">{manageParts === "jobs" ? "Job management — post & track" : "Application management"}</p>
                   <p className="mt-2 text-lg  text-neutral-600 ">
                     {manageParts === "jobs" ? "Post new listings, manage active jobs, and monitor applicant counts — all in one place." : "Review and track all candidate applications received for each job posting — filter by status and move candidates through your pipeline."}
                   </p>
@@ -325,7 +325,7 @@ bg-[size:10px_10px] mask-b-from-1.5"/>
             </div>
           </div>
           {/* right */}
-          <Box className="w-[350px] h-auto border relative overflow-hidden">
+          <Box className="w-full md:w-[350px] h-[750px] md:h-auto shadow-md mb-1  relative overflow-hidden">
             <div className="w-80 h-64 bg-green-300 blur-3xl opacity-50 absolute top-0 right-0 z-0 rounded-2xl" />
 
             <div className="z-10 px-4 py-2 flex flex-col w-full h-full gap-10">
@@ -371,7 +371,7 @@ bg-[size:10px_10px] mask-b-from-1.5"/>
                 </svg>
 
 
-                <div className="w-52 h-28 bg-white shadow-lg absolute left-0 top-[40%]  z-10 rounded-lg flex flex-col  justify-center p-2  gap-1">
+                <div className="w-40 md:w-52 h-28 bg-white shadow-lg absolute left-0 top-[40%]  z-10 rounded-lg flex flex-col  justify-center p-2  gap-1">
                   <Users className="text-green-500" />
                   <p className="text-sm font-semibold">Active Users</p>
                   <p className="text-2xl font-bold text-black">25.00K</p>
@@ -401,7 +401,7 @@ bg-[size:10px_10px] mask-b-from-1.5"/>
 
 
 
-                <div className="w-52 h-28 bg-white shadow-lg absolute right-0 top-[40%]  z-10 rounded-lg flex flex-col  justify-center p-2  gap-1">
+                <div className="w-40 md:w-52 h-28 bg-white shadow-lg absolute right-0 top-[40%]  z-10 rounded-lg flex flex-col  justify-center p-2  gap-1">
                   <BriefcaseBusiness className="text-orange-400" />
                   <p className="text-sm font-semibold">Active Jobs</p>
                   <p className="text-2xl font-bold text-black">10.00K</p>
