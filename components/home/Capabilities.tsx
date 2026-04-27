@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
-import { Brain, FileText, Search, Send, Zap } from "lucide-react";
+import { Brain, BriefcaseBusiness, FileText, Search, Send, User, Users, Zap } from "lucide-react";
 import FadeRight from "../animations/FadeRight";
 import FadeLeft from "../animations/FadeLeft";
 import { cn } from "@/lib/utils";
@@ -325,7 +325,113 @@ bg-[size:10px_10px] mask-b-from-1.5"/>
             </div>
           </div>
           {/* right */}
-          <div className="w-[350px] bg-green-50">right</div>
+          <Box className="w-[350px] h-auto border relative overflow-hidden">
+            <div className="w-80 h-64 bg-green-300 blur-3xl opacity-50 absolute top-0 right-0 z-0 rounded-2xl" />
+
+            <div className="z-10 px-4 py-2 flex flex-col w-full h-full gap-10">
+              <div>
+                <p className="bg-neutral-100 w-fit px-5 py-1 rounded-full text-sm font-medium shadow-md">Admin</p>
+                <h2 className="text-3xl font-bold mt-4">Platform overview</h2>
+                <p className="text-neutral-600 mt-4 font-medium">
+                  Monitor all users, jobs, and system health from a single admin dashboard.
+                </p>
+              </div>
+
+              <div className="flex-1 flex justify-end relative items-center flex-col mb-10">
+                <div
+                  className="w-40 h-40 bg-yellow-100 bg-gradient-to-t from-green-100/50 via-green-500 to-green-100/70 rounded-2xl relative flex items-center justify-center"
+                  style={{
+                    boxShadow: '0 12px 0 0 #166534, 0 13px 0 0 rgba(22,101,52,0.3)',
+                    transform: 'perspective(1000px) rotateX(48deg) rotateY(2deg)',
+                  }}
+                >
+                  <User color="#fff" size={60} /> <span className="absolute bottom-4 left-4 text-black font-semibold">Admin Dashboard</span>
+
+
+
+
+                </div>
+
+
+                <div className="w-60 h-28 bg-white shadow-lg absolute top-20 z-30 rounded-lg flex flex-col items-center justify-center p-4 gap-2">
+                  <p className="text-lg uppercase tracking-tight font-playfair font-medium relative flex items-center gap-2"><span className="block w-3 h-3 bg-green-500 rounded-full z-20"></span>
+                    System Health</p>
+                  <p className="text-2xl font-bold text-black">100% Uptime</p>
+                  <p className="text-xs font-medium text-green-600">All services operational</p>
+                </div>
+                <svg width={50} height={250} className=" absolute top-[130px] z-20">
+                  <motion.line x1={25} y1={0} x2={25} y2={250} stroke="gray" strokeWidth={2} strokeDasharray="5 8"
+                    animate={{ strokeDashoffset: [0, -13] }}
+                    transition={{
+                      duration: 0.6,
+                      ease: "linear",
+                      repeat: Infinity,
+                    }}
+                  />
+                </svg>
+
+
+                <div className="w-52 h-28 bg-white shadow-lg absolute left-0 top-[40%]  z-10 rounded-lg flex flex-col  justify-center p-2  gap-1">
+                  <Users className="text-green-500" />
+                  <p className="text-sm font-semibold">Active Users</p>
+                  <p className="text-2xl font-bold text-black">25.00K</p>
+                </div>
+                <motion.svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="absolute left-[35%] top-[200px] -rotate-12 "
+                  width="32"
+                  height="250"
+                  viewBox="0 0 32 118"
+                  fill="none"
+                >
+                  <motion.path
+                    d="M31.5 117L8.61905 98.8672L0.5 76.8487V46.1956V20.7232V0"
+                    stroke="gray"
+                    strokeWidth={2}
+                    strokeDasharray="5 8"
+
+                    animate={{ strokeDashoffset: [0, -13] }}
+                    transition={{
+                      duration: 0.8,
+                      ease: "linear",
+                      repeat: Infinity,
+                    }}
+                  />
+                </motion.svg>
+
+
+
+                <div className="w-52 h-28 bg-white shadow-lg absolute right-0 top-[40%]  z-10 rounded-lg flex flex-col  justify-center p-2  gap-1">
+                  <BriefcaseBusiness className="text-orange-400" />
+                  <p className="text-sm font-semibold">Active Jobs</p>
+                  <p className="text-2xl font-bold text-black">10.00K</p>
+                </div>
+                <motion.svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="absolute right-[36%] top-[200px] rotate-12"
+                  width="32"
+                  height="250"
+                  viewBox="0 0 32 118"
+                  fill="none"
+                >
+                  <motion.path
+                    d="M0.310547 117L23.1915 98.8672L31.3105 76.8487V46.1956V20.7232V0"
+                    stroke="gray"
+                    strokeWidth={2}
+                    strokeDasharray="5 8"
+
+                    animate={{ strokeDashoffset: [0, -13] }}
+                    transition={{
+                      duration: 0.8,
+                      ease: "linear",
+                      repeat: Infinity,
+                    }}
+                  />
+                </motion.svg>
+
+              </div>
+            </div>
+          </Box>
         </div >
       </section >
 
@@ -339,7 +445,7 @@ export default Capabilities;
 
 const Box = ({ children, className }: { children: React.ReactNode, className?: string }) => {
   return (
-    <div className={cn("flex-1 h-[400px] flex flex-col rounded-2xl overflow-hidden bg-linear-to-t from-transparent  to-neutral-200", className)}>
+    <div className={cn(" h-[400px] flex flex-col rounded-2xl overflow-hidden bg-linear-to-t from-transparent  to-neutral-200", className)}>
       {children}
     </div>
   )
