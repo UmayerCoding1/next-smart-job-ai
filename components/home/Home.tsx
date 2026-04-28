@@ -6,12 +6,13 @@ import Hero from "./Hero";
 import Capabilities from "./Capabilities";
 import Categorys from "./Categorys";
 import Company from "./Company";
-import About from "./About";
+
 import KeyHighlights from "./KeyHighlights";
 import Testimonials from "./Testimonials";
 import FQA from "./FQA";
 import HowItWorks from "./HowItWorks";
 import Jobs from "../ui/job/Jobs";
+import { About } from "./About";
 
 const Home = () => {
   return (

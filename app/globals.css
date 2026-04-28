@@ -219,3 +219,7 @@
 .react-datepicker__input {
   width: 100% !important;
 }
+
+.writing-vertical {
+  writing-mode: vertical-rl;
+}

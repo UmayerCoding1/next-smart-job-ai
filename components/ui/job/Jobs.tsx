@@ -1,33 +1,16 @@
 "use client";
 import React from "react";
-
 import { IJob } from "@/app/models/Job";
-
 import { ChevronRight } from "lucide-react";
-
 import Link from "next/link";
-
 import useJobs from "@/hooks/useJobs";
-
-
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
-import Search from "../custom/Search";
-import Joblist from "./job-card";
-import PrimaryButton from "@/components/button/PrimaryButton";
 import JobCard from "./job-card";
 import { Button } from "../button";
 import { motion } from "motion/react";
 const Jobs = () => {
-  const searchQuery = useSelector((state: RootState) => state.searchR.search);
-
-  console.log("home jobs ", searchQuery);
   const { jobs } = useJobs("", "", "", "", "", "");
-
-
-
   return (
-    <div>
+    <div className="my-40">
       <section className="mt-16 ">
         <div className="">
           <div className="mb-10 flex flex-col lg:items-center lg:justify-center">
@@ -67,10 +50,7 @@ const Jobs = () => {
 
           <div className="flex items-center justify-center mt-2">
             <Link href={`/browse-jobs?page=1`}>
-              <Button
-                className=" px-10 py-3 mt-5 bg-green-500 hover:bg-green-600 text-white"
-
-              >
+              <Button className=" px-10 py-3 mt-5 bg-green-500 hover:bg-green-600 text-white">
                 <span>View all jobs</span>
                 <ChevronRight size={20} />
               </Button>
