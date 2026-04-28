@@ -4,7 +4,7 @@ import { motion } from "motion/react"
 
 export const About = () => {
   return (
-    <div className='w-full h-screen flex'>
+    <div className='w-full  flex my-10 0 px-10 py-5  bg-neutral-50 rounded-2xl '>
 
       <section className="flex flex-col items-center justify-center gap-2 w-1/3">
         <h2 className="text-3xl font-bold">Explore Over 1.3 Million Job Vacancies Waiting for You!</h2>
@@ -16,15 +16,27 @@ export const About = () => {
 
       <div className='flex items-center justify-center w-full flex-1 '>
         <div className=' flex flex-col items-start justify-center gap-10 mt-10  w-2/3 relative'>
-          <div className='bg-red-200 w-80 h-44 relative  '>
+          <div className=' relative'>
             <ArrowRight className='top-[90.8%] right-[-200px] ' />
+            <div className='w-80 h-44 relative z-50 bg-green-50 shadow-lg border border-neutral-300 rounded-md  flex flex-col items-start justify-center  px-4 gap-4 '>
+              <h2 className='text-2xl font-semibold text-neutral-900 '>Explore Job Openings</h2>
+              <p className='text-sm text-neutral-600 '>Explore a wide array of exciting job openings across various industries that pique your interest and inspire your career ambitions.</p>
+            </div>
           </div>
 
 
-          <div className='self-end bg-green-200 w-80 h-44 relative'>
-            <ArrowLeft className='top-[90.8%] left-[-200px] ' />
+          <div className='relative self-end'>
+            <ArrowLeft className='top-[90.8%] left-[-200px]  ' />
+            <div className='self-end bg-white w-80 h-44 z-50 relative shadow-lg border border-neutral-300 rounded-md  flex flex-col items-start justify-center  px-4 gap-4   '>
+              <h2 className='text-2xl font-semibold text-neutral-900 '>Explore Job Openings</h2>
+              <p className='text-sm text-neutral-600 '>Explore a wide array of exciting job openings across various industries that pique your interest and inspire your career ambitions.</p>
+            </div>
+
           </div>
-          <div className='bg-blue-200 w-80 h-44'></div>
+          <div className='w-80 h-44 shadow-lg border border-neutral-300 rounded-md  flex flex-col items-start justify-center  px-4 gap-4 '>
+            <h2 className='text-2xl font-semibold text-neutral-900 '>Explore Job Openings</h2>
+            <p className='text-sm text-neutral-600 '>Explore a wide array of exciting job openings across various industries that pique your interest and inspire your career ambitions.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -37,14 +49,14 @@ const ArrowRight = ({ className }: { className?: string }) => {
 
   return (
     <svg
-      className={cn('absolute top-1/2 -translate-y-1/2 -z-10', className)}
+      className={cn('absolute top-1/2 -translate-y-1/2 z-10', className)}
       xmlns="http://www.w3.org/2000/svg"
       width="249"
       height="81"
       viewBox="0 0 249 81"
       fill="none"
     >
-      {/* 🔥 Gradient تعریف */}
+
       <defs>
         <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#d2d5d9" />
@@ -52,19 +64,19 @@ const ArrowRight = ({ className }: { className?: string }) => {
         </linearGradient>
       </defs>
 
-      {/* Base path */}
+
       <path
         d={pathD}
         stroke="#e5e7eb"
         strokeWidth="2"
-        // strokeDasharray="6 6"
+        strokeDasharray="6 6"
         fill="none"
       />
 
-      {/* Animated gradient segment */}
+
       <motion.path
         d={pathD}
-        stroke="url(#lineGradient)"   // ✅ correct gradient usage
+        stroke="url(#lineGradient)"
         strokeWidth="3"
         fill="none"
         strokeDasharray="30 210"
@@ -77,7 +89,7 @@ const ArrowRight = ({ className }: { className?: string }) => {
         }}
       />
 
-      {/* Arrow */}
+
       <path
         d="M241.5 80 L235 74 M241.5 80 L248 74"
         stroke="#9ca3af"
@@ -95,14 +107,14 @@ const ArrowLeft = ({ className }: { className?: string }) => {
 
   return (
     <svg
-      className={cn("absolute top-1/2 -translate-y-1/2 -z-10", className)}
+      className={cn("absolute top-1/2 -translate-y-1/2 z-0", className)}
       xmlns="http://www.w3.org/2000/svg"
       width="249"
       height="81"
       viewBox="0 0 249 81"
       fill="none"
     >
-      {/* Base dashed line */}
+
       <path
         d={pathD}
         stroke="#e5e7eb"
@@ -111,7 +123,7 @@ const ArrowLeft = ({ className }: { className?: string }) => {
         fill="none"
       />
 
-      {/* 🔥 Animated segment (reverse direction) */}
+
       <motion.path
         d={pathD}
         stroke="limegreen"
@@ -119,7 +131,7 @@ const ArrowLeft = ({ className }: { className?: string }) => {
         fill="none"
         strokeDasharray="30 210"
         initial={{ strokeDashoffset: 0 }}
-        animate={{ strokeDashoffset: -240 }} // 👉 reverse direction
+        animate={{ strokeDashoffset: -240 }}
         transition={{
           duration: 2,
           ease: "linear",
